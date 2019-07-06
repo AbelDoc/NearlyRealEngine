@@ -1,0 +1,5 @@
+*.o
+*.nre
+*.exe
+DoxyFile
+archive.sh
