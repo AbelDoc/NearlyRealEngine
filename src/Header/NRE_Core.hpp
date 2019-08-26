@@ -7,5 +7,6 @@
      * @copyright CC-BY-NC-SA
      */
 
-    #include <Header/NRE_System.hpp>
     #include "NRE_GL.hpp"
+    #include "NRE_Exception.hpp"
+    #include "NRE_Shader.hpp"
