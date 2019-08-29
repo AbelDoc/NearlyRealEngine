@@ -10,3 +10,6 @@
     #include "NRE_GL.hpp"
     #include "NRE_Exception.hpp"
     #include "NRE_Shader.hpp"
+
+    #include "NRE_Buffer.hpp"
+    #include "NRE_Texture.hpp"

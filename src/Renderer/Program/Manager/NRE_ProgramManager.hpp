@@ -12,6 +12,7 @@
     #include <memory>
     #include <algorithm>
     #include <bitset>
+    #include <cassert>
 
     #include <Header/NRE_Utility.hpp>
     #include "../NRE_Program.hpp"
@@ -69,11 +70,9 @@
                             Spec* shader = new Spec;
                             mask[T::getCategory()] = true;
                             if (programs.getSize() <= T::getCategory()) {
-                                programs.resize(T::getCategory() + 1);
-                                programs.getLast().emplaceBack(shader);
-                            } else {
-                                programs[T::getCategory()].emplaceBack(shader);
+                                programs.reserve(T::getCategory() + 1);
                             }
+                            programs[T::getCategory()].emplaceBack(shader);
                             return shader;
                         }
                         /**

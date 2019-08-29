@@ -30,7 +30,7 @@
                 GL::useProgram(getId());
             }
 
-            inline void Program::unBind() const {
+            inline void Program::unbind() const {
                 GL::useProgram(0);
             }
 

@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_ShaderException.hpp
-     * @brief Declaration of Engine's Exception's Object : ShaderException
+     * @file NRE_GLException.hpp
+     * @brief Declaration of Engine's Exception's Object : GLException
      * @author Louis ABEL
      * @date 16/08/2019
      * @copyright CC-BY-NC-SA
@@ -23,16 +23,16 @@
         namespace Exception {
 
             /**
-             * @class ShaderException
-             * @brief Exception's Object : An exception for shader related operation
+             * @class GLException
+             * @brief Exception's Object : An exception for OpenGL related operation
              */
-            class ShaderException : public IException {
+            class GLException : public IException {
                 public:
                     /**
-                     * Construct a ShaderException with a custom log
-                     * @param log the ShaderException's log
+                     * Construct a GLException with a custom log
+                     * @param log the GLException's log
                      */
-                    ShaderException(Utility::String const& log) throw() : IException("Shader Exception : " + log) {
+                    GLException(Utility::String const& log) throw() : IException("GL Exception : " + log) {
                     }
             };
         }

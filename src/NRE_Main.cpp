@@ -13,14 +13,28 @@
     using namespace NRE::Math;
     using namespace NRE::Event;
     using namespace NRE::Time;
+    using namespace NRE::Renderer;
     using namespace NRE::Graphics;
     using namespace NRE::GL;
     using namespace std::chrono_literals;
 
     class DevApplication : public Application {
+        private :   // Field
+            VAO vao;
+            VBO<PrimitiveVertex> vbo;
+
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}) {
+                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW) {
+                    vbo.addData(Vector2D<float>(-1, -1), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector2D<float>( 1, -1), Vector4D<float>(0.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector2D<float>( 1,  1), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector2D<float>( 1,  1), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector2D<float>(-1,  1), Vector4D<float>(0.0f, 0.0f, 1.0f, 1.0f));
+                    vbo.addData(Vector2D<float>(-1, -1), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
+
+                    vbo.allocateAndFill();
+                    vao.access(&vbo);
                 }
 
             //## Methods ##//
@@ -50,14 +64,24 @@
                 }
                 void render() override {
                     clearColor(1.0f, 0.0f, 0.0f, 0.0f);
+                    Primitive2D* shader = ProgramManager::get<Primitive2D>();
+                    shader->bind();
+                        vao.bind();
+                            vbo.draw();
+                        vao.unbind();
+                    shader->unbind();
                 }
                 void destroy() override {
                 }
     };
 
     int main(int, char**) {
-        DevApplication app;
-        app.NREmain();
+        try {
+            DevApplication app;
+            app.NREmain();
+        } catch (std::exception const& e) {
+            std::cout << e.what() << std::endl;
+        }
 
         return 0;
     }

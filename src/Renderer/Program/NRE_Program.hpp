@@ -54,7 +54,7 @@
                          */
                         Program();
 
-                    //## Move-Constructor ##//
+                    //## Copy-Constructor ##//
                         /**
                          * Copy forbidden
                          * @param p the program to copy
@@ -102,7 +102,7 @@
                         /**
                          * Unbind the object
                          */
-                        void unBind() const;
+                        void unbind() const;
                         /**
                          * Create the object's id
                          */

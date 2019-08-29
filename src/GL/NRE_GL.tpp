@@ -1,9 +1,9 @@
 
     /**
-     * @file GL/NRE_GL.cpp
+     * @file GL/NRE_GL.tpp
      * @brief Implementation of NearlyRealEngine's GL Functions
      * @author Louis ABEL
-     * @date 11/08/2019
+     * @date 29/08/2019
      * @copyright CC-BY-NC-SA
      */
 
@@ -35,7 +35,7 @@
             }
 
             inline bool isShader(Id id) {
-                return glIsShader(id) == GL_TRUE;
+                return glIsShader(id);
             }
 
             inline Id createProgram() {
@@ -47,7 +47,7 @@
             }
 
             inline bool isProgram(Id id) {
-                return glIsProgram(id) == GL_TRUE;
+                return glIsProgram(id);
             }
 
             inline void replaceSource(Id id, GLsizei count, const GLchar** strs, const GLint* lengths) {
@@ -111,6 +111,204 @@
 
                 glGetProgramInfoLog(id, size, nullptr, &log[0]);
                 return log;
+            }
+
+            inline void bindBuffer(BufferTarget target, Id id) {
+                glBindBuffer(target, id);
+            }
+
+            inline Id generateBuffer() {
+                Id tmp = 0;
+                glGenBuffers(1, &tmp);
+                return tmp;
+            }
+
+            inline void deleteBuffer(Id id) {
+                glDeleteBuffers(1, &id);
+            }
+
+            inline bool isBuffer(Id id) {
+                return glIsBuffer(id);
+            }
+
+            inline void sendData(BufferTarget target, std::size_t size, const void* data, GLenum usage) {
+                glBufferData(target, size, data, usage);
+            }
+
+            inline void updateData(BufferTarget target, GLintptr offset, std::size_t size, const void* data) {
+                glBufferSubData(target, offset, size, data);
+            }
+
+            inline void bindBufferBase(BufferTarget target, int index, Id id) {
+                glBindBufferBase(target, index, id);
+            }
+
+            inline GLuint getUniformBlockIndex(Id id, Utility::String const& name) {
+                return glGetUniformBlockIndex(id, name.getCData());
+            }
+
+            inline void bindUniformBlock(Id id, GLuint blockIndex, int index) {
+                glUniformBlockBinding(id, blockIndex, index);
+            }
+
+            inline Id generateRenderBuffer() {
+                Id tmp = 0;
+                glGenRenderbuffers(1, &tmp);
+                return tmp;
+            }
+
+            inline void deleteRenderBuffer(Id id) {
+                glDeleteRenderbuffers(1, &id);
+            }
+
+            inline bool isRenderBuffer(Id id) {
+                return glIsRenderbuffer(id);
+            }
+
+            inline void bindRenderBuffer(BufferTarget target, Id id) {
+                glBindRenderbuffer(target, id);
+            }
+
+            inline void allocateRenderBuffer(BufferTarget target, RenderInternalFormat internalFormat, GLsizei w, GLsizei h) {
+                glRenderbufferStorage(target, internalFormat, w, h);
+            }
+
+            inline void attachRenderBuffer(BufferTarget fboTarget, AttachPoint attach, BufferTarget renderTarget, Id id) {
+                glFramebufferRenderbuffer(fboTarget, attach, renderTarget, id);
+            }
+
+            inline void attach2DTexture(BufferTarget fboTarget, AttachPoint attach, BufferTarget textureTarget, Id id, GLint level) {
+                glFramebufferTexture2D(fboTarget, attach, textureTarget, id, level);
+            }
+
+            inline void attachTextureLayer(BufferTarget fboTarget, AttachPoint attach, Id id, GLint level, GLint layer) {
+                glFramebufferTextureLayer(fboTarget, attach, id, level, layer);
+            }
+
+            inline Id generateTexture() {
+                Id tmp = 0;
+                glGenTextures(1, &tmp);
+                return tmp;
+            }
+
+            inline void deleteTexture(Id id) {
+                glDeleteTextures(1, &id);
+            }
+
+            inline bool isTexture(Id id) {
+                return glIsTexture(id);
+            }
+
+            inline void bindTexture(BufferTarget target, Id id) {
+                glBindTexture(target, id);
+            }
+
+            inline void send2DTextureData(BufferTarget target, GLint level, TextureInternalFormat internalFormat, GLsizei width, GLsizei height, GLint border, TextureFormat format, TextureType type, const void* data) {
+                glTexImage2D(target, level, internalFormat, width, height, border, format, type, data);
+            }
+
+            inline void send2DTextureData(BufferTarget target, GLint level, TextureInternalFormat internalFormat, Math::Vector2D<GLsizei> const& size, GLint border, TextureFormat format, TextureType type, const void* data) {
+                glTexImage2D(target, level, internalFormat, size.getW(), size.getH(), border, format, type, data);
+            }
+
+            inline void update2DTextureData(BufferTarget target, GLint level, GLint offsetX, GLint offsetY, GLsizei width, GLsizei height, TextureFormat format, TextureType type, const void* data) {
+                glTexSubImage2D(target, level, offsetX, offsetY, width, height, format, type, data);
+            }
+
+            inline void update2DTextureData(BufferTarget target, GLint level, Math::Vector2D<GLint> const& offset, Math::Vector2D<GLsizei> const& size, TextureFormat format, TextureType type, const void* data) {
+                glTexSubImage2D(target, level, offset.getX(), offset.getY(), size.getW(), size.getH(), format, type, data);
+            }
+
+            inline void setTextureParameter(BufferTarget target, TextureParameter param, GLint value) {
+                glTexParameteri(target, param, value);
+            }
+
+            inline void send3DTextureData(BufferTarget target, GLint level, TextureInternalFormat internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, TextureFormat format, TextureType type, const void* data) {
+                glTexImage3D(target, level, internalFormat, width, height, depth, border, format, type, data);
+            }
+
+            inline void send3DTextureData(BufferTarget target, GLint level, TextureInternalFormat internalFormat, Math::Vector2D<GLsizei> const& size, GLsizei depth, GLint border, TextureFormat format, TextureType type, const void* data) {
+                glTexImage3D(target, level, internalFormat, size.getW(), size.getH(), depth, border, format, type, data);
+            }
+
+            inline void update3DTextureData(BufferTarget target, GLint level, GLint offsetX, GLint offsetY, GLint offsetZ, GLsizei width, GLsizei height, GLsizei depth, TextureFormat format, TextureType type, const void* data) {
+                glTexSubImage3D(target, level, offsetX, offsetY, offsetZ, width, height, depth, format, type, data);
+            }
+
+            inline void update3DTextureData(BufferTarget target, GLint level, Math::Vector3D<GLint> const& offset, Math::Vector2D<GLsizei> const& size, GLsizei depth, TextureFormat format, TextureType type, const void* data) {
+                glTexSubImage3D(target, level, offset.getX(), offset.getY(), offset.getZ(), size.getW(), size.getH(), depth, format, type, data);
+            }
+
+            inline void bindFrameBuffer(BufferTarget target, Id id) {
+                glBindFramebuffer(target, id);
+            }
+
+            inline Id generateFrameBuffer() {
+                Id tmp = 0;
+                glGenFramebuffers(1, &tmp);
+                return tmp;
+            }
+
+            inline void deleteFrameBuffer(Id id) {
+                glDeleteFramebuffers(1, &id);
+            }
+
+            inline bool isFrameBuffer(Id id) {
+                return glIsFramebuffer(id);
+            }
+
+            inline void bindVAO(Id id) {
+                glBindVertexArray(id);
+            }
+
+            inline Id generateVAO() {
+                Id tmp = 0;
+                glGenVertexArrays(1, &tmp);
+                return tmp;
+            }
+
+            inline void deleteVAO(Id id) {
+                glDeleteVertexArrays(1, &id);
+            }
+
+            inline bool isVAO(Id id) {
+                return glIsVertexArray(id);
+            }
+
+            inline FrameBufferStatus getFrameBufferStatus(BufferTarget target) {
+                return glCheckFramebufferStatus(target);
+            }
+
+            inline void drawBuffer(BufferTarget target) {
+                glDrawBuffer(target);
+            }
+
+            inline void readBuffer(BufferTarget target) {
+                glReadBuffer(target);
+            }
+
+            inline void drawArrays(DrawMode mode, GLint first, GLsizei count) {
+                glDrawArrays(mode, first, count);
+            }
+
+            inline void drawArraysInstanced(DrawMode mode, GLint first, GLsizei count, GLsizei instance) {
+                glDrawArraysInstanced(mode, first, count, instance);
+            }
+
+            inline void drawMultiArrays(DrawMode mode, const GLint* first, const GLsizei* count, GLsizei drawCount) {
+                glMultiDrawArrays(mode, first, count, drawCount);
+            }
+
+            inline void drawElements(DrawMode mode, GLsizei count, IndexType type, const void* indexes) {
+                glDrawElements(mode, count, type, indexes);
+            }
+
+            inline void drawElementsInstanced(DrawMode mode, GLsizei count, IndexType type, const void* indexes, GLsizei instanceCount) {
+                glDrawElementsInstanced(mode, count, type, indexes, instanceCount);
+            }
+
+            inline void drawMultiElements(DrawMode mode, const GLsizei* counts, IndexType type, const void* const* indexes, GLsizei drawCount) {
+                glMultiDrawElements(mode, counts, type, indexes, drawCount);
             }
 
         }

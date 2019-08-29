@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_ShaderException.hpp
-     * @brief Declaration of Engine's Exception's Object : ShaderException
+     * @file NRE_STBException.hpp
+     * @brief Declaration of Engine's Exception's Object : STBException
      * @author Louis ABEL
      * @date 16/08/2019
      * @copyright CC-BY-NC-SA
@@ -23,16 +23,16 @@
         namespace Exception {
 
             /**
-             * @class ShaderException
-             * @brief Exception's Object : An exception for shader related operation
+             * @class STBException
+             * @brief Exception's Object : An exception for STB related operation
              */
-            class ShaderException : public IException {
+            class STBException : public IException {
                 public:
                     /**
-                     * Construct a ShaderException with a custom log
-                     * @param log the ShaderException's log
+                     * Construct a STBException with a custom log
+                     * @param log the STBException's log
                      */
-                    ShaderException(Utility::String const& log) throw() : IException("Shader Exception : " + log) {
+                    STBException(Utility::String const& log) throw() : IException("STB Exception : " + log) {
                     }
             };
         }

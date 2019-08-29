@@ -8,3 +8,5 @@
      */
 
     #include "../Exception/NRE_ShaderException.hpp"
+    #include "../Exception/NRE_GLException.hpp"
+    #include "../Exception/NRE_STBException.hpp"

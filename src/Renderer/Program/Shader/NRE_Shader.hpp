@@ -54,7 +54,7 @@
                          */
                         Shader(IO::File const& m, Utility::Vector<IO::File> && inc);
 
-                    //## Move-Constructor ##//
+                    //## Copy-Constructor ##//
                         /**
                          * Copy forbidden
                          * @param s the shader to copy
