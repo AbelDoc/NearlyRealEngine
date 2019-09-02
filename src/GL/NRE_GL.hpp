@@ -541,6 +541,11 @@
              * @param drawCount the number of draw count
              */
             void drawMultiElements(DrawMode mode, const GLsizei* counts, IndexType type, const void* const* indexes, GLsizei drawCount);
+            /**
+             * Clear the current buffer with a given clear mask
+             * @param mask the clear mask
+             */
+            void clear(GLbitfield mask);
 
 
         }

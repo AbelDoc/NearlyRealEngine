@@ -311,5 +311,9 @@
                 glMultiDrawElements(mode, counts, type, indexes, drawCount);
             }
 
+            inline void clear(GLbitfield mask) {
+                glClear(mask);
+            }
+
         }
     }

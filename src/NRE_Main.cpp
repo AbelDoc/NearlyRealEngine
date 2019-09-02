@@ -15,6 +15,7 @@
     using namespace NRE::Time;
     using namespace NRE::Renderer;
     using namespace NRE::Graphics;
+    using namespace NRE::Camera;
     using namespace NRE::GL;
     using namespace std::chrono_literals;
 
@@ -22,16 +23,25 @@
         private :   // Field
             VAO vao;
             VBO<PrimitiveVertex> vbo;
+            PerspectiveCamera camera;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW) {
-                    vbo.addData(Vector2D<float>(-1, -1), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector2D<float>( 1, -1), Vector4D<float>(0.0f, 1.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector2D<float>( 1,  1), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector2D<float>( 1,  1), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector2D<float>(-1,  1), Vector4D<float>(0.0f, 0.0f, 1.0f, 1.0f));
-                    vbo.addData(Vector2D<float>(-1, -1), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
+                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(10.0f, Point3D<float>(0, 0, 10), Point3D<float>(0, 0, 0), 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f)) {
+
+                    /*vbo.addData(Vector3D<float>(-100, 0, -100), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>( 100, 0, -100), Vector4D<float>(0.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>( 100, 0,  100), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>( 100, 0,  100), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>(-100, 0,  100), Vector4D<float>(0.0f, 0.0f, 1.0f, 1.0f));
+                    vbo.addData(Vector3D<float>(-100, 0, -100), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));*/
+
+                    vbo.addData(Vector3D<float>(-100, -100, 0), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>( 100, -100, 0), Vector4D<float>(0.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>( 100,  100, 0), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>( 100,  100, 0), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
+                    vbo.addData(Vector3D<float>(-100,  100, 0), Vector4D<float>(0.0f, 0.0f, 1.0f, 1.0f));
+                    vbo.addData(Vector3D<float>(-100, -100, 0), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
 
                     vbo.allocateAndFill();
                     vao.access(&vbo);
@@ -40,32 +50,35 @@
             //## Methods ##//
                 void create() override {
                     addHandler<KeyEvent>([&](KeyEvent& event) {
-                        std::cout << event.getCode() << std::endl;
-                        return true;
-                    });
-
-                    addHandler<WindowCloseEvent>([&](WindowCloseEvent& event) {
-                        std::cout << "One window is closing : " << event.getWindow().getId() << std::endl;
-                        return true;
-                    });
-
-                    addHandler<ButtonEvent>([&](ButtonEvent& event) {
-                        std::cout << event.getCode() << std::endl;
-                        std::cout << "Cursor : " << event.getPosition() << std::endl;
+                        if (event.isCode(KeyCode::Z)) {
+                            camera.moveFront();
+                        } else if (event.isCode(KeyCode::S)) {
+                            camera.moveBack();
+                        } else if (event.isCode(KeyCode::Q)) {
+                            camera.moveLeft();
+                        } else if (event.isCode(KeyCode::D)) {
+                            camera.moveRight();
+                        } else if (event.isCode(KeyCode::LEFT_SHIFT)) {
+                            camera.moveDown();
+                        } else if (event.isCode(KeyCode::SPACE)) {
+                            camera.moveUp();
+                        }
                         return false;
                     });
 
                     addHandler<MotionEvent>([&](MotionEvent& event) {
-                        std::cout << "Motion : " << event.getPosition() << std::endl;
+                        camera.turn(Vector2D<Angle>(event.getMotion().getY() * degree * 0.1f, event.getMotion().getX() * degree * 0.1f));
                         return true;
                     });
                 }
                 void update() override {
+                    camera.update();
                 }
                 void render() override {
-                    clearColor(1.0f, 0.0f, 0.0f, 0.0f);
-                    Primitive2D* shader = ProgramManager::get<Primitive2D>();
+                    clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
+                        shader->sendMVP(static_cast <PerspectiveCamera const&> (camera).getProjection() * camera.getView());
                         vao.bind();
                             vbo.draw();
                         vao.unbind();
@@ -76,12 +89,8 @@
     };
 
     int main(int, char**) {
-        try {
-            DevApplication app;
-            app.NREmain();
-        } catch (std::exception const& e) {
-            std::cout << e.what() << std::endl;
-        }
+        DevApplication app;
+        app.NREmain();
 
         return 0;
     }

@@ -13,3 +13,5 @@
 
     #include "NRE_Buffer.hpp"
     #include "NRE_Texture.hpp"
+    
+    #include "NRE_Camera.hpp"
