@@ -9,6 +9,7 @@
 
     #include "Header/NRE_Core.hpp"
 
+    using namespace NRE;
     using namespace NRE::System;
     using namespace NRE::Math;
     using namespace NRE::Event;
@@ -16,6 +17,7 @@
     using namespace NRE::Renderer;
     using namespace NRE::Graphics;
     using namespace NRE::Camera;
+    using namespace NRE::Utility;
     using namespace NRE::GL;
     using namespace std::chrono_literals;
 
@@ -28,13 +30,6 @@
         public :    // Methods
             //## Constructor ##//
                 DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(10.0f, Point3D<float>(0, 0, 10), Point3D<float>(0, 0, 0), 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f)) {
-
-                    /*vbo.addData(Vector3D<float>(-100, 0, -100), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector3D<float>( 100, 0, -100), Vector4D<float>(0.0f, 1.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector3D<float>( 100, 0,  100), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector3D<float>( 100, 0,  100), Vector4D<float>(1.0f, 1.0f, 0.0f, 1.0f));
-                    vbo.addData(Vector3D<float>(-100, 0,  100), Vector4D<float>(0.0f, 0.0f, 1.0f, 1.0f));
-                    vbo.addData(Vector3D<float>(-100, 0, -100), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));*/
 
                     vbo.addData(Vector3D<float>(-100, -100, 0), Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
                     vbo.addData(Vector3D<float>( 100, -100, 0), Vector4D<float>(0.0f, 1.0f, 0.0f, 1.0f));
@@ -49,6 +44,7 @@
 
             //## Methods ##//
                 void create() override {
+                    Singleton<System::System>::get().setRelativeMode(true);
                     addHandler<KeyEvent>([&](KeyEvent& event) {
                         if (event.isCode(KeyCode::Z)) {
                             camera.moveFront();
