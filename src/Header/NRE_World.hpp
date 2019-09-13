@@ -9,6 +9,5 @@
 
     #pragma once
 
-    #include "../World/Cell/NRE_Cell.hpp"
-    #include "../World/Factory/NRE_ShapeFactory.hpp"
-    #include "../World/Polygonizer/NRE_CellPolygonizer.hpp"
+    #include "../World/Factory/NRE_CloudFactory.hpp"
+    #include "../World/Polygonizer/NRE_CloudPolygonizer.hpp"

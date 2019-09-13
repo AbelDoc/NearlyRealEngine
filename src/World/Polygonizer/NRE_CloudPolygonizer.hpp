@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_CellPolygonizer.hpp
-     * @brief Declaration of Engine's World's Object : CellPolygonizer
+     * @file NRE_CloudPolygonizer.hpp
+     * @brief Declaration of Engine's World's Object : CloudPolygonizer
      * @author Louis ABEL
      * @date 12/09/2019
      * @copyright CC-BY-NC-SA
@@ -11,7 +11,6 @@
 
     #include "../../Header/NRE_GL.hpp"
     #include "../../Header/NRE_Buffer.hpp"
-    #include "../Cell/NRE_Cell.hpp"
 
     /**
      * @namespace NRE
@@ -25,10 +24,10 @@
         namespace World {
 
             /**
-             * @class CellPolygonizer
-             * @brief Manage the transformation of cells into a rendering mesh
+             * @class CloudPolygonizer
+             * @brief Manage the transformation of points cloud into a rendering mesh
              */
-            class CellPolygonizer {
+            class CloudPolygonizer {
                 private :   // Static
                     static constexpr float lookupTable[16][27] = {
                         {
@@ -101,27 +100,18 @@
 
                 public :    // Static
                     /**
-                     * Polygonize a set of cells into a rendering mesh
+                     * Polygonize a set of voxels into a rendering mesh using marching squares algorithm
                      * @param vbo           the vertex buffer to fill
-                     * @param cells         the cells data
-                     * @param size          the data size
+                     * @param voxels        the voxels data
                      * @param startPosition the data start coordinates
+                     * @param size          the data size
+                     * @param resolution    the resolution
+                     * @param threshold     the isovalue threshold
                      */
-                    static void polygonize(GL::VBO<GL::PrimitiveVertex>& vbo, Utility::Vector<Cell> const& cells, Math::Vector2D<unsigned int> const& size, Math::Point2D<int> const& startPosition);
-
-                private :   // Static
-                    /**
-                     * Find the convex hull for a set of points
-                     * @param hull      the hull to find
-                     * @param points    the points to process
-                     * @param min       the min x points
-                     * @param max       the max x points
-                     * @param upperHull tell if we are processing the upper hull
-                     */
-                    static void quickHull(Utility::Vector<Math::Point3D<float>>& hull, Utility::Vector<Math::Point3D<float>> const& points, Point3D<float> const& min, Point3D<float> const& max, bool upperHull);
+                    static void polygonize(GL::VBO<GL::PrimitiveVertex>& vbo, Utility::Vector<float> const& voxels, Math::Point2D<int> const& startPosition, Math::Vector2D<unsigned int> const& size, float resolution, float threshold);
             };
 
         }
     }
 
-    #include "NRE_CellPolygonizer.tpp"
+    #include "NRE_CloudPolygonizer.tpp"
