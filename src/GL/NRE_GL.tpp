@@ -315,5 +315,9 @@
                 glClear(mask);
             }
 
+            inline void polygonMode(FaceType face, PolygonMode mode) {
+                glPolygonMode(face, mode);
+            }
+
         }
     }

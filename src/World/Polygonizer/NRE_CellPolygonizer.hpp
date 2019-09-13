@@ -108,6 +108,17 @@
                      * @param startPosition the data start coordinates
                      */
                     static void polygonize(GL::VBO<GL::PrimitiveVertex>& vbo, Utility::Vector<Cell> const& cells, Math::Vector2D<unsigned int> const& size, Math::Point2D<int> const& startPosition);
+
+                private :   // Static
+                    /**
+                     * Find the convex hull for a set of points
+                     * @param hull      the hull to find
+                     * @param points    the points to process
+                     * @param min       the min x points
+                     * @param max       the max x points
+                     * @param upperHull tell if we are processing the upper hull
+                     */
+                    static void quickHull(Utility::Vector<Math::Point3D<float>>& hull, Utility::Vector<Math::Point3D<float>> const& points, Point3D<float> const& min, Point3D<float> const& max, bool upperHull);
             };
 
         }

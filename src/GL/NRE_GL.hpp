@@ -51,6 +51,9 @@
             typedef GLenum StreamUsage;
             typedef GLenum DrawMode;
 
+            typedef GLenum FaceType;
+            typedef GLenum PolygonMode;
+
             /**
              * Clear the context screen and fill it with the given color
              * @param r the clear color red value
@@ -546,7 +549,12 @@
              * @param mask the clear mask
              */
             void clear(GLbitfield mask);
-
+            /**
+             * Set the rendering mode for a given face type
+             * @param face the face to modify
+             * @param mode the new rendering mode
+             */
+            void polygonMode(FaceType face, PolygonMode mode);
 
         }
     }

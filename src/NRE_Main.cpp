@@ -28,9 +28,11 @@
             VBO<PrimitiveVertex> vbo;
             PerspectiveCamera camera;
 
+            bool wireframeMode;
+
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(10.0f, Point3D<float>(0, 0, 10), Point3D<float>(0, 0, 0), 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f)) {
+                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(10.0f, Point3D<float>(0, 0, 10), Point3D<float>(0, 0, 0), 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f)), wireframeMode(false) {
 
                     Vector2D<unsigned int> size(100, 100);
                     Vector<Cell> cells1 = ShapeFactory::createCircle(40.0f, {0, 0}, size);
@@ -57,6 +59,14 @@
                             camera.moveDown();
                         } else if (event.isCode(KeyCode::SPACE)) {
                             camera.moveUp();
+                        } else if (event.isCode(KeyCode::R)) {
+                            wireframeMode = !wireframeMode;
+                            if (wireframeMode) {
+                                polygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                            } else {
+                                polygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                            }
+                            return true;
                         }
                         return false;
                     });

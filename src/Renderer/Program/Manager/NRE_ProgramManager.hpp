@@ -71,6 +71,9 @@
                             mask[T::getCategory()] = true;
                             if (programs.getSize() <= T::getCategory()) {
                                 programs.reserve(T::getCategory() + 1);
+                                for (std::size_t i = programs.getSize(); i <= T::getCategory(); i++) {
+                                    programs.emplaceBack();
+                                }
                             }
                             programs[T::getCategory()].emplaceBack(shader);
                             return shader;
