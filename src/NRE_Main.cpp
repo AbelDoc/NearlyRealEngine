@@ -35,24 +35,11 @@
                 DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(50.0f, Point3D<float>(0, 0, 10), Point3D<float>(0, 0, 0), 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f)), wireframeMode(false) {
                     Clock& clock = Singleton<System::System>::get().getClock();
 
-                    float radius = 40.0f;
-                    float threshold = radius * radius;
+                    float radius = 1.0f;
+                    float threshold = radius * radius * radius;
 
                     clock.update();
-                    Vector<float> voxels1 = CloudFactory::createCircle({100, 100}, 10);
-                    Vector<float> voxels2 = CloudFactory::createCircle({100, 100}, 5);
-                    Vector<float> voxels3 = CloudFactory::createCircle({100, 100}, 2);
-                    Vector<float> voxels4 = CloudFactory::createCircle({100, 100}, 1);
-                    Vector<float> voxels5 = CloudFactory::createCircle({100, 100}, 0.5f);
-
-                    clock.update();
-                    std::cout << "Time taken for points cloud generation : " << clock.getDelta() << std::endl;
-                    clock.update();
-                    CloudPolygonizer::polygonize(vbo, voxels1, {0,   0}, {100, 100},   10, threshold);
-                    CloudPolygonizer::polygonize(vbo, voxels2, {0, 100}, {100, 100},    5, threshold);
-                    CloudPolygonizer::polygonize(vbo, voxels3, {0, 200}, {100, 100},    2, threshold);
-                    CloudPolygonizer::polygonize(vbo, voxels4, {0, 300}, {100, 100},    1, threshold);
-                    CloudPolygonizer::polygonize(vbo, voxels5, {0, 400}, {100, 100}, 0.5f, threshold);
+                    CloudPolygonizer::polygonize(vbo, {0, 0, 0}, {2, 2, 2}, 1, threshold);
                     clock.update();
 
                     std::cout << "Time taken for cells polygonization : " << clock.getDelta() << std::endl;

@@ -9,5 +9,4 @@
 
     #pragma once
 
-    #include "../World/Factory/NRE_CloudFactory.hpp"
     #include "../World/Polygonizer/NRE_CloudPolygonizer.hpp"
