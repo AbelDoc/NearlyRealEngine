@@ -59,7 +59,7 @@
                                 }
 
                                 for (int i = 0; triTable[cell][i] != 0xFF; i += 3) {
-                                    Math::Vector4D<float> color(x, y, z, 1.0f);
+                                    Math::Vector4D<float> color(0, y / Chunk::SIZE_Y, 0, 1.0);
                                     color.normalize();
                                     ibo.addData(vertices[triTable[cell][i    ]], color);
                                     ibo.addData(vertices[triTable[cell][i + 2]], color);

@@ -24,14 +24,38 @@
                      }
                  }
 
+                 computeCells(target, voxels, radius * radius);
+             }
+
+             void ChunkFactory::createTerrain(Chunk& target, float resolution) {
+                 target.changeResolution(resolution);
+
+                 FastNoise generator(16'09'2019);
+
+                 Utility::Vector<float> voxels;
+                 voxels.reserve(target.getVoxelsVolume());
+
+                 for (float y = 0; y <= Chunk::SIZE_Y; y += resolution) {
+                     for (float z = 0; z <= Chunk::SIZE_Z; z += resolution) {
+                         for (float x = 0; x <= Chunk::SIZE_X; x += resolution) {
+                             float e = generator.GetNoise(x + static_cast <float> (target.getPosition().getX()),
+                                                          z + static_cast <float> (target.getPosition().getZ()));
+                             float elevation = (e / 2.0f + 0.5f) * Chunk::SIZE_Y;
+                             voxels.emplaceBack((y >= elevation) ? (1.0f) : (0.0f));
+                         }
+                     }
+                 }
+
+                 computeCells(target, voxels, 0.5f);
+             }
+
+             void ChunkFactory::computeCells(Chunk& target, Utility::Vector<float> const& voxels, float threshold) {
                  std::size_t index = 0;
                  std::size_t topLayerIndex;
 
-                 float threshold = radius * radius;
-
-                 for (float y = 0; y <= Chunk::SIZE_Y - resolution; y += resolution) {
-                     for (float z = 0; z <= Chunk::SIZE_Z - resolution; z += resolution) {
-                         for (float x = 0; x <= Chunk::SIZE_X - resolution; x += resolution) {
+                 for (float y = 0; y <= Chunk::SIZE_Y - target.getResolution(); y += target.getResolution()) {
+                     for (float z = 0; z <= Chunk::SIZE_Z - target.getResolution(); z += target.getResolution()) {
+                         for (float x = 0; x <= Chunk::SIZE_X - target.getResolution(); x += target.getResolution()) {
                              CellCorners corners = 0b00000000;
                              topLayerIndex = index + target.getVoxelsLayerSize();
                              if (voxels[index] < threshold) {

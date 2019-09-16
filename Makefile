@@ -1,7 +1,7 @@
 export CXX = g++.exe
 export LD = g++.exe
 
-export CFLAGS = -pedantic -Wno-virtual-move-assign -Wall -Wextra -Wfatal-errors -Wfloat-equal -Wstrict-overflow -Wshadow -Wconversion -Wunreachable-code -Wuninitialized -Winit-self -Werror -fstrict-overflow -std=c++17
+export CFLAGS = -pedantic -Wno-virtual-move-assign -Wall -Wextra -Wfatal-errors -Wfloat-equal -Wstrict-overflow -Wshadow -Wconversion -Wunreachable-code -Wuninitialized -Winit-self -Werror -fstrict-overflow -O3 -std=c++17
 export LDFLAGS = -static -static-libgcc -static-libstdc++
 
 export INC = -I"C:\lib\MinGW64_7.3\include" -I"C:\lib\Glew\include" -I"C:\lib\STB" -I"C:\Users\abell\Documents\GitHub\NRE-Utility\src" -I"C:\Users\abell\Documents\GitHub\NRE-Math\src" -I"C:\Users\abell\Documents\GitHub\NRE-System\src" -I"C:\Users\abell\Documents\GitHub\NRE-IO\src" 
@@ -11,7 +11,7 @@ export LIBDIR = -L"C:\lib\MinGW64_7.3\lib" -L"C:/lib/WindowsKits/10/Lib/10.0.177
 OBJDIR = obj/
 BIN = bin/
 SRC = src
-OBJ = $(OBJDIR)NRE_Main.o $(OBJDIR)GL/NRE_GL.o $(OBJDIR)Renderer/Program/NRE_Program.o $(OBJDIR)Renderer/Program/Shader/NRE_Shader.o 
+OBJ = $(OBJDIR)NRE_Main.o $(OBJDIR)GL/NRE_GL.o $(OBJDIR)lib/FastNoise/FastNoise.o $(OBJDIR)Renderer/Program/NRE_Program.o $(OBJDIR)Renderer/Program/Shader/NRE_Shader.o 
 OUT = NearlyRealEngine
 
 all : childs out
@@ -28,7 +28,9 @@ clean :
 	@rm -r obj
 	@mkdir obj
 	@mkdir obj/GL/
+	@mkdir obj/lib/
 	@mkdir obj/Renderer/
+	@mkdir obj/lib/FastNoise/
 	@mkdir obj/Renderer/Program/
 	@mkdir obj/Renderer/Program/Shader/
 	@echo "obj-Tree creation done."
