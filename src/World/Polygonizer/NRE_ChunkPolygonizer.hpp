@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_CloudPolygonizer.hpp
-     * @brief Declaration of Engine's World's Object : CloudPolygonizer
+     * @file NRE_ChunkPolygonizer.hpp
+     * @brief Declaration of Engine's World's Object : ChunkPolygonizer
      * @author Louis ABEL
      * @date 12/09/2019
      * @copyright CC-BY-NC-SA
@@ -25,10 +25,10 @@
         namespace World {
 
             /**
-             * @class CloudPolygonizer
+             * @class ChunkPolygonizer
              * @brief Manage the transformation of points cloud into a rendering mesh
              */
-            class CloudPolygonizer {
+            class ChunkPolygonizer {
                 private :   // Static
                     static constexpr std::uint16_t edgeTable[256] = {
                         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
@@ -325,17 +325,14 @@
 
                 public :    // Static
                     /**
-                     * Polygonize a set of voxels into a rendering mesh using marching squares algorithm
-                     * @param ibo           the indexed buffer to fill
-                     * @param startPosition the data start coordinates
-                     * @param size          the data size
-                     * @param resolution    the resolution
-                     * @param threshold     the isovalue threshold
+                     * Polygonize a chunk using the marching cubes algorithm
+                     * @param target the chunk to polygonize
+                     * @param ibo    the indexed buffer to fill
                      */
-                    static void polygonize(GL::VBO<GL::PrimitiveVertex>& ibo, Math::Point3D<int> const& startPosition, Math::Vector3D<unsigned int> const& size, float resolution, float threshold);
+                    static void polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo);
             };
 
         }
     }
 
-    #include "NRE_CloudPolygonizer.tpp"
+    #include "NRE_ChunkPolygonizer.tpp"
