@@ -32,11 +32,11 @@
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(50.0f, Point3D<float>(0, 0, 10), Point3D<float>(0, 0, 0), 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f)), wireframeMode(false) {
+                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vbo(GL_STATIC_DRAW), camera(50.0f, 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false) {
 
                     int shift = 0;
-                    for (float i = 0.25f; i <= 8; i *= 2) {
-                        Chunk chunk({static_cast <int> (Chunk::SIZE_X) * shift++, 0, });
+                    for (float i = 0.125f; i <= 4; i *= 2) {
+                        Chunk chunk({static_cast <int> (Chunk::SIZE_X) * shift++, 0, 0});
                         ChunkFactory::createSphere(chunk, i, 6.5f);
                         ChunkPolygonizer::polygonize(chunk, vbo);
                     }
@@ -47,6 +47,8 @@
                     vao.access(&vbo);
 
                     glEnable(GL_DEPTH_TEST);
+                    glEnable(GL_CULL_FACE);
+                        glCullFace(GL_BACK);
                 }
 
             //## Methods ##//
@@ -68,9 +70,9 @@
                         } else if (event.isCode(KeyCode::R)) {
                             wireframeMode = !wireframeMode;
                             if (wireframeMode) {
-                                polygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                                polygonMode(GL_FRONT, GL_LINE);
                             } else {
-                                polygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                                polygonMode(GL_FRONT, GL_FILL);
                             }
                             return true;
                         }
@@ -78,7 +80,7 @@
                     });
 
                     addHandler<MotionEvent>([&](MotionEvent& event) {
-                        camera.turn(Vector2D<Angle>(event.getMotion().getY() * degree * 0.1f, event.getMotion().getX() * degree * 0.1f));
+                        camera.turn(event.getMotion());
                         return true;
                     });
                 }

@@ -59,9 +59,11 @@
                                 }
 
                                 for (int i = 0; triTable[cell][i] != 0xFF; i += 3) {
-                                    ibo.addData(vertices[triTable[cell][i    ]], Math::Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
-                                    ibo.addData(vertices[triTable[cell][i + 1]], Math::Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
-                                    ibo.addData(vertices[triTable[cell][i + 2]], Math::Vector4D<float>(1.0f, 0.0f, 0.0f, 1.0f));
+                                    Math::Vector4D<float> color(x, y, z, 1.0f);
+                                    color.normalize();
+                                    ibo.addData(vertices[triTable[cell][i    ]], color);
+                                    ibo.addData(vertices[triTable[cell][i + 2]], color);
+                                    ibo.addData(vertices[triTable[cell][i + 1]], color);
                                 }
                             }
                         }

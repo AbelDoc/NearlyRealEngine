@@ -10,7 +10,7 @@
     namespace NRE {
         namespace Camera {
 
-            PerspectiveCamera::PerspectiveCamera(float s, Math::Point3D<float> const& e, Math::Point3D<float> const& c, float fieldOfView, float r, Math::Vector2D<float> const& d) : Camera(s, e, c), frustum(fieldOfView, r, d) {
+            PerspectiveCamera::PerspectiveCamera(float s, float fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a) : Camera(s, e, u, a), frustum(fieldOfView, r, d) {
                 computePlane();
                 computeProjectionMatrix();
             }
@@ -21,7 +21,7 @@
             }
 
             void PerspectiveCamera::resize(Math::Vector2D<unsigned int> const& size) {
-                frustum.resize(size, getEye(), getForward(), getLeft(), getUp());
+                frustum.resize(size, getEye(), getForward(), getRight(), getUp());
                 computeProjectionMatrix();
             }
 
@@ -30,7 +30,7 @@
             }
 
             void PerspectiveCamera::computePlane() {
-                frustum.computePlane(getEye(), getForward(), getLeft(), getUp());
+                frustum.computePlane(getEye(), getForward(), getRight(), getUp());
             }
 
         }

@@ -30,10 +30,9 @@
                 private:    //Fields
                     float speed;                            /**< The camera's speed */
                     Math::Point3D<float> eye;               /**< The camera's point of view */
-                    Math::Point3D<float> center;            /**< The camera's center of view */
+                    Math::Vector3D<float> forward;          /**< The camera's direction */
                     Math::Vector3D<float> up;               /**< The camera's up vector */
-                    Math::Vector3D<float> forward;          /**< The camera's forward vector */
-                    Math::Vector3D<float> left;             /**< The camera's left vector */
+                    Math::Vector3D<float> right;            /**< The camera's right vector */
                     Math::Vector2D<Math::Angle> angle;      /**< The camera's angle */
                     Math::Matrix4x4<float> view;            /**< The camera's view matrix */
                     Math::Matrix4x4<float> projection;      /**< The camera's projection matrix */
@@ -48,9 +47,10 @@
                          * Construct a camera from a speed and a pair of point
                          * @param s the camera's speed
                          * @param e the camera's eye position
-                         * @param c the camera's center of view position
+                         * @param u the camera's up direction
+                         * @param a the camera's angle
                          */
-                        Camera(float s, Math::Point3D<float> const& e, Math::Point3D<float> const& c);
+                        Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a = Math::Vector2D<Math::Angle>(0 * Math::degree, -90 * Math::degree));
 
                     //## Copy-Constructor ##//
                         /**
@@ -78,10 +78,6 @@
                          */
                         Math::Point3D<float> const& getEye() const;
                         /**
-                         * @return the camera's center of view
-                         */
-                        Math::Point3D<float> const& getCenter() const;
-                        /**
                          * @return the camera's angle
                          */
                         Math::Vector2D<Math::Angle> const& getAngle() const;
@@ -94,9 +90,9 @@
                          */
                         Math::Vector3D<float> const& getForward() const;
                         /**
-                         * @return the camera's left vector
+                         * @return the camera's right vector
                          */
-                        Math::Vector3D<float> const& getLeft() const;
+                        Math::Vector3D<float> const& getRight() const;
                         /**
                          * @return the camera's view matrix
                          */
@@ -106,29 +102,11 @@
                          */
                         Math::Matrix4x4<float> const& getProjection() const;
 
-                    //## Setter ##//
-                        /**
-                         * @param p the new camera's eye
-                         */
-                        void setEye(Math::Point3D<float> const& p);
-                        /**
-                         * @param p the new camera's center
-                         */
-                        void setCenter(Math::Point3D<float> const& p);
-                        /**
-                         * @param u the new camera's angle
-                         */
-                        void setAngle(Math::Vector2D<Math::Angle> const& u);
-
                     //## Methods ##//
                         /**
                          * Update the view matrix
                          */
                         void updateView();
-                        /**
-                         * Initialize angle from the position and fixed point value
-                         */
-                        void initAngle();
                         /**
                          * Compute angle, just test for phi to be in the min, max range
                          */
@@ -171,14 +149,10 @@
                          */
                         void moveRight();
                         /**
-                         * Move the center of view according to the forward vector
+                         * Turn the camera with the given motions
+                         * @param motion the motion to process
                          */
-                        void moveCenter();
-                        /**
-                         * Turn the camera with given angles
-                         * @param a the turning angle
-                         */
-                        void turn(Math::Vector2D<Math::Angle> const& a);
+                        void turn(Math::Vector2D<int> const& motion);
                         /**
                          * Update the camera position and view
                          */
@@ -215,9 +189,9 @@
                      */
                     Math::Vector3D<float>& getForward();
                     /**
-                     * @return the camera's left vector
+                     * @return the camera's right vector
                      */
-                    Math::Vector3D<float>& getLeft();
+                    Math::Vector3D<float>& getRight();
                     /**
                      * @return the camera's up vector
                      */
@@ -228,8 +202,8 @@
                     Math::Matrix4x4<float>& getProjection();
 
                 private:    // Static
-                    static constexpr Math::Angle MAX_PHI =  89.9 * Math::degree;    /**< The maximum phi */
-                    static constexpr Math::Angle MIN_PHI = -89.9 * Math::degree;    /**< The minimum phi */
+                    static constexpr Math::Angle MAX_PITCH =  89.9 * Math::degree;    /**< The maximum phi */
+                    static constexpr Math::Angle MIN_PITCH = -89.9 * Math::degree;    /**< The minimum phi */
 
             };
 

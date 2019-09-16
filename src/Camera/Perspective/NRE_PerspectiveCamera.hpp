@@ -39,13 +39,14 @@
                         /**
                          * Construct a perspective camera from her attributes
                          * @param s           the camera's speed
-                         * @param e           the camera's eye position
-                         * @param c           the camera's center of view position
                          * @param fieldOfView the camera's field of view
                          * @param r           the perspective ratio
                          * @param d           the far and near clipping plane distance
+                         * @param e           the camera's eye position
+                         * @param u           the camera's up direction
+                         * @param a           the camera's angle
                          */
-                        PerspectiveCamera(float s, Math::Point3D<float> const& e, Math::Point3D<float> const& c, float fieldOfView, float r, Math::Vector2D<float> const& d);
+                        PerspectiveCamera(float s, float fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a = Math::Vector2D<Math::Angle>(0 * Math::degree, -90 * Math::degree));
 
                     //## Copy-Constructor ##//
                         /**

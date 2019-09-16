@@ -10,17 +10,12 @@
     namespace NRE {
         namespace Camera {
 
-            inline Camera::Camera(float s, Math::Point3D<float> const& e, Math::Point3D<float> const& c) : speed(s), eye(e), center(c) {
-                initAngle();
+            inline Camera::Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a) : speed(s), eye(e), up(u), angle(a) {
                 computeVector();
             }
 
             inline Math::Point3D<float> const& Camera::getEye() const {
                 return eye;
-            }
-
-            inline Math::Point3D<float> const& Camera::getCenter() const {
-                return center;
             }
 
             inline Math::Vector2D<Math::Angle> const& Camera::getAngle() const {
@@ -35,8 +30,8 @@
                 return forward;
             }
 
-            inline Math::Vector3D<float> const& Camera::getLeft() const {
-                return left;
+            inline Math::Vector3D<float> const& Camera::getRight() const {
+                return right;
             }
 
             inline Math::Matrix4x4<float> const& Camera::getView() const {
@@ -47,113 +42,75 @@
                 return projection;
             }
 
-            inline void Camera::setEye(Math::Point3D<float> const& p) {
-                eye = p;
-            }
-
-            inline void Camera::setCenter(Math::Point3D<float> const& p) {
-                center = p;
-            }
-
-            inline void Camera::setAngle(Math::Vector2D<Math::Angle> const& u) {
-                angle = u;
-            }
-
             inline void Camera::updateView() {
-                view.lookAt(getEye(), getCenter(), getUp());
-            }
-
-            inline void Camera::initAngle() {
-                using namespace Math;
-                Math::Vector3D<float> dir(getEye() - getCenter());
-                dir.normalize();
-                angle.setX(std::asin(dir.getZ()) * degree);
-                angle.setY(std::atan2(dir.getX(), dir.getY()) * degree);
-                if (angle.getY() > 90_deg) {
-                    angle.setY(450_deg - angle.getY());
-                } else {
-                    angle.setY(90_deg - angle.getY());
-                }
+                view.lookAt(eye, eye + forward, up);
             }
 
             inline void Camera::computeAngle() {
-                using namespace Math;
-                if (angle.getX() > MAX_PHI) {
-                    angle.setX(MAX_PHI);
-                } else if (angle.getX() < MIN_PHI) {
-                    angle.setX(MIN_PHI);
-                }
-                if (angle.getY() > 360_deg) {
-                    angle.setY(angle.getY() - 360_deg);
-                } else if (angle.getY() < 0_deg) {
-                    angle.setY(angle.getY() + 360_deg);
+                if (angle.getX() > MAX_PITCH) {
+                    angle.setX(MAX_PITCH);
+                } else if (angle.getX() < MIN_PITCH) {
+                    angle.setX(MIN_PITCH);
                 }
             }
 
             inline void Camera::computeVector() {
                 float tmp = static_cast <float> (Math::cos(angle.getX()));
-                forward.setCoord(tmp * static_cast <float> (Math::cos(angle.getY())),
-                                 tmp * static_cast <float> (Math::sin(angle.getY())),
-                                 static_cast <float> (Math::sin(angle.getX())));
+                forward.setX(tmp * static_cast <float> (Math::cos(angle.getY())));
+                forward.setY(      static_cast <float> (Math::sin(angle.getX())));
+                forward.setZ(tmp * static_cast <float> (Math::sin(angle.getY())));
                 forward.normalize();
 
-                left = Math::Vector3D<float>(0, 0, 1) ^ getForward();
-                left.normalize();
+                right = forward ^ Math::Vector3D<float>(0, 1, 0);
+                right.normalize();
 
-                up = getForward() ^ getLeft();
+                up = right ^ forward;
                 up.normalize();
             }
 
             inline void Camera::moveFront() {
-                setEye(getEye() + (getForward() * speed * Time::Clock::TIMESTEP));
+                eye += forward * speed * Time::Clock::TIMESTEP;
             }
 
             inline void Camera::moveBack() {
-                setEye(getEye() - (getForward() * speed * Time::Clock::TIMESTEP));
+                eye -= forward * speed * Time::Clock::TIMESTEP;
             }
 
             inline void Camera::moveLeft() {
-                setEye(getEye() + (getLeft() * speed * Time::Clock::TIMESTEP));
+                eye -= right * speed * Time::Clock::TIMESTEP;
             }
 
             inline void Camera::moveRight() {
-                setEye(getEye() - (getLeft() * speed * Time::Clock::TIMESTEP));
+                eye += right * speed * Time::Clock::TIMESTEP;
             }
 
             inline void Camera::moveUp() {
-                setEye(getEye() + (getUp() * speed * Time::Clock::TIMESTEP));
+                eye += up * speed * Time::Clock::TIMESTEP;
             }
 
             inline void Camera::moveDown() {
-                setEye(getEye() - (getUp() * speed * Time::Clock::TIMESTEP));
+                eye -= up * speed * Time::Clock::TIMESTEP;
             }
 
-            inline void Camera::moveCenter() {
-                setCenter(getEye() + getForward());
-            }
-
-            inline void Camera::turn(Math::Vector2D<Math::Angle> const& a) {
-                setAngle(getAngle() - a);
+            inline void Camera::turn(Math::Vector2D<int> const& motion) {
+                angle += Math::Vector2D<Math::Angle>(static_cast <float> (-motion.getY()) * Math::degree * 0.1f, static_cast <float> (motion.getX()) * Math::degree * 0.1f);
             }
 
             inline void Camera::update() {
-                moveCenter();
-                updateView();
                 computeAngle();
                 computeVector();
+                updateView();
             }
 
             inline Utility::String Camera::toString() const {
                 Utility::String res;
                 res << eye.toString();
                 res << " - ";
-                res << center.toString();
-                res << " - ";
                 res << angle.toString();
                 res << '\n';
                 res << forward.toString();
                 res << " - ";
-                res << left.toString();
+                res << right.toString();
                 res << " - ";
                 res << up.toString();
                 res << '\n';
@@ -171,8 +128,8 @@
                 return forward;
             }
 
-            inline Math::Vector3D<float>& Camera::getLeft() {
-                return left;
+            inline Math::Vector3D<float>& Camera::getRight() {
+                return right;
             }
 
             inline Math::Vector3D<float>& Camera::getUp() {
