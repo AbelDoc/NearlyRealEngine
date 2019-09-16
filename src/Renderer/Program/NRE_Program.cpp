@@ -22,7 +22,6 @@
                 try {
                     addStages();
                 } catch (ShaderException const& e) {
-                    std::cout << e << std::endl;
                     throw e;
                 }
 

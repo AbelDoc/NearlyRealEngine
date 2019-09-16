@@ -94,7 +94,10 @@
                 GLint size = getShaderInfo(id, GL_INFO_LOG_LENGTH);
                 log.reserve(size);
 
-                glGetShaderInfoLog(id, size, nullptr, &log[0]);
+                char* tmp = new char[size];
+
+                glGetShaderInfoLog(id, size, nullptr, tmp);
+                log.assign(tmp);
                 return log;
             }
 
@@ -109,7 +112,10 @@
                 GLint size = getProgramInfo(id, GL_INFO_LOG_LENGTH);
                 log.reserve(size);
 
-                glGetProgramInfoLog(id, size, nullptr, &log[0]);
+                char* tmp = new char[size];
+
+                glGetProgramInfoLog(id, size, nullptr, tmp);
+                log.assign(tmp);
                 return log;
             }
 

@@ -11,8 +11,10 @@
 
     #include "../GL/Buffer/FrameBuffer/NRE_FrameBuffer.hpp"
     #include "../GL/VBO/NRE_AbstractVBO.hpp"
+
     #include "../GL/VBO/Layout/NRE_Layout.hpp"
     #include "../GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp"
+
     #include "../GL/VBO/NRE_VBO.hpp"
     #include "../GL/VBO/IBO/NRE_IBO.hpp"
     #include "../GL/FBO/NRE_FBO.hpp"

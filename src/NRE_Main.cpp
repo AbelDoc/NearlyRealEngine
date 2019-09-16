@@ -45,6 +45,8 @@
 
                     vbo.allocateAndFill();
                     vao.access(&vbo);
+
+                    glEnable(GL_DEPTH_TEST);
                 }
 
             //## Methods ##//
