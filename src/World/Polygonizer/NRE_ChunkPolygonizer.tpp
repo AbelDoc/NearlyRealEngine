@@ -59,11 +59,18 @@
                                 }
 
                                 for (int i = 0; triTable[cell][i] != 0xFF; i += 3) {
-                                    Math::Vector4D<float> color(0, y / Chunk::SIZE_Y, 0, 1.0);
-                                    color.normalize();
-                                    ibo.addData(vertices[triTable[cell][i    ]], color);
-                                    ibo.addData(vertices[triTable[cell][i + 2]], color);
-                                    ibo.addData(vertices[triTable[cell][i + 1]], color);
+                                    Math::Vector4D<float> color1(vertices[triTable[cell][i    ]], 0.0);
+                                    Math::Vector4D<float> color2(vertices[triTable[cell][i + 2]], 0.0);
+                                    Math::Vector4D<float> color3(vertices[triTable[cell][i + 1]], 0.0);
+                                    color1.normalize();
+                                    color2.normalize();
+                                    color3.normalize();
+                                    color1.setY(vertices[triTable[cell][i    ]].getY() / Chunk::SIZE_Y);
+                                    color2.setY(vertices[triTable[cell][i + 2]].getY() / Chunk::SIZE_Y);
+                                    color3.setY(vertices[triTable[cell][i + 1]].getY() / Chunk::SIZE_Y);
+                                    ibo.addData(vertices[triTable[cell][i    ]], color1);
+                                    ibo.addData(vertices[triTable[cell][i + 2]], color2);
+                                    ibo.addData(vertices[triTable[cell][i + 1]], color3);
                                 }
                             }
                         }
