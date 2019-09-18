@@ -36,9 +36,7 @@
                              float e = 1.0f * generator.GetNoise(1 * nx, 1 * nz)
                                     +  0.5f * generator.GetNoise(2 * nx, 2 * nz)
                                     + 0.25f * generator.GetNoise(4 * nx, 4 * nz);
-                             if (y == 0) {
-                                 std::cout << (e / 2.0f) + 0.5f << std::endl;
-                             }
+                             e /= (1.0f + 0.5f + 0.25f);
                              e = (e / 2.0f) + 0.5f;
                              e = static_cast <float> (std::pow(e, 1.74f));
                              e *= Chunk::SIZE_Y;

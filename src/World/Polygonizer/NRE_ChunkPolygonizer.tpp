@@ -10,7 +10,7 @@
     namespace NRE {
         namespace World {
 
-            void ChunkPolygonizer::polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level) {
+            void ChunkPolygonizer::polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear) {
                 Math::Point3D<float> vertices[12];
 
                 std::size_t width = Chunk::VOXELS_LAYER_WIDTH * level;
@@ -18,6 +18,13 @@
 
                 std::size_t index = 0;
                 std::size_t topLayerIndex;
+
+                std::function<Math::Point3D<float>(float, Math::Point3D<float>, Math::Point3D<float>, float, float)> interpolator;
+                if (linear) {
+                    interpolator = interpolateLinearVertex;
+                } else {
+                    interpolator = interpolateFlatVertex;
+                }
 
                 for (std::size_t y = 0; y < Chunk::SIZE_Y; y += level) {
                     for (std::size_t z = 0; z < Chunk::SIZE_Z; z += level) {
@@ -74,40 +81,40 @@
                                 Math::Point3D<float> p7 = Math::Point3D<float>(xF + levelF, yF + levelF, zF         ) + target.getPosition();
 
                                 if (edgeTable[corners] & 1) {
-                                    vertices[0] = interpolateVertex(threshold, p0, p1, v0, v1);
+                                    vertices[0] = interpolator(threshold, p0, p1, v0, v1);
                                 }
                                 if (edgeTable[corners] & 2) {
-                                    vertices[1] = interpolateVertex(threshold, p1, p2, v1, v2);
+                                    vertices[1] = interpolator(threshold, p1, p2, v1, v2);
                                 }
                                 if (edgeTable[corners] & 4) {
-                                    vertices[2] = interpolateVertex(threshold, p2, p3, v2, v3);
+                                    vertices[2] = interpolator(threshold, p2, p3, v2, v3);
                                 }
                                 if (edgeTable[corners] & 8) {
-                                    vertices[3] = interpolateVertex(threshold, p3, p0, v3, v0);
+                                    vertices[3] = interpolator(threshold, p3, p0, v3, v0);
                                 }
                                 if (edgeTable[corners] & 16) {
-                                    vertices[4] = interpolateVertex(threshold, p4, p5, v4, v5);
+                                    vertices[4] = interpolator(threshold, p4, p5, v4, v5);
                                 }
                                 if (edgeTable[corners] & 32) {
-                                    vertices[5] = interpolateVertex(threshold, p5, p6, v5, v6);
+                                    vertices[5] = interpolator(threshold, p5, p6, v5, v6);
                                 }
                                 if (edgeTable[corners] & 64) {
-                                    vertices[6] = interpolateVertex(threshold, p6, p7, v6, v7);
+                                    vertices[6] = interpolator(threshold, p6, p7, v6, v7);
                                 }
                                 if (edgeTable[corners] & 128) {
-                                    vertices[7] = interpolateVertex(threshold, p7, p4, v7, v4);
+                                    vertices[7] = interpolator(threshold, p7, p4, v7, v4);
                                 }
                                 if (edgeTable[corners] & 256) {
-                                    vertices[8] = interpolateVertex(threshold, p0, p4, v0, v4);
+                                    vertices[8] = interpolator(threshold, p0, p4, v0, v4);
                                 }
                                 if (edgeTable[corners] & 512) {
-                                    vertices[9] = interpolateVertex(threshold, p1, p5, v1, v5);
+                                    vertices[9] = interpolator(threshold, p1, p5, v1, v5);
                                 }
                                 if (edgeTable[corners] & 1024) {
-                                    vertices[10] = interpolateVertex(threshold, p2, p6, v2, v6);
+                                    vertices[10] = interpolator(threshold, p2, p6, v2, v6);
                                 }
                                 if (edgeTable[corners] & 2048) {
-                                    vertices[11] = interpolateVertex(threshold, p3, p7, v3, v7);
+                                    vertices[11] = interpolator(threshold, p3, p7, v3, v7);
                                 }
 
                                 for (int i = 0; triTable[corners][i] != 0xFF; i += 3) {
@@ -130,7 +137,7 @@
                 }
             }
 
-            Math::Point3D<float> ChunkPolygonizer::interpolateVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2) {
+            Math::Point3D<float> ChunkPolygonizer::interpolateLinearVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2) {
                 float mu;
                 if (std::abs(threshold - iso1) < Math::F_EPSILON) {
                     return(p1);
@@ -143,6 +150,10 @@
                 }
                 mu = (threshold - iso1) / (iso2 - iso1);
                 return p1 + (p2 - p1) * mu;
+            }
+
+            Math::Point3D<float> ChunkPolygonizer::interpolateFlatVertex(float, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float, float) {
+                return (p1 + p2) * 0.5f;
             }
 
 
