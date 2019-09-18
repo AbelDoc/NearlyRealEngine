@@ -10,84 +10,41 @@
      namespace NRE {
          namespace World {
 
-             void ChunkFactory::createSphere(Chunk& target, float resolution, float radius) {
-                 target.changeResolution(resolution);
-
-                 Utility::Vector<float> voxels;
-                 voxels.reserve(target.getVoxelsVolume());
-
-                 for (float y = 0; y <= Chunk::SIZE_Y; y += resolution) {
-                     for (float z = 0; z <= Chunk::SIZE_Z; z += resolution) {
-                         for (float x = 0; x <= Chunk::SIZE_X; x += resolution) {
-                             voxels.emplaceBack(Math::Vector3D<float>(x - Chunk::SIZE_X / 2, y - Chunk::SIZE_Y / 2, z - Chunk::SIZE_Z / 2).normSquared());
+             void ChunkFactory::createSphere(Chunk& target) {
+                 std::size_t index = 0;
+                 for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
+                     for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
+                         for (std::size_t x = 0; x <= Chunk::SIZE_X; ++x) {
+                             target[index++] = Math::Vector3D<int>(static_cast <int> (x - Chunk::SIZE_X / 2) + target.getPosition().getX(),
+                                                                   static_cast <int> (y - Chunk::SIZE_Y / 2) + target.getPosition().getY(),
+                                                                   static_cast <int> (z - Chunk::SIZE_Z / 2) + target.getPosition().getZ()).normSquared();
                          }
                      }
                  }
-
-                 computeCells(target, voxels, radius * radius);
              }
 
-             void ChunkFactory::createTerrain(Chunk& target, float resolution) {
-                 target.changeResolution(resolution);
-
+             void ChunkFactory::createTerrain(Chunk& target) {
                  FastNoise generator(16'09'2019);
 
-                 Utility::Vector<float> voxels;
-                 voxels.reserve(target.getVoxelsVolume());
-
-                 for (float y = 0; y <= Chunk::SIZE_Y; y += resolution) {
-                     for (float z = 0; z <= Chunk::SIZE_Z; z += resolution) {
-                         for (float x = 0; x <= Chunk::SIZE_X; x += resolution) {
-                             float e = generator.GetNoise(x + static_cast <float> (target.getPosition().getX()),
-                                                          z + static_cast <float> (target.getPosition().getZ()));
-                             float elevation = (e / 2.0f + 0.5f) * Chunk::SIZE_Y;
-                             voxels.emplaceBack((y >= elevation) ? (1.0f) : (0.0f));
-                         }
-                     }
-                 }
-
-                 computeCells(target, voxels, 0.5f);
-             }
-
-             void ChunkFactory::computeCells(Chunk& target, Utility::Vector<float> const& voxels, float threshold) {
                  std::size_t index = 0;
-                 std::size_t topLayerIndex;
-
-                 for (float y = 0; y <= Chunk::SIZE_Y - target.getResolution(); y += target.getResolution()) {
-                     for (float z = 0; z <= Chunk::SIZE_Z - target.getResolution(); z += target.getResolution()) {
-                         for (float x = 0; x <= Chunk::SIZE_X - target.getResolution(); x += target.getResolution()) {
-                             CellCorners corners = 0b00000000;
-                             topLayerIndex = index + target.getVoxelsLayerSize();
-                             if (voxels[index] < threshold) {
-                                 corners |= 0b00000001;
+                 for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
+                     for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
+                         for (std::size_t x = 0; x <= Chunk::SIZE_X; ++x) {
+                             float nx = static_cast <float> (x) + static_cast <float> (target.getPosition().getX());
+                             float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY()) - 0.5f;
+                             float nz = static_cast <float> (z) + static_cast <float> (target.getPosition().getZ());
+                             float e = 1.0f * generator.GetNoise(1 * nx, 1 * nz)
+                                    +  0.5f * generator.GetNoise(2 * nx, 2 * nz)
+                                    + 0.25f * generator.GetNoise(4 * nx, 4 * nz);
+                             if (y == 0) {
+                                 std::cout << (e / 2.0f) + 0.5f << std::endl;
                              }
-                             if (voxels[index + target.getVoxelsLayerWidth()] < threshold) {
-                                 corners |= 0b00000010;
-                             }
-                             if (voxels[index + target.getVoxelsLayerWidth() + 1] < threshold) {
-                                 corners |= 0b00000100;
-                             }
-                             if (voxels[index + 1] < threshold) {
-                                 corners |= 0b00001000;
-                             }
-                             if (voxels[topLayerIndex] < threshold) {
-                                 corners |= 0b00010000;
-                             }
-                             if (voxels[topLayerIndex + target.getVoxelsLayerWidth()] < threshold) {
-                                 corners |= 0b00100000;
-                             }
-                             if (voxels[topLayerIndex + target.getVoxelsLayerWidth() + 1] < threshold) {
-                                 corners |= 0b01000000;
-                             }
-                             if (voxels[topLayerIndex + 1] < threshold) {
-                                 corners |= 0b10000000;
-                             }
-                             target.emplaceBack(corners);
-                             index++;
+                             e = (e / 2.0f) + 0.5f;
+                             e = static_cast <float> (std::pow(e, 1.74f));
+                             e *= Chunk::SIZE_Y;
+                             target[index++] = ny - e;
                          }
-                         index++;
                      }
-                     index += target.getVoxelsLayerWidth();
                  }
              }
 

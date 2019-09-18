@@ -23,16 +23,25 @@
     using namespace std::chrono_literals;
 
     class DevApplication : public Application {
+        public :    // Static
+            static constexpr int H_WIDTH = 5;
+            static constexpr int H_DEPTH = 5;
+            static constexpr int HEIGHT  = 1;
+            static constexpr int SIMULTANEOUS_W = 2;
+            static constexpr int SIMULTANEOUS_H = 2;
+
         private :   // Field
             VAO* vaos;
             VBO<PrimitiveVertex>* vbos;
             PerspectiveCamera camera;
 
+            Chunk*** chunks;
+
             bool wireframeMode;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[4]), vbos(new VBO<PrimitiveVertex>[4]{GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW}), camera(50.0f, 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false) {
+                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), vbos(new VBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW}), camera(50.0f, 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -83,13 +92,13 @@
                         shader->sendMVP(static_cast <PerspectiveCamera const&> (camera).getProjection() * camera.getView());
                         std::size_t index = 0;
                         unsigned int w, h;
-                        w = 1280 / 2;
-                        h = 720 / 2;
-                        for (int i = 0; i < 2; i++) {
-                            for (int j = 0; j < 2; j++) {
+                        w = 1280 / SIMULTANEOUS_W;
+                        h = 720 / SIMULTANEOUS_H;
+                        for (int i = 0; i < SIMULTANEOUS_H; i++) {
+                            for (int j = 0; j < SIMULTANEOUS_W; j++) {
                                 VBO<PrimitiveVertex>& vbo = vbos[index];
                                 VAO& vao = vaos[index++];
-                                glViewport(i * w, j * h, w, h);
+                                glViewport(j * w, i * h, w, h);
                                 vao.bind();
                                     vbo.draw();
                                 vao.unbind();
@@ -100,32 +109,64 @@
                 void destroy() override {
                     delete[] vbos;
                     delete[] vaos;
+                    for (int j = 0; j < HEIGHT; j++) {
+                        for (int i = 0; i < H_WIDTH * 2 + 1; i++) {
+                            delete[] chunks[j][i];
+                        }
+                        delete[] chunks[j];
+                    }
+                    delete[] chunks;
                 }
                 void updateChunks() {
+                    chunks = new Chunk**[HEIGHT];
+                    for (int j = 0; j < HEIGHT; j++) {
+                        chunks[j] = new Chunk*[H_WIDTH * 2 + 1];
+                        for (int i = 0; i < H_WIDTH * 2 + 1; i++) {
+                            chunks[j][i] = new Chunk[H_DEPTH * 2 + 1];
+                        }
+                    }
+
                     std::size_t index = 0;
-                    for (int i = 0; i < 2; i++) {
-                        for (int j = 0; j < 2; j++) {
+                    Clock clock;
+                    clock.update();
+
+                    for (int y = 0; y < HEIGHT; y++) {
+                        for (int z = -H_DEPTH; z <= H_DEPTH; z++) {
+                            for (int x = -H_WIDTH; x <= H_WIDTH; x++) {
+                                chunks[y][z + H_DEPTH][x + H_DEPTH].setPosition({static_cast <int> (Chunk::SIZE_X) * x, static_cast <int> (Chunk::SIZE_Y) * y, static_cast <int> (Chunk::SIZE_Z) * z});
+                                ChunkFactory::createTerrain(chunks[y][z + H_DEPTH][x + H_DEPTH]);
+                            }
+                        }
+                    }
+                    clock.update();
+                    std::cout << "Chunk generation time : " << clock.getDelta() << std::endl;
+                    clock.update();
+                    index = 0;
+                    for (int i = 0; i < SIMULTANEOUS_H; i++) {
+                        for (int j = 0; j < SIMULTANEOUS_W; j++) {
                             VBO<PrimitiveVertex>& vbo = vbos[index];
                             VAO& vao = vaos[index];
 
-                            float resolution = static_cast <float> (std::pow(2.0f, index++)) / 2.0f;
-
-                            for (int z = -5; z <= 5; z++) {
-                                for (int x = -5; x <= 5; x++) {
-                                    Chunk chunk({static_cast <int> (Chunk::SIZE_X) * x, 0, static_cast <int> (Chunk::SIZE_Z) * z});
-                                    ChunkFactory::createTerrain(chunk, resolution);
-                                    ChunkPolygonizer::polygonize(chunk, vbo);
+                            for (int y = 0; y < HEIGHT; y++) {
+                                for (int z = -H_DEPTH; z <= H_DEPTH; z++) {
+                                    for (int x = -H_WIDTH; x <= H_WIDTH; x++) {
+                                        ChunkPolygonizer::polygonize(chunks[y][z + H_DEPTH][x + H_DEPTH], vbo, 8.0f, Chunk::LEVELS[index]);
+                                    }
                                 }
                             }
 
+                            index++;
+
                             std::cout << "Chunks update :" << std::endl;
-                            std::cout << "\tResolution : " << resolution << std::endl;
+                            std::cout << "\tResolution : " << Chunk::LEVELS[index - 1] << std::endl;
                             std::cout << "\tVertex count : " << vbo.getDataCount() << std::endl;
 
                             vbo.allocateAndFill();
                             vao.access(&vbo);
                         }
                     }
+                    clock.update();
+                    std::cout << "Time taken for update : " << clock.getDelta() << std::endl;
                 }
     };
 

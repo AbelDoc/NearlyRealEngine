@@ -326,10 +326,24 @@
                 public :    // Static
                     /**
                      * Polygonize a chunk using the marching cubes algorithm
-                     * @param target the chunk to polygonize
-                     * @param ibo    the indexed buffer to fill
+                     * @param target    the chunk to polygonize
+                     * @param ibo       the indexed buffer to fill
+                     * @param threshold the polygonize threshold
+                     * @param level     the polygonization lod level
                      */
-                    static void polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo);
+                    static void polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level);
+
+                private :   // Static
+                    /**
+                     * Interpolate a vertex along the given points
+                     * @param threshold the polygonize threshold
+                     * @param  p1        the first voxel
+                     * @param  p2        the second voxel
+                     * @param  iso1      the first isovalue
+                     * @param  iso2      the second isovalue
+                     * @return           the interpolated point
+                     */
+                    static Math::Point3D<float> interpolateVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2);
             };
 
         }

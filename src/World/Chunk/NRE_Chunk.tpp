@@ -17,47 +17,20 @@
                  return position;
              }
 
-             inline std::size_t Chunk::getVolume() const {
-                 return static_cast <std::size_t> ((SIZE_X / resolution) * (SIZE_Y / resolution) * (SIZE_Z / resolution));
+             inline void Chunk::setPosition(Math::Point3D<int> const& p) {
+                 position = p;
              }
 
-             inline std::size_t Chunk::getVoxelsVolume() const {
-                 return static_cast <std::size_t> (((SIZE_X / resolution) + 1) * ((SIZE_Y / resolution) + 1) * ((SIZE_Z / resolution) + 1));
+             inline float& Chunk::operator [](std::size_t baseIndex) {
+                 return voxels[baseIndex];
              }
 
-             inline std::size_t Chunk::getVoxelsLayerSize() const {
-                 return static_cast <std::size_t> (((SIZE_X / resolution) + 1) * ((SIZE_Z / resolution) + 1));
-             }
-
-             inline std::size_t Chunk::getVoxelsLayerWidth() const {
-                 return static_cast <std::size_t> ((SIZE_X / resolution) + 1);
-             }
-
-             inline float Chunk::getResolution() const {
-                 return resolution;
-             }
-
-             inline void Chunk::changeResolution(float res) {
-                 resolution = res;
-
-                 cells.clear();
-                 cells.reserve(getVolume());
-             }
-
-             inline void Chunk::emplaceBack(CellCorners corners) {
-                 cells.emplaceBack(corners);
-             }
-
-             inline Cell& Chunk::operator [](std::size_t index) {
-                 return cells[index];
-             }
-
-             inline Cell const& Chunk::operator [](std::size_t index) const {
-                 return cells[index];
+             inline float const& Chunk::operator [](std::size_t baseIndex) const {
+                 return voxels[baseIndex];
              }
 
              inline Utility::String Chunk::toString() const {
-                 return cells.toString();
+                 return voxels.toString();
              }
 
              inline std::ostream& operator <<(std::ostream& stream, Chunk const& o) {

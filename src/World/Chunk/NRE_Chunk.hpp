@@ -24,25 +24,32 @@
 
             /**
              * @class Chunk
-             * @brief Manage a collection of cells
+             * @brief Manage a collection of voxels
              */
             class Chunk {
+                public :    // Static
+                    typedef std::size_t LODLevel;
+
+                    static constexpr std::size_t SIZE_X     = 16;
+                    static constexpr std::size_t SIZE_Y     = 16;
+                    static constexpr std::size_t SIZE_Z     = 16;
+                    static constexpr std::size_t VOLUME     = SIZE_X * SIZE_Y * SIZE_Z;
+
+                    static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;
+                    static constexpr std::size_t VOXELS_LAYER_AREA  = VOXELS_LAYER_WIDTH * (SIZE_Z + 1);
+                    static constexpr std::size_t VOXELS_VOLUME      = VOXELS_LAYER_AREA  * (SIZE_Y + 1);
+
                 private :   // Fields
-                    Utility::Vector<Cell> cells;     /**< The chunk's cells */
-                    Math::Point3D<int> position;     /**< The chunk's position */
-                    float resolution;                /**< The chunk's resolution */
+                    Utility::Array<float, VOXELS_VOLUME> voxels;    /**< The chunk's cells */
+                    Math::Point3D<int> position;                    /**< The chunk's position */
 
                 public :    // Methods
                     //## Constructor ##//
                         /**
-                         * No default constructor
-                         */
-                        Chunk() = delete;
-                        /**
                          * Construct the chunk from its position
                          * @param pos the chunk's position
                          */
-                        Chunk(Math::Point3D<int> const& pos);
+                        Chunk(Math::Point3D<int> const& pos = {0, 0, 0});
 
                     //## Copy-Constructor ##//
                         /**
@@ -63,38 +70,13 @@
                          * @return the chunk's position
                          */
                         Math::Point3D<int> const& getPosition() const;
-                        /**
-                         * @return the chunk's volume
-                         */
-                        std::size_t getVolume() const;
-                        /**
-                         * @return the chunk's voxels cloud volume
-                         */
-                        std::size_t getVoxelsVolume() const;
-                        /**
-                         * @return the chunk's voxels layer size
-                         */
-                        std::size_t getVoxelsLayerSize() const;
-                        /**
-                         * @return the chunk's voxels layer width
-                         */
-                        std::size_t getVoxelsLayerWidth() const;
-                        /**
-                         * @return the chunk's resolution
-                         */
-                        float getResolution() const;
 
-                    //## Methods ##//
+                    //## Setter ##//
                         /**
-                         * Change the internal container resolution
-                         * @param res the new resolution
+                         * Set the chunk's position
+                         * @param p the new position
                          */
-                        void changeResolution(float res);
-                        /**
-                         * Emplace a cell back in the chunk
-                         * @param corners the cell corners
-                         */
-                        void emplaceBack(CellCorners corners);
+                        void setPosition(Math::Point3D<int> const& p);
 
                     //## Access Operator ##//
                         /**
@@ -103,14 +85,14 @@
                          * @param   index the object's index
                          * @return        the object's reference
                          */
-                        Cell& operator [](std::size_t index);
+                        float& operator [](std::size_t index);
                         /**
                          * Return a const reference on a chunk's object
                          * @warning No range check performed
                          * @param   index the object's index
                          * @return        the object's reference
                          */
-                         Cell const& operator [](std::size_t index) const;
+                         float const& operator [](std::size_t index) const;
 
                     //## Assignment Operator ##//
                         /**
@@ -134,9 +116,8 @@
                         Utility::String toString() const;
 
                 public :    // Static
-                    static constexpr float SIZE_X = 16;
-                    static constexpr float SIZE_Y = 16;
-                    static constexpr float SIZE_Z = 16;
+
+                    static constexpr LODLevel LEVELS[] = {1, 2, 4, 8};
             };
 
             /**
