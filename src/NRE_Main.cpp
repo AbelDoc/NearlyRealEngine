@@ -27,8 +27,8 @@
             static constexpr int H_WIDTH = 5;
             static constexpr int H_DEPTH = 5;
             static constexpr int HEIGHT  = 2;
-            static constexpr int SIMULTANEOUS_W = 2;
-            static constexpr int SIMULTANEOUS_H = 2;
+            static constexpr int SIMULTANEOUS_W = 1;
+            static constexpr int SIMULTANEOUS_H = 1;
 
             static constexpr int SCREEN_W = 1280;
             static constexpr int SCREEN_H = 720;
@@ -46,9 +46,11 @@
             bool wireframeMode;
             bool linear;
 
+            Angle fov;
+
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW}), camera(50.0f, 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true), fov(70.0_deg) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -86,6 +88,18 @@
                             return true;
                         }
                         return false;
+                    });
+
+                    addHandler<WheelMotionEvent>([&](WheelMotionEvent& event) {
+                        fov += (event.getDelta() * degree);
+                        if (fov < 1.0_deg) {
+                            fov = 1.0_deg;
+                        }
+                        if (fov >= 80_deg) {
+                            fov = 80.0_deg;
+                        }
+                        camera.setFov(fov);
+                        return true;
                     });
 
                     addHandler<MotionEvent>([&](MotionEvent& event) {

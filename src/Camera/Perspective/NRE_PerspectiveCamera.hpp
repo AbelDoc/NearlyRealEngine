@@ -46,7 +46,7 @@
                          * @param u           the camera's up direction
                          * @param a           the camera's angle
                          */
-                        PerspectiveCamera(float s, float fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a = Math::Vector2D<Math::Angle>(0 * Math::degree, -90 * Math::degree));
+                        PerspectiveCamera(float s, Math::Angle fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a = Math::Vector2D<Math::Angle>(0 * Math::degree, -90 * Math::degree));
 
                     //## Copy-Constructor ##//
                         /**
@@ -67,6 +67,13 @@
                          * PerspectiveCamera Deconstructor
                          */
                         ~PerspectiveCamera() = default;
+
+                    //## Setter ##//
+                        /**
+                         * Set the camera field of view
+                         * @param fieldOfView the new fov
+                         */
+                        void setFov(Math::Angle fieldOfView);
 
                     //## Methods ##//
                         /**
