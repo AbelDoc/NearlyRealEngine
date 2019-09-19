@@ -38,6 +38,7 @@
                     Utility::Vector<Index> index;   /**< The index's data */
                     std::size_t indexCount;         /**< The number of index */
                     std::size_t indexSize;          /**< The index's data size in bytes */
+                    std::size_t indexCounter;       /**< The index counter */
                     IndexType type;                 /**< The IBO type */
 
                 public:    // Methods
@@ -64,6 +65,12 @@
                          * IBO Deconstructor
                          */
                         ~IBO() = default;
+
+                    //## Getter ##//
+                        /**
+                         * @return the next index and increment the index counters
+                         */
+                        Index getNextIndex();
 
                     //## Methods ##//
                         /**

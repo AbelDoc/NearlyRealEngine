@@ -11,18 +11,25 @@
         namespace GL {
 
             template <class Layout, class Index>
-            inline IBO<Layout, Index>::IBO(StreamUsage stream) : VBO<Layout>(stream), indexCount(0), indexSize(0) {
+            inline IBO<Layout, Index>::IBO(StreamUsage stream) : VBO<Layout>(stream), indexCount(0), indexSize(0), indexCounter(0) {
                 type = getIndexType();
             }
 
             template <class Layout, class Index>
-            inline IBO<Layout, Index>::IBO(IBO && b) : VBO<Layout>(std::move(b)), element(std::move(b.element)), index(std::move(b.index)), indexCount(b.indexCount), indexSize(b.indexSize), type(b.type) {
+            inline IBO<Layout, Index>::IBO(IBO && b) : VBO<Layout>(std::move(b)), element(std::move(b.element)), index(std::move(b.index)), indexCount(b.indexCount), indexSize(b.indexSize), indexCounter(b.indexCounter), type(b.type) {
                 b.indexCount = 0;
                 b.indexSize = 0;
+                b.indexCounter = 0;
+            }
+
+            template <class Layout, class Index>
+            inline Index IBO<Layout, Index>::getNextIndex() {
+                return static_cast <Index> (indexCounter++);
             }
 
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::addIndex(Index idx) {
+                assert(idx < indexCounter);
                 index.emplaceBack(idx);
             }
 
@@ -61,6 +68,7 @@
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::clearIndex() {
                 Utility::Vector<Index>().swap(index);
+                indexCounter = 0;
             }
 
             template <class Layout, class Index>
@@ -95,12 +103,12 @@
 
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::draw(GLenum mode) const {
-                drawElements(mode, indexCount, getIndexType(), 0);
+                drawElements(mode, static_cast <GLsizei> (indexCount), getIndexType(), 0);
             }
 
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::drawInstanced(int instance, GLenum mode) const {
-                drawElementsInstanced(mode, indexCount, getIndexType(), 0, instance);
+                drawElementsInstanced(mode, static_cast <GLsizei> (indexCount), getIndexType(), 0, instance);
             }
 
             template <class Layout, class Index>
@@ -116,9 +124,11 @@
                     index = std::move(b.index);
                     indexCount = b.indexCount;
                     indexSize = b.indexSize;
+                    indexCounter = b.indexCounter;
                     type = b.type;
                     b.indexCount = 0;
                     b.indexSize = 0;
+                    b.indexCounter = 0;
                 }
                 return *this;
             }
@@ -128,7 +138,7 @@
                 Utility::String internal, res;
                 internal = std::move(VBO<Layout>::toString());
                 res.reserve(20 + internal.getSize());
-                res << "Index count : " << indexCount << "\n";
+                res << "Index count : " << static_cast <GLsizei> (indexCount) << "\n";
                 res << internal;
                 return res;
             }

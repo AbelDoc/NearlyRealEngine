@@ -322,6 +322,9 @@
                         {0, 3, 8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
                         {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}
                     };
+                    static constexpr std::uint8_t windingTable[] = {
+                        0, 2, 1
+                    };
 
                 public :    // Static
                     /**
@@ -332,7 +335,7 @@
                      * @param level     the polygonization lod level
                      * @param linear    use the linear interpolation
                      */
-                    static void polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear);
+                    static void polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear);
 
                 private :   // Static
                     /**

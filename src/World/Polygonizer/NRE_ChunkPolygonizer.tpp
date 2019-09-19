@@ -10,8 +10,9 @@
     namespace NRE {
         namespace World {
 
-            void ChunkPolygonizer::polygonize(Chunk const& target, GL::VBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear) {
+            void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear) {
                 Math::Point3D<float> vertices[12];
+                std::uint32_t indexes[12];
 
                 std::size_t width = Chunk::VOXELS_LAYER_WIDTH * level;
                 std::size_t area  = Chunk::VOXELS_LAYER_AREA  * level;
@@ -71,6 +72,7 @@
                                 corners |= 0b10000000;
                             }
                             if (edgeTable[corners] != 0) {
+                                std::memset(indexes, -1, 12 * sizeof(std::uint32_t));
                                 Math::Point3D<float> p0 = Math::Point3D<float>(xF         , yF         , zF         ) + target.getPosition();
                                 Math::Point3D<float> p1 = Math::Point3D<float>(xF         , yF         , zF + levelF) + target.getPosition();
                                 Math::Point3D<float> p2 = Math::Point3D<float>(xF + levelF, yF         , zF + levelF) + target.getPosition();
@@ -116,20 +118,22 @@
                                 if (edgeTable[corners] & 2048) {
                                     vertices[11] = interpolator(threshold, p3, p7, v3, v7);
                                 }
-
                                 for (int i = 0; triTable[corners][i] != 0xFF; i += 3) {
-                                    Math::Vector4D<float> color1(vertices[triTable[corners][i    ]], 0.0);
-                                    Math::Vector4D<float> color2(vertices[triTable[corners][i + 2]], 0.0);
-                                    Math::Vector4D<float> color3(vertices[triTable[corners][i + 1]], 0.0);
-                                    color1.normalize();
-                                    color2.normalize();
-                                    color3.normalize();
-                                    color1.setY(vertices[triTable[corners][i    ]].getY() / (Chunk::SIZE_Y * 4));
-                                    color2.setY(vertices[triTable[corners][i + 2]].getY() / (Chunk::SIZE_Y * 4));
-                                    color3.setY(vertices[triTable[corners][i + 1]].getY() / (Chunk::SIZE_Y * 4));
-                                    ibo.addData(vertices[triTable[corners][i    ]], color1);
-                                    ibo.addData(vertices[triTable[corners][i + 2]], color2);
-                                    ibo.addData(vertices[triTable[corners][i + 1]], color3);
+                                    for (int c = 0; c < 3; c++) {
+                                        std::uint8_t triIndex = triTable[corners][i + windingTable[c]];
+                                        if (indexes[triIndex] != static_cast <std::uint32_t> (-1)) {
+                                            ibo.addIndex(indexes[triIndex]);
+                                        } else {
+                                            Math::Vector4D<float> color(vertices[triIndex], 0.0);
+                                            color.normalize();
+                                            color.setY(vertices[triIndex].getY() / (Chunk::SIZE_Y * 4));
+
+                                            indexes[triIndex] = ibo.getNextIndex();
+
+                                            ibo.addData(vertices[triIndex], color);
+                                            ibo.addIndex(indexes[triIndex]);
+                                        }
+                                    }
                                 }
                             }
                         }
