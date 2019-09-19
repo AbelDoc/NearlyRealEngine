@@ -10,7 +10,7 @@
      namespace NRE {
          namespace World {
 
-             void ChunkFactory::createSphere(Chunk& target) {
+             inline void ChunkFactory::createSphere(Chunk& target) {
                  std::size_t index = 0;
                  for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                      for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
@@ -23,24 +23,23 @@
                  }
              }
 
-             void ChunkFactory::createTerrain(Chunk& target) {
+             inline void ChunkFactory::createTerrain(Chunk& target) {
                  FastNoise generator(16'09'2019);
 
-                 std::size_t index = 0;
-                 for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
-                     for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
-                         for (std::size_t x = 0; x <= Chunk::SIZE_X; ++x) {
-                             float nx = static_cast <float> (x) + static_cast <float> (target.getPosition().getX());
-                             float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY()) - 0.5f;
-                             float nz = static_cast <float> (z) + static_cast <float> (target.getPosition().getZ());
-                             float e = 1.0f * generator.GetNoise(1 * nx, 1 * nz)
-                                    +  0.5f * generator.GetNoise(2 * nx, 2 * nz)
-                                    + 0.25f * generator.GetNoise(4 * nx, 4 * nz);
-                             e /= (1.0f + 0.5f + 0.25f);
-                             e = (e / 2.0f) + 0.5f;
-                             e = static_cast <float> (std::pow(e, 1.74f));
-                             e *= Chunk::SIZE_Y;
-                             target[index++] = ny - e;
+                 for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
+                     float nz = static_cast <float> (z) + static_cast <float> (target.getPosition().getZ());
+                     for (std::size_t x = 0; x <= Chunk::SIZE_X; ++x) {
+                         float nx = static_cast <float> (x) + static_cast <float> (target.getPosition().getX());
+                         float e = 1.0f * generator.GetNoise(1 * nx, 1 * nz)
+                                +  0.5f * generator.GetNoise(2 * nx, 2 * nz)
+                                + 0.25f * generator.GetNoise(4 * nx, 4 * nz);
+                         e /= (1.0f + 0.5f + 0.25f);
+                         e = (e / 2.0f) + 0.5f;
+                         e = static_cast <float> (std::pow(e, 2.0f));
+                         e *= Chunk::SIZE_Y * World::SIZE_Y;
+                         for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
+                             float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY());
+                             target[y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x] = ny - e;
                          }
                      }
                  }

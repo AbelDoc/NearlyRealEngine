@@ -12,6 +12,7 @@
     #include <cstdlib>
     #include "../../Header/NRE_GL.hpp"
     #include "../../Header/NRE_Buffer.hpp"
+    #include "../NRE_World.hpp"
 
     /**
      * @namespace NRE

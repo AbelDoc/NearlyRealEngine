@@ -128,7 +128,7 @@
                             auto& vao = vaos[index];
 
                             for (Chunk& c : world) {
-                                ChunkPolygonizer::polygonize(c, ibo, 8.0f, ChunkPolygonizer::LEVELS[index], linear);
+                                ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[index], linear);
                             }
 
                             std::cout << "Chunks update :" << std::endl;

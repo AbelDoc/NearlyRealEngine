@@ -1,4 +1,5 @@
-/**
+
+    /**
      * @file NRE_ChunkFactory.hpp
      * @brief Declaration of Engine's World's Object : ChunkFactory
      * @author Louis ABEL
@@ -8,7 +9,7 @@
 
     #pragma once
 
-    #include "../Chunk/NRE_Chunk.hpp"
+    #include "../NRE_World.hpp"
 
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wfloat-equal"

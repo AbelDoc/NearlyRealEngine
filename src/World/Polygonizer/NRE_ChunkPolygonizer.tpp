@@ -126,7 +126,7 @@
                                         } else {
                                             Math::Vector4D<float> color(vertices[triIndex], 0.0);
                                             color.normalize();
-                                            color.setY(vertices[triIndex].getY() / (Chunk::SIZE_Y * 2));
+                                            color.setY(vertices[triIndex].getY() / (Chunk::SIZE_Y * World::SIZE_Y));
 
                                             indexes[triIndex] = ibo.getNextIndex();
 

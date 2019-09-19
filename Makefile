@@ -11,7 +11,7 @@ export LIBDIR = -L"C:\lib\MinGW64_7.3\lib" -L"C:/lib/WindowsKits/10/Lib/10.0.177
 OBJDIR = obj/
 BIN = bin/
 SRC = src
-OBJ = $(OBJDIR)NRE_Main.o $(OBJDIR)GL/NRE_GL.o $(OBJDIR)lib/FastNoise/FastNoise.o $(OBJDIR)Renderer/Program/NRE_Program.o $(OBJDIR)Renderer/Program/Shader/NRE_Shader.o 
+OBJ = $(OBJDIR)NRE_Main.o $(OBJDIR)GL/NRE_GL.o $(OBJDIR)lib/FastNoise/FastNoise.o $(OBJDIR)Renderer/Program/NRE_Program.o $(OBJDIR)Renderer/Program/Shader/NRE_Shader.o $(OBJDIR)World/NRE_World.o 
 OUT = NearlyRealEngine
 
 all : childs out
@@ -30,6 +30,7 @@ clean :
 	@mkdir obj/GL/
 	@mkdir obj/lib/
 	@mkdir obj/Renderer/
+	@mkdir obj/World/
 	@mkdir obj/lib/FastNoise/
 	@mkdir obj/Renderer/Program/
 	@mkdir obj/Renderer/Program/Shader/
