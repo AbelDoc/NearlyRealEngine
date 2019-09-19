@@ -28,8 +28,6 @@
              */
             class Chunk {
                 public :    // Static
-                    typedef std::size_t LODLevel;
-
                     static constexpr std::size_t SIZE_X     = 16;
                     static constexpr std::size_t SIZE_Y     = 16;
                     static constexpr std::size_t SIZE_Z     = 16;
@@ -38,10 +36,18 @@
                     static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;
                     static constexpr std::size_t VOXELS_LAYER_AREA  = VOXELS_LAYER_WIDTH * (SIZE_Z + 1);
                     static constexpr std::size_t VOXELS_VOLUME      = VOXELS_LAYER_AREA  * (SIZE_Y + 1);
+                    
+                public :    // Iterator
+                    typedef Utility::Array<float, VOXELS_VOLUME> VoxelsContainer;
+                    /**< Shortcut to hide Iterator implementation */
+                    typedef VoxelsContainer::Iterator         Iterator;
+                    /**< Shortcut to hide ConstIterator implementation */
+                    typedef VoxelsContainer::ConstIterator    ConstIterator;
+
 
                 private :   // Fields
-                    Utility::Array<float, VOXELS_VOLUME> voxels;    /**< The chunk's cells */
-                    Math::Point3D<int> position;                    /**< The chunk's position */
+                    VoxelsContainer voxels;         /**< The chunk's cells */
+                    Math::Point3D<int> position;    /**< The chunk's position */
 
                 public :    // Methods
                     //## Constructor ##//
@@ -77,6 +83,32 @@
                          * @param p the new position
                          */
                         void setPosition(Math::Point3D<int> const& p);
+
+                    //## Iterator Access ##//
+                        /**
+                         * @return an iterator on the first element
+                         */
+                        Iterator begin();
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator begin() const;
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator cbegin() const;
+                        /**
+                         * @return an iterator on the end of the container
+                         */
+                        Iterator end();
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator end() const;
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator cend() const;
 
                     //## Access Operator ##//
                         /**
@@ -114,10 +146,6 @@
                          * @return the converted chunk
                          */
                         Utility::String toString() const;
-
-                public :    // Static
-
-                    static constexpr LODLevel LEVELS[] = {1, 2, 4, 8};
             };
 
             /**

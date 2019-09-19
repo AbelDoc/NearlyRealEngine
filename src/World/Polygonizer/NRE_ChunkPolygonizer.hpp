@@ -327,6 +327,10 @@
                     };
 
                 public :    // Static
+                    typedef std::size_t LODLevel;
+                    static constexpr LODLevel LEVELS[] = {1, 2, 4, 8};
+
+                public :    // Static
                     /**
                      * Polygonize a chunk using the marching cubes algorithm
                      * @param target    the chunk to polygonize
@@ -335,7 +339,7 @@
                      * @param level     the polygonization lod level
                      * @param linear    use the linear interpolation
                      */
-                    static void polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear);
+                    static void polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, bool linear);
 
                 private :   // Static
                     /**

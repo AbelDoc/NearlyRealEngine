@@ -10,7 +10,7 @@
     namespace NRE {
         namespace World {
 
-            void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, Chunk::LODLevel level, bool linear) {
+            void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, bool linear) {
                 Math::Point3D<float> vertices[12];
                 std::uint32_t indexes[12];
 

@@ -30,41 +30,25 @@
             static constexpr int SIMULTANEOUS_W = 2;
             static constexpr int SIMULTANEOUS_H = 2;
 
+            static constexpr int SCREEN_W = 1280;
+            static constexpr int SCREEN_H = 720;
+
+            static constexpr int VIEWPORT_W = SCREEN_W / SIMULTANEOUS_W;
+            static constexpr int VIEWPORT_H = SCREEN_H / SIMULTANEOUS_H;
+
         private :   // Field
             VAO* vaos;
             IBO<PrimitiveVertex>* ibos;
             PerspectiveCamera camera;
 
-            Chunk*** chunks;
+            World::World world;
 
             bool wireframeMode;
             bool linear;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {1280, 720}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW}), camera(50.0f, 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true) {
-                    chunks = new Chunk**[HEIGHT];
-                    for (int j = 0; j < HEIGHT; j++) {
-                        chunks[j] = new Chunk*[H_WIDTH * 2 + 1];
-                        for (int i = 0; i < H_WIDTH * 2 + 1; i++) {
-                            chunks[j][i] = new Chunk[H_DEPTH * 2 + 1];
-                        }
-                    }
-
-                    Clock clock;
-                    clock.update();
-
-                    for (int y = 0; y < HEIGHT; y++) {
-                        for (int z = -H_DEPTH; z <= H_DEPTH; z++) {
-                            for (int x = -H_WIDTH; x <= H_WIDTH; x++) {
-                                chunks[y][z + H_DEPTH][x + H_DEPTH].setPosition({static_cast <int> (Chunk::SIZE_X) * x, static_cast <int> (Chunk::SIZE_Y) * y, static_cast <int> (Chunk::SIZE_Z) * z});
-                                ChunkFactory::createTerrain(chunks[y][z + H_DEPTH][x + H_DEPTH]);
-                            }
-                        }
-                    }
-                    clock.update();
-                    std::cout << "Chunk generation time : " << clock.getDelta() << std::endl;
-
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW, GL_STATIC_DRAW}), camera(50.0f, 70.0f, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -118,14 +102,11 @@
                     shader->bind();
                         shader->sendMVP(static_cast <PerspectiveCamera const&> (camera).getProjection() * camera.getView());
                         std::size_t index = 0;
-                        unsigned int w, h;
-                        w = 1280 / SIMULTANEOUS_W;
-                        h = 720 / SIMULTANEOUS_H;
                         for (int i = 0; i < SIMULTANEOUS_H; i++) {
                             for (int j = 0; j < SIMULTANEOUS_W; j++) {
                                 auto& ibo = ibos[index];
                                 auto& vao = vaos[index++];
-                                glViewport(j * w, i * h, w, h);
+                                glViewport(j * VIEWPORT_W, i * VIEWPORT_H, VIEWPORT_W, VIEWPORT_H);
                                 vao.bind();
                                     ibo.draw();
                                 vao.unbind();
@@ -136,13 +117,6 @@
                 void destroy() override {
                     delete[] ibos;
                     delete[] vaos;
-                    for (int j = 0; j < HEIGHT; j++) {
-                        for (int i = 0; i < H_WIDTH * 2 + 1; i++) {
-                            delete[] chunks[j][i];
-                        }
-                        delete[] chunks[j];
-                    }
-                    delete[] chunks;
                 }
                 void updateChunks() {
                     Clock clock;
@@ -153,19 +127,14 @@
                             auto& ibo = ibos[index];
                             auto& vao = vaos[index];
 
-                            for (int y = 0; y < HEIGHT; y++) {
-                                for (int z = -H_DEPTH; z <= H_DEPTH; z++) {
-                                    for (int x = -H_WIDTH; x <= H_WIDTH; x++) {
-                                        ChunkPolygonizer::polygonize(chunks[y][z + H_DEPTH][x + H_DEPTH], ibo, 8.0f, Chunk::LEVELS[index], linear);
-                                    }
-                                }
+                            for (Chunk& c : world) {
+                                ChunkPolygonizer::polygonize(c, ibo, 8.0f, ChunkPolygonizer::LEVELS[index], linear);
                             }
 
-                            index++;
-
                             std::cout << "Chunks update :" << std::endl;
-                            std::cout << "\tResolution : " << Chunk::LEVELS[index - 1] << std::endl;
+                            std::cout << "\tResolution : " << ChunkPolygonizer::LEVELS[index] << std::endl;
                             std::cout << "\tVertex count : " << ibo.getDataCount() << std::endl;
+                            index++;
 
                             ibo.allocateAndFill();
                             vao.access(&ibo);

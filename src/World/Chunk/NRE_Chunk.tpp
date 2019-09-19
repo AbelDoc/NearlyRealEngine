@@ -21,12 +21,36 @@
                  position = p;
              }
 
-             inline float& Chunk::operator [](std::size_t baseIndex) {
-                 return voxels[baseIndex];
+             inline typename Chunk::Iterator Chunk::begin() {
+                 return voxels.begin();
              }
 
-             inline float const& Chunk::operator [](std::size_t baseIndex) const {
-                 return voxels[baseIndex];
+             inline typename Chunk::ConstIterator Chunk::begin() const {
+                 return voxels.begin();
+             }
+
+             inline typename Chunk::ConstIterator Chunk::cbegin() const {
+                 return voxels.cbegin();
+             }
+
+             inline typename Chunk::Iterator Chunk::end() {
+                 return voxels.end();
+             }
+
+             inline typename Chunk::ConstIterator Chunk::end() const {
+                 return voxels.end();
+             }
+
+             inline typename Chunk::ConstIterator Chunk::cend() const {
+                 return voxels.cend();
+             }
+
+             inline float& Chunk::operator [](std::size_t index) {
+                 return voxels[index];
+             }
+
+             inline float const& Chunk::operator [](std::size_t index) const {
+                 return voxels[index];
              }
 
              inline Utility::String Chunk::toString() const {
