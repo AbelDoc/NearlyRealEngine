@@ -12,7 +12,8 @@
 
             void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, bool linear) {
                 Math::Point3D<float> vertices[12];
-                std::uint32_t indexes[12];
+                Utility::UnorderedMap<Math::Point3D<float>, IndexedData> indexed;
+                indexed.reserve(3000);
 
                 std::size_t width = Chunk::VOXELS_LAYER_WIDTH * level;
                 std::size_t area  = Chunk::VOXELS_LAYER_AREA  * level;
@@ -72,7 +73,6 @@
                                 corners |= 0b10000000;
                             }
                             if (edgeTable[corners] != 0) {
-                                std::memset(indexes, -1, 12 * sizeof(std::uint32_t));
                                 Math::Point3D<float> p0 = Math::Point3D<float>(xF         , yF         , zF         ) + target.getPosition();
                                 Math::Point3D<float> p1 = Math::Point3D<float>(xF         , yF         , zF + levelF) + target.getPosition();
                                 Math::Point3D<float> p2 = Math::Point3D<float>(xF + levelF, yF         , zF + levelF) + target.getPosition();
@@ -119,20 +119,66 @@
                                     vertices[11] = interpolator(threshold, p3, p7, v3, v7);
                                 }
                                 for (int i = 0; triTable[corners][i] != 0xFF; i += 3) {
-                                    for (int c = 0; c < 3; c++) {
-                                        std::uint8_t triIndex = triTable[corners][i + windingTable[c]];
-                                        if (indexes[triIndex] != static_cast <std::uint32_t> (-1)) {
-                                            ibo.addIndex(indexes[triIndex]);
-                                        } else {
-                                            Math::Vector4D<float> color(vertices[triIndex], 0.0);
-                                            color.normalize();
-                                            color.setY(vertices[triIndex].getY() / (Chunk::SIZE_Y * World::SIZE_Y));
+                                    std::uint8_t p0Index = triTable[corners][i    ];
+                                    std::uint8_t p1Index = triTable[corners][i + 2];
+                                    std::uint8_t p2Index = triTable[corners][i + 1];
 
-                                            indexes[triIndex] = ibo.getNextIndex();
+                                    Math::Point3D<float> vertex0 = vertices[p0Index];
+                                    Math::Point3D<float> vertex1 = vertices[p1Index];
+                                    Math::Point3D<float> vertex2 = vertices[p2Index];
 
-                                            ibo.addData(vertices[triIndex], color);
-                                            ibo.addIndex(indexes[triIndex]);
-                                        }
+                                    Math::Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 1);
+                                    normal.normalize();
+
+                                    auto it0 = indexed.find(vertex0);
+                                    if (it0 != indexed.end()) {
+                                        GL::PrimitiveVertex& layout = ibo.getData(it0->second.vIndex);
+
+                                        Math::Vector4D<float> newNormal(normal + layout.getNormal());
+
+                                        newNormal.normalize();
+                                        layout.setNormal(newNormal);
+                                        ibo.addIndex(it0->second.index);
+                                    } else {
+                                        std::uint32_t newIndex = ibo.getNextIndex();
+
+                                        indexed[vertex0] = {ibo.getDataCount(), newIndex};
+                                        ibo.addData(vertex0, normal);
+                                        ibo.addIndex(newIndex);
+                                    }
+
+                                    auto it1 = indexed.find(vertex1);
+                                    if (it1 != indexed.end()) {
+                                        GL::PrimitiveVertex& layout = ibo.getData(it1->second.vIndex);
+
+                                        Math::Vector4D<float> newNormal(normal + layout.getNormal());
+
+                                        newNormal.normalize();
+                                        layout.setNormal(newNormal);
+                                        ibo.addIndex(it1->second.index);
+                                    } else {
+                                        std::uint32_t newIndex = ibo.getNextIndex();
+
+                                        indexed[vertex1] = {ibo.getDataCount(), newIndex};
+                                        ibo.addData(vertex1, normal);
+                                        ibo.addIndex(newIndex);
+                                    }
+
+                                    auto it2 = indexed.find(vertex2);
+                                    if (it2 != indexed.end()) {
+                                        GL::PrimitiveVertex& layout = ibo.getData(it2->second.vIndex);
+
+                                        Math::Vector4D<float> newNormal(normal + layout.getNormal());
+
+                                        newNormal.normalize();
+                                        layout.setNormal(newNormal);
+                                        ibo.addIndex(it2->second.index);
+                                    } else {
+                                        std::uint32_t newIndex = ibo.getNextIndex();
+
+                                        indexed[vertex2] = {ibo.getDataCount(), newIndex};
+                                        ibo.addData(vertex2, normal);
+                                        ibo.addIndex(newIndex);
                                     }
                                 }
                             }
@@ -142,17 +188,16 @@
             }
 
             Math::Point3D<float> ChunkPolygonizer::interpolateLinearVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2) {
-                float mu;
-                if (std::abs(threshold - iso1) < Math::F_EPSILON) {
+                if (Math::almostEqual(threshold, iso1)) {
                     return(p1);
                 }
-                if (std::abs(threshold - iso2) < Math::F_EPSILON) {
+                if (Math::almostEqual(threshold, iso2)) {
                     return(p2);
                 }
-                if (std::abs(iso1 - iso2) < Math::F_EPSILON) {
+                if (Math::almostEqual(iso1, iso2)) {
                     return(p1);
                 }
-                mu = (threshold - iso1) / (iso2 - iso1);
+                float mu = (threshold - iso1) / (iso2 - iso1);
                 return p1 + (p2 - p1) * mu;
             }
 

@@ -28,6 +28,11 @@
             }
 
             template <class Layout, class Index>
+            inline std::size_t IBO<Layout, Index>::getIndexCount() const {
+                return index.getSize();
+            }
+
+            template <class Layout, class Index>
             inline void IBO<Layout, Index>::addIndex(Index idx) {
                 assert(idx < indexCounter);
                 index.emplaceBack(idx);
@@ -141,11 +146,6 @@
                 res << "Index count : " << static_cast <GLsizei> (indexCount) << "\n";
                 res << internal;
                 return res;
-            }
-
-            template <class Layout, class Index>
-            inline std::size_t IBO<Layout, Index>::getIndexCount() const {
-                return index.getSize();
             }
 
             template <class Layout, class Index>

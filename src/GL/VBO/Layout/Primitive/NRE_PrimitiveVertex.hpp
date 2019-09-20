@@ -24,12 +24,12 @@
 
             /**
              * @class PrimitiveVertex
-             * @brief A vertex layout : Position - Color
+             * @brief A vertex layout : Position - Normal
              */
             class PrimitiveVertex {
                 private:    //Fields
                     Math::Vector4D<float> position;    /**< Vertex's position */
-                    Math::Vector4D<float> color;       /**< Vertex's color */
+                    Math::Vector4D<float> normal;      /**< Vertex's normal */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -40,39 +40,36 @@
                         /**
                          * Construct a 2D primitive vertex
                          * @param pos the vertex's position
-                         * @param c   the vertex's color
+                         * @param n   the vertex's normal
                          */
-                        PrimitiveVertex(Math::Point2D<float> const& pos, Math::Vector4D<float> const& c)
-                            : position(pos.getX(), pos.getY(), 0, 1), color(c) {
+                        PrimitiveVertex(Math::Point2D<float> const& pos, Math::Vector4D<float> const& n)
+                            : position(pos.getX(), pos.getY(), 0, 1), normal(n) {
                         }
                         /**
                          * Construct a 3D primitive vertex
                          * @param pos the vertex's position
-                         * @param c   the vertex's color
+                         * @param n   the vertex's normal
                          */
-                        PrimitiveVertex(Math::Point3D<float> const& pos, Math::Vector4D<float> const& c)
-                            : position(pos.getX(), pos.getY(), pos.getZ(), 1), color(c) {
+                        PrimitiveVertex(Math::Point3D<float> const& pos, Math::Vector4D<float> const& n)
+                            : position(pos, 1), normal(n) {
                         }
 
-                    //## Copy-Constructor ##//
+                    //## Getter ##//
                         /**
-                         * Copy l into this
-                         * @param l the primitive vertex layout to copy the content
+                         * @return the vertex normal
                          */
-                        PrimitiveVertex(PrimitiveVertex const& l) = default;
+                        Math::Vector4D<float> const& getNormal() const {
+                            return normal;
+                        }
 
-                    //## Move-Constructor ##//
+                    //## Setter ##//
                         /**
-                         * Move l into this
-                         * @param l the primitive vertex layout to move
+                         * Set the vertex normal
+                         * @param n the new normal
                          */
-                        PrimitiveVertex(PrimitiveVertex && l) = default;
-
-                    //## Deconstructor ##//
-                        /**
-                         * PrimitiveVertex Deconstructor
-                         */
-                        ~PrimitiveVertex() = default;
+                        void setNormal(Math::Vector4D<float> const& n) {
+                            normal = n;
+                        }
 
                     //## Methods ##//
                         /**
@@ -80,22 +77,8 @@
                          */
                         static void access() {
                             Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(PrimitiveVertex), 0);
-                            Layout::enableAttribute(1, 4, GL_FLOAT, sizeof(PrimitiveVertex), (void*)sizeof(Math::Vector4D<float>));
+                            Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(PrimitiveVertex), (void*)sizeof(Math::Vector4D<float>));
                         }
-
-                    //## Assignment Operator ##//
-                        /**
-                         * Copy assignment of l into this
-                         * @param l the primitive vertex layout to copy into this
-                         * @return      the reference of himself
-                         */
-                        PrimitiveVertex& operator =(PrimitiveVertex const& l) = default;
-                        /**
-                         * Move assignment of l into this
-                         * @param l the primitive vertex layout to move into this
-                         * @return      the reference of himself
-                         */
-                        PrimitiveVertex& operator =(PrimitiveVertex && l) = default;
 
                     //## Stream Operator ##//
                         /**
@@ -103,7 +86,7 @@
                          * @return the converted primitive vertex layout
                          */
                         Utility::String toString() const {
-                            return position.toString() + " - " + color.toString();
+                            return position.toString() + " - " + normal.toString();
                         }
 
             };

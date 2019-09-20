@@ -39,7 +39,7 @@
                          e *= Chunk::SIZE_Y * World::SIZE_Y;
                          for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                              float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY());
-                             target[y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x] = ny - e;
+                             target[y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x] = (ny - e) + 0.0001f;
                          }
                      }
                  }

@@ -2,14 +2,20 @@
     #version 450
 
     in vec4 in_Vertex;
-    in vec4 in_Color;
+    in vec4 in_Normal;
 
-    uniform mat4 MVP;
+    uniform mat4 modelview;
+    uniform mat4 projection;
 
-    out vec4 color;
+    out vec4 normal;
+    out vec4 pos;
+    out vec4 realPos;
 
     void main() {
-        gl_Position = MVP * in_Vertex;
+        pos = modelview * in_Vertex;
+        normal = in_Normal;
 
-        color = in_Color;
+        realPos = in_Vertex;
+
+        gl_Position = projection * pos;
     }

@@ -24,9 +24,6 @@
 
     class DevApplication : public Application {
         public :    // Static
-            static constexpr int H_WIDTH = 5;
-            static constexpr int H_DEPTH = 5;
-            static constexpr int HEIGHT  = 2;
             static constexpr int SIMULTANEOUS_W = 1;
             static constexpr int SIMULTANEOUS_H = 1;
 
@@ -114,7 +111,7 @@
                     clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                     Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
-                        shader->sendMVP(static_cast <PerspectiveCamera const&> (camera).getProjection() * camera.getView());
+                        shader->sendCamera(camera);
                         std::size_t index = 0;
                         for (int i = 0; i < SIMULTANEOUS_H; i++) {
                             for (int j = 0; j < SIMULTANEOUS_W; j++) {
@@ -148,6 +145,7 @@
                             std::cout << "Chunks update :" << std::endl;
                             std::cout << "\tResolution : " << ChunkPolygonizer::LEVELS[index] << std::endl;
                             std::cout << "\tVertex count : " << ibo.getDataCount() << std::endl;
+                            std::cout << "\tIndex count : " << ibo.getIndexCount() << std::endl;
                             index++;
 
                             ibo.allocateAndFill();

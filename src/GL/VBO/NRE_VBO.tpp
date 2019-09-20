@@ -24,6 +24,11 @@
             }
 
             template <class Layout>
+            inline Layout& VBO<Layout>::getData(std::size_t index) {
+                return datas[index];
+            }
+
+            template <class Layout>
             inline void VBO<Layout>::access() const {
                 getAttributeBuffer().bind();
                     Layout::access();
@@ -32,8 +37,9 @@
 
             template <class Layout>
             template <class ... Args>
-            inline void VBO<Layout>::addData(Args && ... args) {
+            inline std::size_t VBO<Layout>::addData(Args && ... args) {
                 datas.emplaceBack(std::forward<Args>(args)...);
+                return datas.getSize() - 1;
             }
 
             template <class Layout>

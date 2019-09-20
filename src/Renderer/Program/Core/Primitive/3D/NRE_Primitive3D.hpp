@@ -10,6 +10,7 @@
      #pragma once
 
     #include "../../../NRE_AbstractProgram.hpp"
+    #include "../../../../../Header/NRE_Camera.hpp"
 
      /**
      * @namespace NRE
@@ -48,14 +49,18 @@
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("MVP");
+                            addUniform("modelview");
+                            addUniform("projection");
+                            addUniform("camera");
                         }
                         /**
                          * Send a mvp matrix to the shader
                          * @param m the mvp matrix
                          */
-                        void sendMVP(Math::Matrix4x4<float> const& m) const {
-                            useMat4("MVP", 1, &m);
+                        void sendCamera(Camera::Camera const& c) const {
+                            useMat4("modelview", 1, &c.getView());
+                            useMat4("projection", 1, &c.getProjection());
+                            use3FV("camera", 1, c.getEye().value());
                         }
             };
         }

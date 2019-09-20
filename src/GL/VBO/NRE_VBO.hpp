@@ -61,14 +61,21 @@
                          * @return the number of vertex
                          */
                         std::size_t getDataCount() const override;
+                        /**
+                         * Query a buffer's data
+                         * @param  index the data index
+                         * @return       the corresponding data
+                         */
+                        Layout& getData(std::size_t index);
 
                     //## Methods ##//
                         /**
                          * Add a layout object in the VBO
                          * @param args layout object's construction arguments
+                         * @return the data index
                          */
                         template <class ... Args>
-                        void addData(Args && ... args);
+                        std::size_t addData(Args && ... args);
                         /**
                          * Store calls for VAO managing
                          */

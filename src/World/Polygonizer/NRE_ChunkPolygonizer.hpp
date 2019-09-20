@@ -30,6 +30,17 @@
              * @brief Manage the transformation of points cloud into a rendering mesh
              */
             class ChunkPolygonizer {
+                private :   // Structure
+                    /**
+                     * @struct IndexedData
+                     * @brief Store indexed data from the model
+                     */
+                    struct IndexedData {
+                        std::size_t  vIndex;
+                        std::uint32_t index;
+                    };
+
+
                 private :   // Static
                     static constexpr std::uint16_t edgeTable[256] = {
                         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
@@ -322,9 +333,6 @@
                         {0, 9, 1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
                         {0, 3, 8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
                         {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}
-                    };
-                    static constexpr std::uint8_t windingTable[] = {
-                        0, 2, 1
                     };
 
                 public :    // Static

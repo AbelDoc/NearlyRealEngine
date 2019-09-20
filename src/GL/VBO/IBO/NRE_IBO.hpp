@@ -71,6 +71,10 @@
                          * @return the next index and increment the index counters
                          */
                         Index getNextIndex();
+                        /**
+                         * @return the number of stored index
+                         */
+                        std::size_t getIndexCount() const;
 
                     //## Methods ##//
                         /**
@@ -164,10 +168,6 @@
                         Utility::String toString() const override;
 
                 private:   // Methods
-                    /**
-                     * @return the number of stored index
-                     */
-                    std::size_t getIndexCount() const;
                     /**
                      * @return the size of stored index in bytes
                      */
