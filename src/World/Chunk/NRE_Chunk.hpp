@@ -8,7 +8,6 @@
 
     #pragma once
 
-    #include "Cell/NRE_Cell.hpp"
     #include <Header/NRE_Math.hpp>
 
     /**
@@ -36,7 +35,7 @@
                     static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;
                     static constexpr std::size_t VOXELS_LAYER_AREA  = VOXELS_LAYER_WIDTH * (SIZE_Z + 1);
                     static constexpr std::size_t VOXELS_VOLUME      = VOXELS_LAYER_AREA  * (SIZE_Y + 1);
-                    
+
                 public :    // Iterator
                     typedef Utility::Array<float, VOXELS_VOLUME> VoxelsContainer;
                     /**< Shortcut to hide Iterator implementation */
@@ -44,10 +43,9 @@
                     /**< Shortcut to hide ConstIterator implementation */
                     typedef VoxelsContainer::ConstIterator    ConstIterator;
 
-
                 private :   // Fields
-                    VoxelsContainer voxels;         /**< The chunk's cells */
-                    Math::Point3D<int> position;    /**< The chunk's position */
+                    VoxelsContainer voxels;             /**< The chunk's cells */
+                    Math::Point3D<int> position;        /**< The chunk's position */
 
                 public :    // Methods
                     //## Constructor ##//

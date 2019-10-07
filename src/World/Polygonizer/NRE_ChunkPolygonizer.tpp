@@ -10,7 +10,7 @@
     namespace NRE {
         namespace World {
 
-            void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, bool linear) {
+            void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator) {
                 Math::Point3D<float> vertices[12];
                 Utility::UnorderedMap<Math::Point3D<float>, IndexedData> indexed;
                 indexed.reserve(3000);
@@ -20,13 +20,6 @@
 
                 std::size_t index = 0;
                 std::size_t topLayerIndex;
-
-                std::function<Math::Point3D<float>(float, Math::Point3D<float>, Math::Point3D<float>, float, float)> interpolator;
-                if (linear) {
-                    interpolator = interpolateLinearVertex;
-                } else {
-                    interpolator = interpolateFlatVertex;
-                }
 
                 for (std::size_t y = 0; y < Chunk::SIZE_Y; y += level) {
                     for (std::size_t z = 0; z < Chunk::SIZE_Z; z += level) {
@@ -127,22 +120,18 @@
                                     Math::Point3D<float> vertex1 = vertices[p1Index];
                                     Math::Point3D<float> vertex2 = vertices[p2Index];
 
-                                    Math::Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 1);
-                                    normal.normalize();
+                                    Math::Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 0.0);
 
                                     auto it0 = indexed.find(vertex0);
                                     if (it0 != indexed.end()) {
                                         GL::PrimitiveVertex& layout = ibo.getData(it0->second.vIndex);
-
-                                        Math::Vector4D<float> newNormal(normal + layout.getNormal());
-
-                                        newNormal.normalize();
-                                        layout.setNormal(newNormal);
+                                        layout.setNormal(normal + layout.getNormal());
+                                        it0->second.nbAdd++;
                                         ibo.addIndex(it0->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
 
-                                        indexed[vertex0] = {ibo.getDataCount(), newIndex};
+                                        indexed[vertex0] = {ibo.getDataCount(), newIndex, 1};
                                         ibo.addData(vertex0, normal);
                                         ibo.addIndex(newIndex);
                                     }
@@ -150,16 +139,13 @@
                                     auto it1 = indexed.find(vertex1);
                                     if (it1 != indexed.end()) {
                                         GL::PrimitiveVertex& layout = ibo.getData(it1->second.vIndex);
-
-                                        Math::Vector4D<float> newNormal(normal + layout.getNormal());
-
-                                        newNormal.normalize();
-                                        layout.setNormal(newNormal);
+                                        layout.setNormal(normal + layout.getNormal());
+                                        it1->second.nbAdd++;
                                         ibo.addIndex(it1->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
 
-                                        indexed[vertex1] = {ibo.getDataCount(), newIndex};
+                                        indexed[vertex1] = {ibo.getDataCount(), newIndex, 1};
                                         ibo.addData(vertex1, normal);
                                         ibo.addIndex(newIndex);
                                     }
@@ -167,16 +153,13 @@
                                     auto it2 = indexed.find(vertex2);
                                     if (it2 != indexed.end()) {
                                         GL::PrimitiveVertex& layout = ibo.getData(it2->second.vIndex);
-
-                                        Math::Vector4D<float> newNormal(normal + layout.getNormal());
-
-                                        newNormal.normalize();
-                                        layout.setNormal(newNormal);
+                                        layout.setNormal(normal + layout.getNormal());
+                                        it2->second.nbAdd++;
                                         ibo.addIndex(it2->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
 
-                                        indexed[vertex2] = {ibo.getDataCount(), newIndex};
+                                        indexed[vertex2] = {ibo.getDataCount(), newIndex, 1};
                                         ibo.addData(vertex2, normal);
                                         ibo.addIndex(newIndex);
                                     }
@@ -184,6 +167,13 @@
                             }
                         }
                     }
+                }
+
+                for (auto& it : indexed) {
+                    GL::PrimitiveVertex& layout = ibo.getData(it.second.vIndex);
+                    Math::Vector3D<float> newNormal(layout.getNormal() / it.second.nbAdd);
+                    newNormal.normalize();
+                    layout.setNormal(newNormal);
                 }
             }
 

@@ -38,6 +38,7 @@
                     struct IndexedData {
                         std::size_t  vIndex;
                         std::uint32_t index;
+                        float         nbAdd;
                     };
 
 
@@ -336,6 +337,7 @@
                     };
 
                 public :    // Static
+                    typedef std::function<Math::Point3D<float>(float, Math::Point3D<float>, Math::Point3D<float>, float, float)> Interpolator;
                     typedef std::size_t LODLevel;
                     static constexpr LODLevel LEVELS[] = {1, 2, 4, 8};
 
@@ -348,9 +350,7 @@
                      * @param level     the polygonization lod level
                      * @param linear    use the linear interpolation
                      */
-                    static void polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, bool linear);
-
-                private :   // Static
+                    static void polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
                     /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold
@@ -371,6 +371,7 @@
                      * @return          the interpolated point
                      */
                     static Math::Point3D<float> interpolateFlatVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2);
+
             };
 
         }

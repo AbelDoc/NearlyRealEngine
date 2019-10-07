@@ -42,12 +42,13 @@
 
             bool wireframeMode;
             bool linear;
+            bool normal;
 
             Angle fov;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true), fov(70.0_deg) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true), normal(false), fov(70.0_deg) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -82,6 +83,9 @@
                         } else if (event.isCode(KeyCode::L)) {
                             linear = !linear;
                             updateChunks();
+                            return true;
+                        } else if (event.isCode(KeyCode::N)) {
+                            normal = !normal;
                             return true;
                         }
                         return false;
@@ -124,6 +128,23 @@
                             }
                         }
                     shader->unbind();
+                    if (normal) {
+                        DebugNormal* debug = ProgramManager::get<DebugNormal>();
+                        debug->bind();
+                            debug->sendCamera(camera);
+                            index = 0;
+                            for (int i = 0; i < SIMULTANEOUS_H; i++) {
+                                for (int j = 0; j < SIMULTANEOUS_W; j++) {
+                                    auto& ibo = ibos[index];
+                                    auto& vao = vaos[index++];
+                                    glViewport(j * VIEWPORT_W, i * VIEWPORT_H, VIEWPORT_W, VIEWPORT_H);
+                                    vao.bind();
+                                        ibo.draw();
+                                    vao.unbind();
+                                }
+                            }
+                        debug->unbind();
+                    }
                 }
                 void destroy() override {
                     delete[] ibos;
@@ -139,7 +160,7 @@
                             auto& vao = vaos[index];
 
                             for (Chunk& c : world) {
-                                ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[index], linear);
+                                ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[index], (linear) ? (ChunkPolygonizer::interpolateLinearVertex) : (ChunkPolygonizer::interpolateFlatVertex));
                             }
 
                             std::cout << "Chunks update :" << std::endl;

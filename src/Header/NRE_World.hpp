@@ -9,7 +9,6 @@
 
     #pragma once
 
-    #include "../World/Chunk/Cell/NRE_Cell.hpp"
     #include "../World/Chunk/NRE_Chunk.hpp"
     #include "../World/Factory/NRE_ChunkFactory.hpp"
     #include "../World/Polygonizer/NRE_ChunkPolygonizer.hpp"

@@ -18,4 +18,6 @@
     #include "../Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp"
     #include "../Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp"
 
+    #include "../Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp"
+
     #include "../Renderer/Program/Manager/NRE_ProgramManager.hpp"

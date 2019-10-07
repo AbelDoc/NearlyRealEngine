@@ -14,7 +14,7 @@
         vec3 ambient = ambientStrength * vec3(1.0, 1.0, 1.0);
 
         vec3 norm = normalize(normal.xyz);
-        vec3 lightDir = normalize(vec3(160, 90, 0) - pos.xyz);
+        vec3 lightDir = normalize(vec3(0, 80, 0) - pos.xyz);
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = diff * vec3(1.0, 1.0, 1.0);
 
