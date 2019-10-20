@@ -16,3 +16,5 @@
 
     #include "NRE_Camera.hpp"
     #include "NRE_World.hpp"
+
+    #include <Header/NRE_ECS.hpp>
