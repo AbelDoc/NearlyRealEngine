@@ -15,9 +15,9 @@
                  for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                      for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
                          for (std::size_t x = 0; x <= Chunk::SIZE_X; ++x) {
-                             target[index++] = Math::Vector3D<int>(static_cast <int> (x - Chunk::SIZE_X / 2) + target.getPosition().getX(),
-                                                                   static_cast <int> (y - Chunk::SIZE_Y / 2) + target.getPosition().getY(),
-                                                                   static_cast <int> (z - Chunk::SIZE_Z / 2) + target.getPosition().getZ()).normSquared();
+                             target[index++] = static_cast <float> (Math::Vector3D<int>(static_cast <int> (x - Chunk::SIZE_X / 2) + target.getPosition().getX(),
+                                                                                        static_cast <int> (y - Chunk::SIZE_Y / 2) + target.getPosition().getY(),
+                                                                                        static_cast <int> (z - Chunk::SIZE_Z / 2) + target.getPosition().getZ()).normSquared());
                          }
                      }
                  }

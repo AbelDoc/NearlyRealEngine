@@ -9,9 +9,6 @@
 
      #pragma once
 
-    #include <iostream>
-    #include <string>
-
     #include "NRE_Program.hpp"
 
      /**

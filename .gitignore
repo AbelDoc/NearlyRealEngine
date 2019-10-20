@@ -4,3 +4,5 @@
 DoxyFile
 archive.sh
 *.dll
+.idea/*
+cmake-build-debug/*

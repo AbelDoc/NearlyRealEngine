@@ -1,0 +1,126 @@
+cmake_minimum_required(VERSION 3.15)
+project(NearlyRealEngine)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../bin")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wno-virtual-move-assign -Wall -Wextra -Wfatal-errors -Wfloat-equal -Wstrict-overflow -Wshadow -Wconversion -Wunreachable-code -Wuninitialized -Winit-self -Werror -fstrict-overflow -O3 -std=c++17")
+
+include_directories(C:/Users/abell/Documents/GitHub/NRE-Utility/src)
+include_directories(C:/Users/abell/Documents/GitHub/NRE-Math/src)
+include_directories(C:/Users/abell/Documents/GitHub/NRE-System/src)
+include_directories(C:/Users/abell/Documents/GitHub/NRE-IO/src)
+include_directories(C:/lib/Glew/include)
+include_directories(C:/lib/STB)
+
+include_directories(src/Camera)
+include_directories(src/Camera/Perspective)
+include_directories(src/Exception)
+include_directories(src/GL)
+include_directories(src/GL/Buffer)
+include_directories(src/GL/Buffer/Array)
+include_directories(src/GL/Buffer/Array/Attribute)
+include_directories(src/GL/Buffer/Array/Element)
+include_directories(src/GL/Buffer/Array/Uniform)
+include_directories(src/GL/Buffer/Attachable)
+include_directories(src/GL/Buffer/Attachable/RenderBuffer)
+include_directories(src/GL/Buffer/Attachable/Texture)
+include_directories(src/GL/Buffer/Attachable/Texture/2D)
+include_directories(src/GL/Buffer/Attachable/Texture/3D)
+include_directories(src/GL/Buffer/Attachable/Texture/CubeMap)
+include_directories(src/GL/Buffer/FrameBuffer)
+include_directories(src/GL/Buffer/VAO)
+include_directories(src/GL/FBO)
+include_directories(src/GL/Texture)
+include_directories(src/GL/Texture/Surface)
+include_directories(src/GL/Texture/Texture2D)
+include_directories(src/GL/Texture/Texture2DArray)
+include_directories(src/GL/VBO)
+include_directories(src/GL/VBO/IBO)
+include_directories(src/GL/VBO/Layout)
+include_directories(src/GL/VBO/Layout/Primitive)
+include_directories(src/Header)
+include_directories(src/lib/FastNoise)
+include_directories(src/Renderer/Program)
+include_directories(src/Renderer/Program/Core)
+include_directories(src/Renderer/Program/Core/Debug)
+include_directories(src/Renderer/Program/Core/Debug/Normal)
+include_directories(src/Renderer/Program/Core/Primitive)
+include_directories(src/Renderer/Program/Core/Primitive/2D)
+include_directories(src/Renderer/Program/Core/Primitive/3D)
+include_directories(src/Renderer/Program/Manager)
+include_directories(src/Renderer/Program/Shader)
+include_directories(src/Renderer/Program/Shader/Fragment)
+include_directories(src/Renderer/Program/Shader/Geometry)
+include_directories(src/Renderer/Program/Shader/Vertex)
+include_directories(src/Renderer/Program/Uniforms)
+include_directories(src/World)
+include_directories(src/World/Chunk)
+include_directories(src/World/Factory)
+include_directories(src/World/Polygonizer)
+
+set(COMPILE_LIST
+        src/Camera/Perspective/NRE_PerspectiveCamera.hpp
+        src/Camera/NRE_Camera.hpp
+        src/Exception/NRE_GLException.hpp
+        src/Exception/NRE_ShaderException.hpp
+        src/Exception/NRE_STBException.hpp
+        src/GL/Buffer/Array/Attribute/NRE_AttributeBuffer.hpp
+        src/GL/Buffer/Array/Element/NRE_ElementBuffer.hpp
+        src/GL/Buffer/Array/Uniform/NRE_UniformBuffer.hpp
+        src/GL/Buffer/Array/NRE_ArrayBuffer.hpp
+        src/GL/Buffer/Attachable/RenderBuffer/NRE_RenderBuffer.hpp
+        src/GL/Buffer/Attachable/Texture/2D/NRE_Texture2DBuffer.hpp
+        src/GL/Buffer/Attachable/Texture/3D/NRE_Texture3DBuffer.hpp
+        src/GL/Buffer/Attachable/Texture/CubeMap/NRE_CubeMap.hpp
+        src/GL/Buffer/Attachable/Texture/NRE_TextureBuffer.hpp
+        src/GL/Buffer/Attachable/NRE_Attachable.hpp
+        src/GL/Buffer/FrameBuffer/NRE_FrameBuffer.hpp
+        src/GL/Buffer/VAO/NRE_VAO.hpp
+        src/GL/FBO/NRE_FBO.hpp
+        src/GL/Texture/Surface/NRE_Surface.hpp
+        src/GL/Texture/Texture2D/NRE_Texture2D.hpp
+        src/GL/Texture/Texture2DArray/NRE_Texture2DArray.hpp
+        src/GL/VBO/IBO/NRE_IBO.hpp
+        src/GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp
+        src/GL/VBO/Layout/NRE_Layout.hpp
+        src/GL/VBO/NRE_AbstractVBO.hpp
+        src/GL/VBO/NRE_VBO.hpp
+        src/GL/NRE_GL.cpp
+        src/GL/NRE_GL.hpp
+        src/Header/NRE_Buffer.hpp
+        src/Header/NRE_Camera.hpp
+        src/Header/NRE_Core.hpp
+        src/Header/NRE_Exception.hpp
+        src/Header/NRE_GL.hpp
+        src/Header/NRE_Shader.hpp
+        src/Header/NRE_Texture.hpp
+        src/Header/NRE_World.hpp
+        src/lib/FastNoise/FastNoise.cpp
+        src/lib/FastNoise/FastNoise.h
+        src/Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp
+        src/Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp
+        src/Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp
+        src/Renderer/Program/Manager/NRE_ProgramManager.hpp
+        src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp
+        src/Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp
+        src/Renderer/Program/Shader/Vertex/NRE_VertexShader.hpp
+        src/Renderer/Program/Shader/NRE_Shader.cpp
+        src/Renderer/Program/Shader/NRE_Shader.hpp
+        src/Renderer/Program/Uniforms/NRE_Uniforms.hpp
+        src/Renderer/Program/NRE_AbstractProgram.hpp
+        src/Renderer/Program/NRE_Program.cpp
+        src/Renderer/Program/NRE_Program.hpp
+        src/World/Chunk/NRE_Chunk.hpp
+        src/World/Factory/NRE_ChunkFactory.hpp
+        src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
+        src/World/NRE_World.cpp
+        src/World/NRE_World.hpp)
+
+set(EXEC_LIST
+        ${COMPILE_LIST}
+        src/NRE_Main.cpp)
+
+add_executable(NearlyRealEngine ${EXEC_LIST})
+
+target_link_libraries(NearlyRealEngine "C:/lib/NRE/Windows/libNRE-System.a" "C:/lib/Glew/lib/libglew32.dll.a" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/OpenGL32.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Psapi.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Gdi32.Lib" "C:/lib/NRE/libNRE-Math.a")
