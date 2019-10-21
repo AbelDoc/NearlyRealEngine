@@ -7,7 +7,7 @@
      * @copyright CC-BY-NC-SA
      */
 
-    #include "NRE_Utility.hpp
+    #include "NRE_Utility.hpp"
     
     #include "NRE_GL.hpp"
     #include "NRE_Exception.hpp"

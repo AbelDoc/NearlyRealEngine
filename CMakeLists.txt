@@ -112,6 +112,8 @@ set(COMPILE_LIST
         src/Renderer/Program/NRE_AbstractProgram.hpp
         src/Renderer/Program/NRE_Program.cpp
         src/Renderer/Program/NRE_Program.hpp
+        src/Utility/Interfaces/Allocable/NRE_Allocable.hpp
+        src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
