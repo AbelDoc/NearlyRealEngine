@@ -56,10 +56,5 @@
              inline Utility::String Chunk::toString() const {
                  return voxels.toString();
              }
-
-             inline std::ostream& operator <<(std::ostream& stream, Chunk const& o) {
-                 return stream << o.toString();
-             }
-
          }
      }

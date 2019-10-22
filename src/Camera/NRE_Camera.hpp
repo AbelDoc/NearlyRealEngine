@@ -9,7 +9,8 @@
 
      #pragma once
 
-    #include "../Header/NRE_GL.hpp"
+     #include "../Header/NRE_GL.hpp"
+     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
 
      /**
      * @namespace NRE
@@ -26,7 +27,7 @@
              * @class Camera
              * @brief A base camera
              */
-            class Camera {
+            class Camera : public Utility::Stringable<Camera> {
                 private:    //Fields
                     float speed;                            /**< The camera's speed */
                     Math::Point3D<float> eye;               /**< The camera's point of view */
@@ -206,14 +207,6 @@
                     static constexpr Math::Angle MIN_PITCH = -89.9 * Math::degree;    /**< The minimum phi */
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, Camera const& o);
         }
     }
 

@@ -9,6 +9,7 @@
     #pragma once
 
     #include <Header/NRE_Math.hpp>
+    #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp
 
     /**
      * @namespace NRE
@@ -25,7 +26,7 @@
              * @class Chunk
              * @brief Manage a collection of voxels
              */
-            class Chunk {
+            class Chunk : public Utility::Stringable<Chunk> {
                 public :    // Static
                     static constexpr std::size_t SIZE_X     = 16;
                     static constexpr std::size_t SIZE_Y     = 16;
@@ -145,14 +146,6 @@
                          */
                         Utility::String toString() const;
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, Chunk const& o);
 
         }
     }

@@ -139,9 +139,5 @@
             inline Math::Matrix4x4<float>& Camera::getProjection() {
                 return projection;
             }
-
-            inline std::ostream& operator <<(std::ostream& stream, Camera const& o) {
-                return stream << o.toString();
-            }
         }
     }

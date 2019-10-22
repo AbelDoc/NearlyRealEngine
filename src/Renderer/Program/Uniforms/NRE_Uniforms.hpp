@@ -27,7 +27,7 @@
              * @class Uniforms
              * @brief Manage a collection of uniforms
              */
-            class Uniforms {
+            class Uniforms : public Utility::Stringable<Uniforms> {
                 private:    //Fields
                     Utility::UnorderedMap<Utility::String, GLint> uniforms;  /**< Uniform's location associate with his name */
 
@@ -96,14 +96,6 @@
                         Utility::String toString() const;
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, Uniforms const& o);
         }
     }
 

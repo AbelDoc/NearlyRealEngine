@@ -30,9 +30,5 @@
                 }
                 return r;
             }
-
-            inline std::ostream& operator <<(std::ostream& stream, Uniforms const& o) {
-                return stream << o.toString();
-            }
         }
     }
