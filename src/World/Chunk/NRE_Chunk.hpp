@@ -9,7 +9,7 @@
     #pragma once
 
     #include <Header/NRE_Math.hpp>
-    #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp
+    #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
 
     /**
      * @namespace NRE

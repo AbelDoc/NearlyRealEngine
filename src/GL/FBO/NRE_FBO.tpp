@@ -71,10 +71,5 @@
                 }
                 return *this;
             }
-
-            inline std::ostream& operator <<(std::ostream& stream, FBO const& o) {
-                return stream << o.toString();
-            }
-
         }
     }

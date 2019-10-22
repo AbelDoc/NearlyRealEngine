@@ -62,9 +62,5 @@
                 }
                 return *this;
             }
-
-            inline std::ostream& operator <<(std::ostream& stream, Texture2D const& o) {
-                return stream << o.toString();
-            }
         }
     }

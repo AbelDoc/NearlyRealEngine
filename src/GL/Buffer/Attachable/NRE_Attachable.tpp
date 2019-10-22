@@ -52,9 +52,5 @@
                 }
                 return *this;
             }
-
-            inline std::ostream& operator <<(std::ostream& stream, Attachable const& o) {
-                return stream << o.toString();
-            }
         }
     }

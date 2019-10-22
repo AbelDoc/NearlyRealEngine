@@ -26,7 +26,7 @@
              * @class FrameBuffer
              * @brief Manage the link between GPU Frame buffer and Engine
              */
-            class FrameBuffer {
+            class FrameBuffer : public Utility::Stringable<FrameBuffer> {
                 protected :   // Fields
                     Id id;              /**< The frame buffer id */
 
@@ -114,14 +114,6 @@
                         Utility::String toString() const;
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, FrameBuffer const& o);
         }
     }
 

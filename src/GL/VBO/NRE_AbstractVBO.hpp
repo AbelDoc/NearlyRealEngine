@@ -10,6 +10,7 @@
      #pragma once
 
      #include <cassert>
+     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
 
      #include "../Buffer/Array/Attribute/NRE_AttributeBuffer.hpp"
 
@@ -28,7 +29,7 @@
              * @class AbstractVBO
              * @brief Manage a layout of data, abstract base for specialized layout
              */
-            class AbstractVBO {
+            class AbstractVBO : public Utility::Stringable<AbstractVBO> {
                 private:    //Fields
                     AttributeBuffer buffer; /**< The attribute buffer */
                     GLsizei count;          /**< The number of vertex */
@@ -193,14 +194,6 @@
                     virtual const void* getDataPointer() const = 0;
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, AbstractVBO const& o);
         }
     }
 

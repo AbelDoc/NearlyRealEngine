@@ -112,14 +112,6 @@
                         Utility::String toString() const;
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, Texture2D const& o);
         }
     }
 

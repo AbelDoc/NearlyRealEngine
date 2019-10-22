@@ -100,9 +100,5 @@
                 return getDataCount() * getLayoutSize();
             }
 
-            inline std::ostream& operator <<(std::ostream& stream, AbstractVBO const& o) {
-                return stream << o.toString();
-            }
-
         }
     }

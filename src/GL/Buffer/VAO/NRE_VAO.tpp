@@ -66,9 +66,5 @@
                 }
                 return *this;
             }
-
-            inline std::ostream& operator <<(std::ostream& stream, VAO const& o) {
-                return stream << o.toString();
-            }
         }
     }

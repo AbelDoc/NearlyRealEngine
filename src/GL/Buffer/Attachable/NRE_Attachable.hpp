@@ -28,7 +28,7 @@
              * @pure Attachable
              * @brief Describe an attachable object
              */
-            class Attachable {
+            class Attachable : public Utility::Stringable<Attachable> {
                 protected :   // Fields
                     Id id;              /**< The attachable id */
 
@@ -130,14 +130,6 @@
                         virtual Utility::String toString() const = 0;
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, Attachable const& o);
         }
     }
 

@@ -28,7 +28,7 @@
              * @class VAO
              * @brief Manage the binding of vbo with the GPU
              */
-            class VAO {
+            class VAO : public Utility::Stringable<VAO> {
                 protected :   // Fields
                     Id id;              /**< The frame buffer id */
 
@@ -115,14 +115,6 @@
                         Utility::String toString() const;
 
             };
-
-            /**
-             * Output stream operator for the object
-             * @param  stream the stream to add the object's string representation
-             * @param  o      the object to add in the stream
-             * @return the    modified stream
-             */
-            std::ostream& operator <<(std::ostream& stream, VAO const& o);
         }
     }
 

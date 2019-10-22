@@ -11,6 +11,8 @@
 
      #include "../NRE_Layout.hpp"
 
+     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+
      /**
      * @namespace NRE
      * @brief The NearlyRealEngine's global namespace
@@ -26,7 +28,7 @@
              * @class PrimitiveVertex
              * @brief A vertex layout : Position - Normal
              */
-            class PrimitiveVertex {
+            class PrimitiveVertex : public Utility::Stringable<PrimitiveVertex> {
                 private:    //Fields
                     Math::Vector4D<float> position;    /**< Vertex's position */
                     Math::Vector4D<float> normal;      /**< Vertex's normal */
@@ -34,7 +36,7 @@
                 public:    // Methods
                     //## Constructor ##//
                         /**
-                         * Default constructor
+                         * No default constructor
                          */
                         PrimitiveVertex() = delete;
                         /**
