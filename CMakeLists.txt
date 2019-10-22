@@ -55,6 +55,13 @@ include_directories(src/Renderer/Program/Shader/Fragment)
 include_directories(src/Renderer/Program/Shader/Geometry)
 include_directories(src/Renderer/Program/Shader/Vertex)
 include_directories(src/Renderer/Program/Uniforms)
+include_directories(src/Utility)
+include_directories(src/Utility/Interfaces)
+include_directories(src/Utility/Interfaces/Bindable)
+include_directories(src/Utility/Interfaces/Allocable)
+include_directories(src/Utility/Interfaces/Identifiable)
+include_directories(src/Model)
+include_directories(src/Model/Mesh)
 include_directories(src/World)
 include_directories(src/World/Chunk)
 include_directories(src/World/Factory)
@@ -114,6 +121,9 @@ set(COMPILE_LIST
         src/Renderer/Program/NRE_Program.hpp
         src/Utility/Interfaces/Allocable/NRE_Allocable.hpp
         src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
+        src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
+        src/Model/Mesh/NRE_Mesh.hpp
+        src/Model/Mesh/NRE_Mesh.cpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
