@@ -24,18 +24,12 @@
 
     class DevApplication : public Application {
         public :    // Static
-            static constexpr int SIMULTANEOUS_W = 1;
-            static constexpr int SIMULTANEOUS_H = 1;
-
             static constexpr int SCREEN_W = 1280;
             static constexpr int SCREEN_H = 720;
 
-            static constexpr int VIEWPORT_W = SCREEN_W / SIMULTANEOUS_W;
-            static constexpr int VIEWPORT_H = SCREEN_H / SIMULTANEOUS_H;
-
         private :   // Field
-            VAO* vaos;
-            IBO<PrimitiveVertex>* ibos;
+            VAO vao;
+            IBO<PrimitiveVertex> ibo;
             PerspectiveCamera camera;
 
             World::World world;
@@ -48,7 +42,7 @@
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), vaos(new VAO[SIMULTANEOUS_H * SIMULTANEOUS_W]), ibos(new IBO<PrimitiveVertex>[SIMULTANEOUS_H * SIMULTANEOUS_W]{GL_STATIC_DRAW}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true), normal(false), fov(70.0_deg) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), ibo(GL_STATIC_DRAW), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true), normal(false), fov(70.0_deg) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -116,66 +110,40 @@
                     Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
                         shader->sendCamera(camera);
-                        std::size_t index = 0;
-                        for (int i = 0; i < SIMULTANEOUS_H; i++) {
-                            for (int j = 0; j < SIMULTANEOUS_W; j++) {
-                                auto& ibo = ibos[index];
-                                auto& vao = vaos[index++];
-                                glViewport(j * VIEWPORT_W, i * VIEWPORT_H, VIEWPORT_W, VIEWPORT_H);
-                                vao.bind();
-                                    ibo.draw();
-                                vao.unbind();
-                            }
-                        }
+                        vao.bind();
+                            ibo.draw();
+                        vao.unbind();
                     shader->unbind();
                     if (normal) {
                         DebugNormal* debug = ProgramManager::get<DebugNormal>();
                         debug->bind();
                             debug->sendCamera(camera);
-                            index = 0;
-                            for (int i = 0; i < SIMULTANEOUS_H; i++) {
-                                for (int j = 0; j < SIMULTANEOUS_W; j++) {
-                                    auto& ibo = ibos[index];
-                                    auto& vao = vaos[index++];
-                                    glViewport(j * VIEWPORT_W, i * VIEWPORT_H, VIEWPORT_W, VIEWPORT_H);
-                                    vao.bind();
-                                        ibo.draw();
-                                    vao.unbind();
-                                }
-                            }
+                            vao.bind();
+                                ibo.draw();
+                            vao.unbind();
                         debug->unbind();
                     }
                 }
                 void destroy() override {
-                    delete[] ibos;
-                    delete[] vaos;
                 }
                 void updateChunks() {
                     Clock clock;
                     clock.update();
-                    std::size_t index = 0;
-                    for (int i = 0; i < SIMULTANEOUS_H; i++) {
-                        for (int j = 0; j < SIMULTANEOUS_W; j++) {
-                            auto& ibo = ibos[index];
-                            auto& vao = vaos[index];
-                            
-                            ibo.deallocate();
-
-                            for (Chunk& c : world) {
-                                ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[index], (linear) ? (ChunkPolygonizer::interpolateLinearVertex) : (ChunkPolygonizer::interpolateFlatVertex));
-                            }
-
-                            std::cout << "Chunks update :" << std::endl;
-                            std::cout << "\tResolution : " << ChunkPolygonizer::LEVELS[index] << std::endl;
-                            std::cout << "\tVertex count : " << ibo.getDataCount() << std::endl;
-                            std::cout << "\tIndex count : " << ibo.getIndexCount() << std::endl;
-                            index++;
-
-                            ibo.allocateAndFill();
-                            vao.access(&ibo);
-                        }
+                    
+                    ibo.deallocate();
+    
+                    for (Chunk& c : world) {
+                        ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[0], (linear) ? (ChunkPolygonizer::interpolateLinearVertex) : (ChunkPolygonizer::interpolateFlatVertex));
                     }
+    
+                    std::cout << "Chunks update :" << std::endl;
+                    std::cout << "\tVertex count : " << ibo.getDataCount() << std::endl;
+                    std::cout << "\tIndex count : " << ibo.getIndexCount() << std::endl;
+
+                    ibo.allocateAndFill();
+                    vao.access(&ibo);
                     clock.update();
+                    
                     std::cout << "Time taken for update : " << clock.getDelta() << std::endl;
                 }
     };
