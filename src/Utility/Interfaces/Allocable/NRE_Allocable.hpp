@@ -9,6 +9,7 @@
     
     #pragma once
 
+    #include <cassert>
     #include <Utility/Interfaces/NRE_StaticInterface.hpp>
     
     /**
@@ -94,7 +95,7 @@
                          * @param a the allocable to copy
                          * @return  the reference of himself
                          */
-                        Allocable& operator =(Allocable const& a = default;
+                        Allocable& operator =(Allocable const& a) = default;
                         /**
                          * Move assignment of a into this
                          * @param a the allocable to move into this
