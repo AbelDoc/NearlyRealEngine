@@ -28,51 +28,35 @@
              * @class ArrayBuffer
              * @brief Manage an array buffer for VBO communication with OpenGL
              */
-            class ArrayBuffer {
-                private :   // Fields
-                    Id id;              /**< The buffer id */
-                    bool allocated;     /**< Tell if the buffer is allocated */
-
+            class ArrayBuffer : public Utility::Identifiable<ArrayBuffer>,
+                                public Utility::Allocable<ArrayBuffer>,
+                                public Utility::Bindable<ArrayBuffer>,
+                                public Utility::Uncopyable<ArrayBuffer> {
                 public :    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        ArrayBuffer();
-
-                    //## Copy-Constructor ##//
-                        /**
-                         * Copy forbidden
-                         * @param b the array buffer to copy
-                         */
-                        ArrayBuffer(ArrayBuffer const& b) = delete;
+                        ArrayBuffer() = default;
 
                     //## Move-Constructor ##//
                         /**
                          * Move b into this
                          * @param b the array buffer to move
                          */
-                        ArrayBuffer(ArrayBuffer && b);
+                        ArrayBuffer(ArrayBuffer && b) = default;
 
                     //## Deconstructor ##//
                         /**
                          * ArrayBuffer Deconstructor
                          */
-                        virtual ~ArrayBuffer();
+                        virtual ~ArrayBuffer() = default;
 
                     //## Getter ##//
                         /**
                          * @return the specific OpenGL buffer's target
                          */
                         virtual BufferTarget getTarget() const = 0;
-                        /**
-                         * @return if the buffer is allocated
-                         */
-                        bool isAllocated() const;
-                        /**
-                         * @return the buffer id
-                         */
-                        Id getId() const;
 
                     //## Methods ##//
                         /**
@@ -133,17 +117,11 @@
 
                     //## Assignment Operator ##//
                         /**
-                         * Copy assignment forbidden
-                         * @param b the array buffer to move into this
-                         * @return  the reference of himself
-                         */
-                        ArrayBuffer& operator =(ArrayBuffer const& b) = delete;
-                        /**
                          * Move assignment of b into this
                          * @param b the array buffer to move into this
                          * @return  the reference of himself
                          */
-                        ArrayBuffer& operator =(ArrayBuffer && b);
+                        ArrayBuffer& operator =(ArrayBuffer && b) = default;
 
             };
         }

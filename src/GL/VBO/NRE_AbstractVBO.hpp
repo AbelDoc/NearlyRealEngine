@@ -111,6 +111,10 @@
                          */
                         bool reallocate();
                         /**
+                         * Deallocate the VBO
+                         */
+                        virtual void deallocate();
+                        /**
                          * Check if the buffer has to be orphaned or reallocated
                          * @return the test's result
                          */

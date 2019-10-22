@@ -19,7 +19,7 @@
             }
 
             inline void Texture2DBuffer::allocate(GLint level, Surface const& surface) {
-                Attachable::allocate();
+                Utility::Allocable<Attachable>::allocate();
                 bind();
                     send2DTextureData(getTarget(), level, surface.getInternalFormat(), surface.getSize(), 0, surface.getFormat(), getType(), nullptr);
                     applyFilter();
@@ -40,7 +40,7 @@
             }
 
             inline void Texture2DBuffer::allocateAndFill(GLint level, Surface& surface) {
-                Attachable::allocate();
+                Utility::Allocable<Attachable>::allocate();
                 bind();
                     send2DTextureData(getTarget(), level, surface.getInternalFormat(), surface.getSize(), 0, surface.getFormat(), getType(), surface.getPixels());
                     surface.deallocateSurface();

@@ -28,42 +28,28 @@
              * @class VAO
              * @brief Manage the binding of vbo with the GPU
              */
-            class VAO : public Utility::Stringable<VAO> {
-                protected :   // Fields
-                    Id id;              /**< The frame buffer id */
-
+            class VAO : public Utility::Identifiable<VAO>,
+                        public Utility::Stringable<VAO>,
+                        public Utility::Uncopyable<VAO>{
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        VAO();
-
-                    //## Copy-Constructor ##//
-                        /**
-                         * Copy forbidden
-                         * @param o the vao to copy
-                         */
-                        VAO(VAO const& o) = delete;
+                        VAO() = default;
 
                     //## Move-Constructor ##//
                         /**
                          * Move o into this
                          * @param o the vao to move
                          */
-                        VAO(VAO && o);
+                        VAO(VAO && o) = default;
 
                     //## Deconstructor ##//
                         /**
                          * VAO Deconstructor
                          */
-                        ~VAO();
-
-                    //## Getter ##//
-                        /**
-                         * @return the vao id
-                         */
-                        Id getId() const;
+                        ~VAO() = default;
 
                     //## Methods ##//
                         /**
@@ -95,17 +81,11 @@
 
                     //## Assignment Operator ##//
                         /**
-                         * Copy assignment forbidden
-                         * @param o the vao to copy
-                         * @return  the reference of himself
-                         */
-                        VAO& operator =(VAO const& o) = delete;
-                        /**
                          * Move assignment of o into this
                          * @param o the vao to move into this
                          * @return  the reference of himself
                          */
-                        VAO& operator =(VAO && o);
+                        VAO& operator =(VAO && o) = default;
 
                     //## Stream Operator ##//
                         /**

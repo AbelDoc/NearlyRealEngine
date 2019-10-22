@@ -10,23 +10,6 @@
     namespace NRE {
         namespace GL {
 
-            inline VAO::VAO() : id(0) {
-                createId();
-            }
-
-            inline VAO::VAO(VAO && o) : id(o.id) {
-                o.id = 0;
-            }
-
-            inline VAO::~VAO() {
-                unbind();
-                deleteId();
-            }
-
-            inline Id VAO::getId() const {
-                return id;
-            }
-
             inline void VAO::bind() const {
                 bindVAO(getId());
             }
@@ -57,14 +40,6 @@
                 Utility::String res;
                 res << id;
                 return res;
-            }
-
-            inline VAO& VAO::operator =(VAO && o) {
-                if (this != &o) {
-                    id = o.id;
-                    o.id = 0;
-                }
-                return *this;
             }
         }
     }

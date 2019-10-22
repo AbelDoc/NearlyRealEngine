@@ -10,27 +10,18 @@
     namespace NRE {
         namespace GL {
 
-            inline Surface::Surface() : pixels(nullptr), format(0), internalFormat(0), allocated(false)  {
+            inline Surface::Surface() : pixels(nullptr), format(0), internalFormat(0)  {
             }
 
-            inline Surface::Surface(IO::File const& file) : pixels(nullptr), format(0), internalFormat(0), allocated(false) {
+            inline Surface::Surface(IO::File const& file) : pixels(nullptr), format(0), internalFormat(0) {
                 load(file);
             }
 
-            inline Surface::Surface(Math::Vector2D<GLsizei> const& s, TextureFormat f, TextureInternalFormat iF) : size(s), pixels(nullptr), format(f), internalFormat(iF), allocated(false) {
+            inline Surface::Surface(Math::Vector2D<GLsizei> const& s, TextureFormat f, TextureInternalFormat iF) : size(s), pixels(nullptr), format(f), internalFormat(iF) {
             }
 
-            inline Surface::Surface(Surface && s) : size(std::move(s.size)), pixels(std::move(s.pixels)), format(s.format), internalFormat(s.internalFormat), allocated(s.pixels) {
+            inline Surface::Surface(Surface && s) : Utility::Allocable<Surface>(std::move(s)), size(std::move(s.size)), pixels(std::move(s.pixels)), format(s.format), internalFormat(s.internalFormat) {
                 s.pixels = nullptr;
-                s.allocated = false;
-            }
-
-            inline Surface::~Surface() {
-                deallocate();
-            }
-
-            inline bool Surface::isAllocated() const {
-                return allocated;
             }
 
             inline Math::Vector2D<GLsizei> const& Surface::getSize() const {
@@ -69,10 +60,6 @@
             }
 
             inline void Surface::allocate() {
-                if (allocated) {
-                    deallocate();
-                }
-                allocated = true;
             }
 
             inline void Surface::deallocate() {
@@ -81,7 +68,6 @@
                 format = 0;
                 internalFormat = 0;
                 assert(pixels == nullptr);
-                allocated = false;
             }
 
             inline void Surface::deallocateSurface() {
@@ -93,7 +79,7 @@
                 int w, h, n;
                 stbi_set_flip_vertically_on_load(true);
                 pixels = stbi_load(file.getPath().getCData(), &w, &h, &n, 0);
-                allocate();
+                Utility::Allocable<Surface>::allocate();
                 size = Math::Vector2D<GLsizei>(w, h);
                 if (n == 3) {
                     internalFormat = GL_RGB;
@@ -107,19 +93,18 @@
             }
 
             inline void Surface::update(IO::File const& file) {
-                deallocate();
+                Utility::Allocable<Surface>::deallocate();
                 load(file);
             }
 
             inline Surface& Surface::operator =(Surface && s) {
                 if (this != &s) {
+                    Utility::Allocable<Surface>::operator=(std::move(s));
                     size = std::move(s.size);
                     pixels = std::move(s.pixels);
-                    allocated = s.allocated;
                     format = s.format;
                     internalFormat = s.internalFormat;
                     s.pixels = nullptr;
-                    s.allocated = false;
                 }
                 return *this;
             }

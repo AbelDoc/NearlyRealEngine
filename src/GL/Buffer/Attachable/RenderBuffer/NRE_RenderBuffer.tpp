@@ -11,7 +11,6 @@
         namespace GL {
 
             inline RenderBuffer::RenderBuffer(RenderInternalFormat internalFormat, GLsizei w, GLsizei h) {
-                createId();
                 allocate(internalFormat, w, h);
             }
 
@@ -24,15 +23,11 @@
             }
 
             inline void RenderBuffer::createId() {
-                if (exist()) {
-                    deleteId();
-                }
                 id = generateRenderBuffer();
             }
 
             inline void RenderBuffer::deleteId() {
                 deleteRenderBuffer(id);
-                id = 0;
             }
 
             inline bool RenderBuffer::exist() const {

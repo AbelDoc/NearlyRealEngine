@@ -14,7 +14,7 @@
             }
 
             inline void Texture3DBuffer::allocate(GLint level, GLsizei z, Surface const& surface) {
-                Attachable::allocate();
+                Utility::Allocable<Attachable>::allocate();
                 bind();
                     send3DTextureData(getTarget(), level, surface.getInternalFormat(), surface.getSize(), z, 0, surface.getFormat(), getType(), nullptr);
                     applyFilter();
@@ -29,7 +29,7 @@
             }
 
             inline void Texture3DBuffer::allocateAndFill(GLint level, GLsizei z, Surface& surface) {
-                Attachable::allocate();
+                Utility::Allocable<Attachable>::allocate();
                 bind();
                     send3DTextureData(getTarget(), level, surface.getInternalFormat(), surface.getSize(), z, 0, surface.getFormat(), getType(), surface.getPixels());
                     surface.deallocateSurface();

@@ -28,49 +28,30 @@
              * @pure Attachable
              * @brief Describe an attachable object
              */
-            class Attachable : public Utility::Stringable<Attachable> {
-                protected :   // Fields
-                    Id id;              /**< The attachable id */
-
-                private :    // Fields
-                    bool allocated;     /**< Tell if the attachable is allocated */
-
+            class Attachable : public Utility::Identifiable<Attachable>,
+                               public Utility::Allocable<Attachable>,
+                               public Utility::Bindable<Attachable>,
+                               public Utility::Uncopyable<Attachable>,
+                               public Utility::Stringable<Attachable> {
                 public :    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        Attachable();
-
-                    //## Copy-Constructor ##//
-                        /**
-                         * Copy forbidden
-                         * @param a the attachable object to copy
-                         */
-                        Attachable(Attachable const& a) = delete;
+                        Attachable() = default;
 
                     //## Move-Constructor ##//
                         /**
                          * Move a into this
                          * @param a the attachable object to move
                          */
-                        Attachable(Attachable && a);
+                        Attachable(Attachable && a) = default;
 
                     //## Deconstructor ##//
                         /**
                          * Attachable Deconstructor
                          */
-                        virtual ~Attachable();
-
-                    //## Getter ##//
-                        /**
-                         * @return if the attachable is allocated
-                         */
-                        bool isAllocated() const;
-                        /**
-                         * @return the attachable id
-                         */
-                        Id getId() const;
+                        virtual ~Attachable() = default;
 
                     //## Methods ##//
                         /**
@@ -78,27 +59,6 @@
                          * @param target the attachment point
                          */
                         virtual void attach(AttachPoint target) const = 0;
-                        /**
-                         * Bind the object
-                         */
-                        virtual void bind() const = 0;
-                        /**
-                         * Unbind the object
-                         */
-                        virtual void unbind() const = 0;
-                        /**
-                         * Create the object's id
-                         */
-                        virtual void createId() = 0;
-                        /**
-                         * Delete the object's id
-                         */
-                        virtual void deleteId() = 0;
-                        /**
-                         * Test if the id already exist
-                         * @return the test's result
-                         */
-                        virtual bool exist() const = 0;
                         /**
                          * Allocate the object
                          */
@@ -110,17 +70,11 @@
 
                     //## Assignment Operator ##//
                         /**
-                         * Copy assignment forbidden
-                         * @param a the attachable object to copy
-                         * @return  the reference of himself
-                         */
-                        Attachable& operator =(Attachable const& a) = delete;
-                        /**
                          * Move assignment of a into this
                          * @param a the attachable object to move into this
                          * @return  the reference of himself
                          */
-                        Attachable& operator =(Attachable && a);
+                        Attachable& operator =(Attachable && a) = default;
 
                     //## Stream Operator ##//
                         /**

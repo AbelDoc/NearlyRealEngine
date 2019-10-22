@@ -69,19 +69,19 @@
                         /**
                          * Bind the object
                          */
-                        void bind() const override;
+                        void bind() const;
                         /**
                          * Unbind the object
                          */
-                        void unbind() const override;
+                        void unbind() const;
                         /**
                          * Create the object's id
                          */
-                        void createId() override;
+                        void createId();
                         /**
                          * Delete the object's id
                          */
-                        void deleteId() override;
+                        void deleteId();
                         /**
                          * Test if the id already exist
                          * @return the test's result

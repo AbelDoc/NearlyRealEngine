@@ -90,14 +90,19 @@
             inline bool IBO<Layout, Index>::checkReallocation() {
                 bool result = VBO<Layout>::checkReallocation();
                 if (getIndexSize() > indexSize) {
-                    element.deleteId();
-                    element.createId();
+                    element.regenerateId();
                     result = true;
                 } else {
                     orphanIndex();
                 }
-                element.deallocate();
+                static_cast <Utility::Allocable<ArrayBuffer>&> (element).deallocate();
                 return result;
+            }
+            
+            template <class Layout, class Index>
+            inline void IBO<Layout, Index>::deallocate() {
+                AbstractVBO::deallocate();
+                static_cast <Utility::Allocable<ArrayBuffer>&> (element).deallocate();
             }
 
             template <class Layout, class Index>

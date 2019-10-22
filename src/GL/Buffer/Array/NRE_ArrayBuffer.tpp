@@ -10,27 +10,6 @@
     namespace NRE {
         namespace GL {
 
-            inline ArrayBuffer::ArrayBuffer() : id(0), allocated(false) {
-                createId();
-            }
-
-            inline ArrayBuffer::ArrayBuffer(ArrayBuffer && b) : id(b.id), allocated(b.allocated) {
-                b.id = 0;
-                b.allocated = false;
-            }
-
-            inline ArrayBuffer::~ArrayBuffer() {
-                deallocate();
-            }
-
-            inline bool ArrayBuffer::isAllocated() const {
-                return allocated;
-            }
-
-            inline Id ArrayBuffer::getId() const {
-                return id;
-            }
-
             inline void ArrayBuffer::bind() const {
                 bindBuffer(getTarget(), getId());
             }
@@ -40,15 +19,11 @@
             }
 
             inline void ArrayBuffer::createId() {
-                if (exist()) {
-                    deleteId();
-                }
                 id = generateBuffer();
             }
 
             inline void ArrayBuffer::deleteId() {
                 deleteBuffer(id);
-                id = 0;
             }
 
             inline bool ArrayBuffer::exist() const {
@@ -56,20 +31,13 @@
             }
 
             inline void ArrayBuffer::allocate() {
-                if (isAllocated()) {
-                    deallocate();
-                    createId();
-                }
-                allocated = true;
             }
 
             inline void ArrayBuffer::deallocate() {
-                deleteId();
-                allocated = false;
             }
 
             inline void ArrayBuffer::allocate(std::size_t size, StreamUsage usage) {
-                allocate();
+                Utility::Allocable<ArrayBuffer>::allocate();
                 bind();
                     sendData(getTarget(), size, nullptr, usage);
                 unbind();
@@ -82,7 +50,7 @@
             }
 
             inline void ArrayBuffer::allocateAndFill(std::size_t size, const void* data, StreamUsage usage) {
-                allocate();
+                Utility::Allocable<ArrayBuffer>::allocate();
                 bind();
                     sendData(getTarget(), size, data, usage);
                 unbind();
@@ -92,16 +60,6 @@
                 bind();
                     sendData(getTarget(), size, nullptr, usage);
                 unbind();
-            }
-
-            inline ArrayBuffer& ArrayBuffer::operator =(ArrayBuffer && b) {
-                if (this != &b) {
-                    id = b.id;
-                    b.id = 0;
-                    allocated = b.allocated;
-                    b.allocated = false;
-                }
-                return *this;
             }
 
         }

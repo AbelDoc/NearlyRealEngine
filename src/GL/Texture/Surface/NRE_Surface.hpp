@@ -29,13 +29,13 @@
              * @class Surface
              * @brief Manage a surface
              */
-            class Surface {
+            class Surface : public Utility::Allocable<Surface>,
+                            public Utility::Uncopyable<Surface> {
                 private:    //Fields
                     Math::Vector2D<GLsizei> size;           /**< The surface's size */
                     unsigned char* pixels;                  /**< The surface's pixels */
                     TextureFormat format;                   /**< The surface's pixel format */
                     TextureInternalFormat internalFormat;   /**< The surface's internal pixel format */
-                    bool allocated;                         /**< Tell if the surface is allocated */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -56,13 +56,6 @@
                          */
                         Surface(Math::Vector2D<GLsizei> const& s, TextureFormat f, TextureInternalFormat iF);
 
-                    //## Copy-Constructor ##//
-                        /**
-                         * Copy forbidden
-                         * @param s the surface object to copy
-                         */
-                        Surface(Surface const& s) = delete;
-
                     //## Move-Constructor ##//
                         /**
                          * Move s into this
@@ -74,13 +67,9 @@
                         /**
                          * Surface Deconstructor
                          */
-                        ~Surface();
+                        ~Surface() = default;
 
                     //## Getter ##//
-                        /**
-                         * @return if the surface is allocated
-                         */
-                        bool isAllocated() const;
                         /**
                          * @return the surface's size
                          */
@@ -141,12 +130,6 @@
                         void update(IO::File const& file);
 
                     //## Assignment Operator ##//
-                        /**
-                         * Copy assignment forbidden
-                         * @param s the surface object to copy
-                         * @return  the reference of himself
-                         */
-                        Surface& operator =(Surface const& s) = delete;
                         /**
                          * Move assignment of s into this
                          * @param s the surface to move into this

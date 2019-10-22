@@ -11,6 +11,8 @@
 
     #include <cassert>
     #include <Utility/Interfaces/NRE_StaticInterface.hpp>
+
+#include <iostream>
     
     /**
     * @namespace NRE

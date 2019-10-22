@@ -30,10 +30,10 @@
              */
             template <class T>
             class Identifiable : public StaticInterface<T, Identifiable> {
-                private:    //Fields
+                protected :    //Fields
                     Id id;      /**< The object's id */
     
-                public:    // Methods
+                public :       // Methods
                     //## Constructor ##//
                         /**
                          * Construct the object
@@ -45,13 +45,6 @@
                             }
                         }
         
-                    //## Copy Constructor ##//
-                        /**
-                         * Copy i into this
-                         * @param i the identifiable to copy
-                         */
-                        Identifiable(Identifiable const& i) = default;
-    
                     //## Move Constructor ##//
                         /**
                          * Move i into this
@@ -93,7 +86,7 @@
                          */
                         void deleteId()  {
                             if (id != 0) {
-                                this->impl().auxDeleteId();
+                                this->impl().deleteId();
                                 id = 0;
                             }
                         }
@@ -113,12 +106,6 @@
                         }
     
                     //## Assignment Operator ##//
-                        /**
-                         * Copy assignment of i into this
-                         * @param i the identifaible to copy
-                         * @return  the reference of himself
-                         */
-                        Identifiable operator =(Identifiable const& i) = default;
                         /**
                          * Move assignment of i into this
                          * @param i the identifiable to move

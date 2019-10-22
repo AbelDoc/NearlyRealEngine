@@ -54,14 +54,17 @@
             inline bool AbstractVBO::checkReallocation() {
                 bool result = false;
                 if (getDataSize() > size) {
-                    buffer.deleteId();
-                    buffer.createId();
+                    buffer.regenerateId();
                     result = true;
                 } else {
                     orphan();
                 }
-                buffer.deallocate();
+                static_cast <Utility::Allocable<ArrayBuffer>&> (buffer).deallocate();
                 return result;
+            }
+            
+            inline void AbstractVBO::deallocate() {
+                static_cast <Utility::Allocable<ArrayBuffer>&> (buffer).deallocate();
             }
 
             inline void AbstractVBO::draw(DrawMode mode) const {

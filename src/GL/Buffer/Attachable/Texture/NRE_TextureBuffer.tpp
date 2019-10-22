@@ -11,11 +11,9 @@
         namespace GL {
 
             inline TextureBuffer::TextureBuffer() : type(GL_UNSIGNED_BYTE) {
-                createId();
             }
 
             inline TextureBuffer::TextureBuffer(TextureType t) : type(t) {
-                createId();
             }
 
             inline TextureType TextureBuffer::getType() const {
@@ -31,15 +29,11 @@
             }
 
             inline void TextureBuffer::createId() {
-                if (exist()) {
-                    deleteId();
-                }
                 id = GL::generateTexture();
             }
 
             inline void TextureBuffer::deleteId() {
                 GL::deleteTexture(id);
-                id = 0;
             }
 
             inline bool TextureBuffer::exist() const {

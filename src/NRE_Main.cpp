@@ -158,6 +158,8 @@
                         for (int j = 0; j < SIMULTANEOUS_W; j++) {
                             auto& ibo = ibos[index];
                             auto& vao = vaos[index];
+                            
+                            ibo.deallocate();
 
                             for (Chunk& c : world) {
                                 ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[index], (linear) ? (ChunkPolygonizer::interpolateLinearVertex) : (ChunkPolygonizer::interpolateFlatVertex));
@@ -181,6 +183,6 @@
     int main(int, char**) {
         DevApplication app;
         app.NREmain();
-
+        
         return 0;
     }

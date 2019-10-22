@@ -129,6 +129,10 @@
                          */
                         bool checkReallocation() override;
                         /**
+                         * Deallocate the IBO
+                         */
+                        void deallocate() override;
+                        /**
                          * Access the buffer to save command in a VAO
                          */
                         void access() const override;
