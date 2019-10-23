@@ -33,9 +33,11 @@
             
             template <class T>
             inline void Mesh<T>::draw(GL::DrawMode mode) const {
-                bind();
-                    vbo->draw(mode);
-                unbind();
+                if (vbo->getCount() > 0) {
+                    bind();
+                        vbo->draw(mode);
+                    unbind();
+                }
             }
             
             template <class T>

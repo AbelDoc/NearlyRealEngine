@@ -58,7 +58,7 @@
 
                     //## Getter ##//
                         /**
-                         * @return the number of vertex
+                         * @return the number of vertex which are not in GPU memory
                          */
                         std::size_t getDataCount() const override;
                         /**

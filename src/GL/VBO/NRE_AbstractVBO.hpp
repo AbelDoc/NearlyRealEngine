@@ -63,9 +63,13 @@
 
                     //## Getter ##//
                         /**
-                         * @return the number of vertex
+                         * @return the number of vertex which are not in GPU memory
                          */
                         virtual std::size_t getDataCount() const = 0;
+                        /**
+                         * @return the number of vertex in GPU memory
+                         */
+                        GLsizei getCount() const;
 
                     //## Methods ##//
                         /**

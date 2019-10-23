@@ -18,6 +18,7 @@
     using namespace NRE::Graphics;
     using namespace NRE::Camera;
     using namespace NRE::Utility;
+    using namespace NRE::Model;
     using namespace NRE::GL;
     using namespace NRE::World;
     using namespace std::chrono_literals;
@@ -28,21 +29,19 @@
             static constexpr int SCREEN_H = 720;
 
         private :   // Field
-            VAO vao;
-            IBO<PrimitiveVertex> ibo;
             PerspectiveCamera camera;
 
             World::World world;
+            Utility::Vector<Mesh<Chunk>> meshes;
 
             bool wireframeMode;
-            bool linear;
             bool normal;
 
             Angle fov;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), ibo(GL_STATIC_DRAW), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), linear(true), normal(false), fov(70.0_deg) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), normal(false), fov(70.0_deg) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -73,10 +72,6 @@
                             } else {
                                 polygonMode(GL_FRONT, GL_FILL);
                             }
-                            return true;
-                        } else if (event.isCode(KeyCode::L)) {
-                            linear = !linear;
-                            updateChunks();
                             return true;
                         } else if (event.isCode(KeyCode::N)) {
                             normal = !normal;
@@ -110,17 +105,17 @@
                     Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
                         shader->sendCamera(camera);
-                        vao.bind();
-                            ibo.draw();
-                        vao.unbind();
+                        for (Mesh<Chunk> const& m : meshes) {
+                            m.draw();
+                        }
                     shader->unbind();
                     if (normal) {
                         DebugNormal* debug = ProgramManager::get<DebugNormal>();
                         debug->bind();
                             debug->sendCamera(camera);
-                            vao.bind();
-                                ibo.draw();
-                            vao.unbind();
+                            for (Mesh<Chunk> const& m : meshes) {
+                                m.draw();
+                            }
                         debug->unbind();
                     }
                 }
@@ -130,20 +125,13 @@
                     Clock clock;
                     clock.update();
                     
-                    ibo.deallocate();
-    
-                    for (Chunk& c : world) {
-                        ChunkPolygonizer::polygonize(c, ibo, 0.0f, ChunkPolygonizer::LEVELS[0], (linear) ? (ChunkPolygonizer::interpolateLinearVertex) : (ChunkPolygonizer::interpolateFlatVertex));
+                    meshes.reserve(World::World::NB_CHUNKS);
+                    
+                    for (Chunk const& c : world) {
+                        meshes.emplaceBack(c);
                     }
     
-                    std::cout << "Chunks update :" << std::endl;
-                    std::cout << "\tVertex count : " << ibo.getDataCount() << std::endl;
-                    std::cout << "\tIndex count : " << ibo.getIndexCount() << std::endl;
-
-                    ibo.allocateAndFill();
-                    vao.access(&ibo);
                     clock.update();
-                    
                     std::cout << "Time taken for update : " << clock.getDelta() << std::endl;
                 }
     };

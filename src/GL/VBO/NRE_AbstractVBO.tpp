@@ -17,6 +17,10 @@
                 b.count = 0;
                 b.size = 0;
             }
+            
+            inline GLsizei AbstractVBO::getCount() const {
+                return count;
+            }
 
             inline void AbstractVBO::allocate(int nb) {
                 count = nb;
