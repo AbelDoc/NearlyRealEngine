@@ -10,15 +10,15 @@
     namespace NRE {
         namespace GL {
 
-            BufferTarget UniformBuffer::getTarget() const {
+            inline BufferTarget UniformBuffer::getTarget() const {
                 return GL_UNIFORM_BUFFER;
             }
 
-            void UniformBuffer::bindBase(int index) {
+            inline void UniformBuffer::bindBase(int index) {
                 bindBufferBase(getTarget(), index, getId());
             }
 
-            void UniformBuffer::connect(Id program, int index, Utility::String const& name) {
+            inline void UniformBuffer::connect(Id program, int index, Utility::String const& name) {
                 GLuint blockIndex = getUniformBlockIndex(program, name);
                 bind();
                     bindUniformBlock(program, blockIndex, index);

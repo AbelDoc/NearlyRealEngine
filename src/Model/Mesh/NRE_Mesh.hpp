@@ -10,6 +10,7 @@
     #pragma once
 
     #include "../../GL/VBO/NRE_AbstractVBO.hpp"
+    #include "../../GL/Buffer/VAO/NRE_VAO.hpp"
     
     /**
     * @namespace NRE
@@ -21,6 +22,8 @@
          * @brief Engine's Model module
          */
         namespace Model {
+            
+            template<class> class MeshFactory;
             
             template <class T>
             class Mesh : public Utility::Bindable<Mesh<T>>,

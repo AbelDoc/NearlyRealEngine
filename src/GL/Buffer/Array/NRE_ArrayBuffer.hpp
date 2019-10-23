@@ -10,8 +10,9 @@
      #pragma once
 
      #include <Header/NRE_Utility.hpp>
-
+    
      #include "../../../Header/NRE_GL.hpp"
+     #include "../../../Header/NRE_Utility.hpp"
 
      /**
      * @namespace NRE

@@ -10,7 +10,7 @@
     namespace NRE {
         namespace GL {
 
-            BufferTarget AttributeBuffer::getTarget() const {
+            inline BufferTarget AttributeBuffer::getTarget() const {
                 return GL_ARRAY_BUFFER;
             }
 

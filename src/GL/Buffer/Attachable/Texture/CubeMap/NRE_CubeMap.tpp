@@ -31,7 +31,7 @@
                 unbind();
             }
 
-            void CubeMap::update(GLint level, Utility::Vector<Math::Vector2D<GLint>> const& offsets, Utility::Vector<Surface>& surfaces) {
+            inline void CubeMap::update(GLint level, Utility::Vector<Math::Vector2D<GLint>> const& offsets, Utility::Vector<Surface>& surfaces) {
                 bind();
                     for (unsigned int i = 0; i < Math::FACE_NUM; i++) {
                         update2DTextureData(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, level, offsets[i], surfaces[i].getSize(), surfaces[i].getFormat(), getType(), surfaces[i].getPixels());
@@ -40,14 +40,14 @@
                 unbind();
             }
 
-            void CubeMap::update(GLint level, Math::Vector2D<GLint> const& offset, Surface& surface, GLenum target) {
+            inline void CubeMap::update(GLint level, Math::Vector2D<GLint> const& offset, Surface& surface, GLenum target) {
                 bind();
                     update2DTextureData(target, level, offset, surface.getSize(), surface.getFormat(), getType(), surface.getPixels());
                     surface.deallocateSurface();
                 unbind();
             }
 
-            void CubeMap::allocateAndFill(GLint level, Utility::Vector<Surface>& surfaces) {
+            inline void CubeMap::allocateAndFill(GLint level, Utility::Vector<Surface>& surfaces) {
                 Utility::Allocable<Attachable>::allocate();
                 bind();
                     for (unsigned int i = 0; i < Math::FACE_NUM; i++) {
@@ -58,15 +58,15 @@
                 unbind();
             }
 
-            void CubeMap::attach(AttachPoint target) const {
+            inline void CubeMap::attach(AttachPoint target) const {
                 attach(target, 0);
             }
 
-            void CubeMap::attach(AttachPoint target, GLint face, GLint level) const {
+            inline void CubeMap::attach(AttachPoint target, GLint face, GLint level) const {
                 attach2DTexture(GL_FRAMEBUFFER, target, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, getId(), level);
             }
 
-            void CubeMap::applyFilter() {
+            inline void CubeMap::applyFilter() {
                 setTextureParameter(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 setTextureParameter(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 setTextureParameter(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

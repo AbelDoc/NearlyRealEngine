@@ -11,8 +11,8 @@
         namespace Model {
         
             template <class T>
-            inline Mesh<T>::Mesh(T const& o) : vbo(MeshFactory::create<T>(o)) {
-                vbo.allocateAndFill();
+            inline Mesh<T>::Mesh(T const& o) : vbo(MeshFactory<T>::create(o)) {
+                vbo->allocateAndFill();
                 vao.access(getBuffer());
             }
             
@@ -34,7 +34,7 @@
             template <class T>
             inline void Mesh<T>::draw(GL::DrawMode mode) const {
                 bind();
-                    vbo.draw(mode);
+                    vbo->draw(mode);
                 unbind();
             }
             
