@@ -123,7 +123,7 @@ set(COMPILE_LIST
         src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
         src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
         src/Model/Mesh/NRE_Mesh.hpp
-        src/Model/Mesh/NRE_Mesh.cpp
+        src/Model/Mesh/NRE_Mesh.tpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp

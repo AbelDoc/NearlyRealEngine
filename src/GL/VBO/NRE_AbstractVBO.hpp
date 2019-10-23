@@ -29,7 +29,7 @@
              * @class AbstractVBO
              * @brief Manage a layout of data, abstract base for specialized layout
              */
-            class AbstractVBO : public Utility::Stringable<AbstractVBO> {
+        class AbstractVBO : public Utility::Stringable<AbstractVBO>, public Utility::Uncopyable<AbstractVBO> {
                 private:    //Fields
                     AttributeBuffer buffer; /**< The attribute buffer */
                     GLsizei count;          /**< The number of vertex */
@@ -48,13 +48,6 @@
                          */
                         AbstractVBO(StreamUsage stream);
 
-                    //## Copy-Constructor ##//
-                        /**
-                         * Copy forbidden
-                         * @param b the vbo to copy
-                         */
-                        AbstractVBO(AbstractVBO const& b) = delete;
-
                     //## Move-Constructor ##//
                         /**
                          * Move b into this
@@ -70,7 +63,6 @@
 
                     //## Getter ##//
                         /**
-                         * Data count getter
                          * @return the number of vertex
                          */
                         virtual std::size_t getDataCount() const = 0;
@@ -146,12 +138,6 @@
 
                     //## Assignment Operator ##//
                         /**
-                         * Copy assignment forbidden
-                         * @param b the vbo to copy
-                         * @return  the reference of himself
-                         */
-                        AbstractVBO& operator =(AbstractVBO const& b) = delete;
-                        /**
                          * Move assignment of b into this
                          * @param b the vbo to move into this
                          * @return  the reference of himself
@@ -182,17 +168,14 @@
                      */
                     virtual void clear() = 0;
                     /**
-                     * Layout type's size getter
                      * @return the layout type's size in bytes
                      */
                     virtual std::size_t getLayoutSize() const = 0;
                     /**
-                     * Data size getter
                      * @return the size of stored data in bytes
                      */
                     std::size_t getDataSize() const;
                     /**
-                     * Data's pointer getter
                      * @return the pointer to data
                      */
                     virtual const void* getDataPointer() const = 0;
