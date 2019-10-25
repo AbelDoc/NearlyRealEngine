@@ -81,7 +81,7 @@
                     }
             };
             
-            typedef CullableMesh<World::Chunk, Math::Frustum, Utility::Array<Math::Plane<int>, 6>> ChunkMesh;
+            typedef CullableMesh<World::Chunk, Math::Frustum, Utility::Array<Math::Point3D<int>, 8>> ChunkMesh;
     
             template <>
             inline bool ChunkMesh::inBound(Math::Frustum const& bound) const {
@@ -90,8 +90,8 @@
                 for (int i = 0; i < Math::FACE_NUM; i++) {
                     in = 0;
                     out = 0;
-                    for (int j = 0; j < Math::FACE_NUM; j = j + 1) {
-                        if (bound.getPlane(i).distance(cacheData[j].getPoint()) <= 0) {
+                    for (int j = 0; j < 8; j = j + 1) {
+                        if (bound.getPlane(i).distance(cacheData[j]) <= 0) {
                             out++;
                         } else {
                             in++;
@@ -108,23 +108,14 @@
             
             template <>
             inline void ChunkMesh::update(Utility::Observable*, void*) {
-                cacheData[Math::TOP].setPoint(target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X / 2, World::Chunk::SIZE_Y, World::Chunk::SIZE_Z / 2));
-                cacheData[Math::TOP].setNormal(Math::Vector3D<int>(0, 1, 0));
-                
-                cacheData[Math::BOTTOM].setPoint(target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X / 2, 0, World::Chunk::SIZE_Z / 2));
-                cacheData[Math::BOTTOM].setNormal(Math::Vector3D<int>(0, -1, 0));
-
-                cacheData[Math::LEFT].setPoint(target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X, World::Chunk::SIZE_Y / 2, World::Chunk::SIZE_Z / 2));
-                cacheData[Math::LEFT].setNormal(Math::Vector3D<int>(1, 0, 0));
-
-                cacheData[Math::RIGHT].setPoint(target.getPosition() + Math::Vector3D<int>(0, World::Chunk::SIZE_Y / 2, World::Chunk::SIZE_Z / 2));
-                cacheData[Math::RIGHT].setNormal(Math::Vector3D<int>(-1, 0, 0));
-                
-                cacheData[5].setPoint(target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X / 2, World::Chunk::SIZE_Y / 2, 0));
-                cacheData[5].setNormal(Math::Vector3D<int>(0, 0, 1));
-
-                cacheData[6].setPoint(target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X / 2, World::Chunk::SIZE_Y / 2, World::Chunk::SIZE_Z));
-                cacheData[6].setNormal(Math::Vector3D<int>(0, 0, -1));
+                cacheData[0] = target.getPosition();
+                cacheData[1] = target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X, 0, 0);
+                cacheData[2] = target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X, 0, World::Chunk::SIZE_Z);
+                cacheData[3] = target.getPosition() + Math::Vector3D<int>(0, 0, World::Chunk::SIZE_Z);
+                cacheData[4] = target.getPosition() + Math::Vector3D<int>(0, World::Chunk::SIZE_Y, 0);
+                cacheData[5] = target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X, World::Chunk::SIZE_Y, 0);
+                cacheData[6] = target.getPosition() + Math::Vector3D<int>(World::Chunk::SIZE_X, World::Chunk::SIZE_Y, World::Chunk::SIZE_Z);
+                cacheData[7] = target.getPosition() + Math::Vector3D<int>(0, World::Chunk::SIZE_Y, World::Chunk::SIZE_Z);
             }
         }
     }

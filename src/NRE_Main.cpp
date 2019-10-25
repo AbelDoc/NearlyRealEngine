@@ -32,7 +32,7 @@
             PerspectiveCamera camera;
 
             World::World world;
-            Utility::Vector<CullableMesh<Chunk, Frustum, Array<Plane<int>, 6>>> meshes;
+            Utility::Vector<ChunkMesh> meshes;
 
             bool wireframeMode;
             bool normal;
