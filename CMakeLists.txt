@@ -17,6 +17,8 @@ include_directories(C:/lib/STB)
 include_directories(src/Camera)
 include_directories(src/Camera/Perspective)
 include_directories(src/Exception)
+include_directories(src/Physics/Cullable)
+include_directories(src/Physics)
 include_directories(src/GL)
 include_directories(src/GL/Buffer)
 include_directories(src/GL/Buffer/Array)
@@ -62,6 +64,7 @@ include_directories(src/Utility/Interfaces/Allocable)
 include_directories(src/Utility/Interfaces/Identifiable)
 include_directories(src/Model)
 include_directories(src/Model/Mesh)
+include_directories(src/Model/CullableMesh)
 include_directories(src/World)
 include_directories(src/World/Chunk)
 include_directories(src/World/Factory)
@@ -124,6 +127,8 @@ set(COMPILE_LIST
         src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
         src/Model/Mesh/NRE_Mesh.hpp
         src/Model/Mesh/NRE_Mesh.tpp
+        src/Model/CullableMesh/NRE_CullableMesh.hpp
+        src/Model/CullableMesh/NRE_CullableMesh.tpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.cpp

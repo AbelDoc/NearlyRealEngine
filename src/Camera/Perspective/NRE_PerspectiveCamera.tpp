@@ -14,6 +14,10 @@
                 computePlane();
                 computeProjectionMatrix();
             }
+            
+            inline Math::Frustum const& PerspectiveCamera::getFrustum() const {
+                return frustum;
+            }
 
             inline void PerspectiveCamera::setFov(Math::Angle fieldOfView) {
                 frustum.setFov(fieldOfView);

@@ -19,6 +19,8 @@
 
              inline void Chunk::setPosition(Math::Point3D<int> const& p) {
                  position = p;
+                 setChanged(true);
+                 notifyAll();
              }
 
              inline typename Chunk::Iterator Chunk::begin() {

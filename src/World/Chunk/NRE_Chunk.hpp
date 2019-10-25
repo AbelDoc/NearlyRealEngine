@@ -9,7 +9,7 @@
     #pragma once
 
     #include <Header/NRE_Math.hpp>
-    #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+    #include <Header/NRE_Utility.hpp>
 
     /**
      * @namespace NRE
@@ -26,7 +26,7 @@
              * @class Chunk
              * @brief Manage a collection of voxels
              */
-            class Chunk : public Utility::Stringable<Chunk> {
+            class Chunk : public Utility::Observable, public Utility::Stringable<Chunk> {
                 public :    // Static
                     static constexpr std::size_t SIZE_X     = 16;
                     static constexpr std::size_t SIZE_Y     = 16;

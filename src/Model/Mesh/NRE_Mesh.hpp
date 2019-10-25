@@ -56,7 +56,7 @@
                         /**
                          * Mesh Deconstructor
                          */
-                        ~Mesh() = default;
+                        virtual ~Mesh() = default;
     
                     //## Getter ##//
                         /**
@@ -76,8 +76,9 @@
                         /**
                          * Draw the mesh
                          * @param mode the drawing mode
+                         * @return if the mesh has been drawn
                          */
-                        void draw(GL::DrawMode mode = GL_TRIANGLES) const;
+                        bool draw(GL::DrawMode mode = GL_TRIANGLES) const;
                         
                     //## Assignment Operator ##//
                         /**

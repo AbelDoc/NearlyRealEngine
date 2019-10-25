@@ -67,6 +67,12 @@
                          * PerspectiveCamera Deconstructor
                          */
                         ~PerspectiveCamera() = default;
+    
+                    //## Getter ##//
+                        /**
+                         * @return the camera's frustum
+                         */
+                        Math::Frustum const& getFrustum() const;
 
                     //## Setter ##//
                         /**

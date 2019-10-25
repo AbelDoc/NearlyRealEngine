@@ -9,13 +9,17 @@
 
     #include "NRE_ChunkPolygonizer.hpp"
     
+    using namespace NRE::GL;
+    using namespace NRE::Utility;
+    using namespace NRE::Math;
+    
     namespace NRE {
         namespace World {
             
-            void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO <GL::PrimitiveVertex>& ibo, float threshold,
+            void ChunkPolygonizer::polygonize(Chunk const& target, IBO <PrimitiveVertex>& ibo, float threshold,
                                               LODLevel level, Interpolator interpolator) {
-                Math::Point3D<float> vertices[12];
-                Utility::UnorderedMap <Math::Point3D<float>, IndexedData> indexed;
+                Point3D<float> vertices[12];
+                UnorderedMap<Point3D<float>, IndexedData> indexed;
                 indexed.reserve(3000);
                 
                 std::size_t width = Chunk::VOXELS_LAYER_WIDTH * level;
@@ -69,18 +73,18 @@
                                 corners |= 0b10000000;
                             }
                             if (edgeTable[corners] != 0) {
-                                Math::Point3D<float> p0 = Math::Point3D<float>(xF, yF, zF) + target.getPosition();
-                                Math::Point3D<float> p1 = Math::Point3D<float>(xF, yF, zF + levelF) + target.getPosition();
-                                Math::Point3D<float> p2 =
-                                        Math::Point3D<float>(xF + levelF, yF, zF + levelF) + target.getPosition();
-                                Math::Point3D<float> p3 = Math::Point3D<float>(xF + levelF, yF, zF) + target.getPosition();
-                                Math::Point3D<float> p4 = Math::Point3D<float>(xF, yF + levelF, zF) + target.getPosition();
-                                Math::Point3D<float> p5 =
-                                        Math::Point3D<float>(xF, yF + levelF, zF + levelF) + target.getPosition();
-                                Math::Point3D<float> p6 =
-                                        Math::Point3D<float>(xF + levelF, yF + levelF, zF + levelF) + target.getPosition();
-                                Math::Point3D<float> p7 =
-                                        Math::Point3D<float>(xF + levelF, yF + levelF, zF) + target.getPosition();
+                                Point3D<float> p0 = Point3D<float>(xF, yF, zF) + target.getPosition();
+                                Point3D<float> p1 = Point3D<float>(xF, yF, zF + levelF) + target.getPosition();
+                                Point3D<float> p2 =
+                                        Point3D<float>(xF + levelF, yF, zF + levelF) + target.getPosition();
+                                Point3D<float> p3 = Point3D<float>(xF + levelF, yF, zF) + target.getPosition();
+                                Point3D<float> p4 = Point3D<float>(xF, yF + levelF, zF) + target.getPosition();
+                                Point3D<float> p5 =
+                                        Point3D<float>(xF, yF + levelF, zF + levelF) + target.getPosition();
+                                Point3D<float> p6 =
+                                        Point3D<float>(xF + levelF, yF + levelF, zF + levelF) + target.getPosition();
+                                Point3D<float> p7 =
+                                        Point3D<float>(xF + levelF, yF + levelF, zF) + target.getPosition();
                                 
                                 if (edgeTable[corners] & 1) {
                                     vertices[0] = interpolator(threshold, p0, p1, v0, v1);
@@ -123,15 +127,15 @@
                                     std::uint8_t p1Index = triTable[corners][i + 2];
                                     std::uint8_t p2Index = triTable[corners][i + 1];
                                     
-                                    Math::Point3D<float> vertex0 = vertices[p0Index];
-                                    Math::Point3D<float> vertex1 = vertices[p1Index];
-                                    Math::Point3D<float> vertex2 = vertices[p2Index];
+                                    Point3D<float> vertex0 = vertices[p0Index];
+                                    Point3D<float> vertex1 = vertices[p1Index];
+                                    Point3D<float> vertex2 = vertices[p2Index];
                                     
-                                    Math::Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 0.0);
+                                    Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 0.0);
                                     
                                     auto it0 = indexed.find(vertex0);
                                     if (it0 != indexed.end()) {
-                                        GL::PrimitiveVertex& layout = ibo.getData(it0->second.vIndex);
+                                        PrimitiveVertex& layout = ibo.getData(it0->second.vIndex);
                                         layout.setNormal(normal + layout.getNormal());
                                         it0->second.nbAdd++;
                                         ibo.addIndex(it0->second.index);
@@ -145,7 +149,7 @@
                                     
                                     auto it1 = indexed.find(vertex1);
                                     if (it1 != indexed.end()) {
-                                        GL::PrimitiveVertex& layout = ibo.getData(it1->second.vIndex);
+                                        PrimitiveVertex& layout = ibo.getData(it1->second.vIndex);
                                         layout.setNormal(normal + layout.getNormal());
                                         it1->second.nbAdd++;
                                         ibo.addIndex(it1->second.index);
@@ -159,7 +163,7 @@
                                     
                                     auto it2 = indexed.find(vertex2);
                                     if (it2 != indexed.end()) {
-                                        GL::PrimitiveVertex& layout = ibo.getData(it2->second.vIndex);
+                                        PrimitiveVertex& layout = ibo.getData(it2->second.vIndex);
                                         layout.setNormal(normal + layout.getNormal());
                                         it2->second.nbAdd++;
                                         ibo.addIndex(it2->second.index);
@@ -177,8 +181,8 @@
                 }
                 
                 for (auto& it : indexed) {
-                    GL::PrimitiveVertex& layout = ibo.getData(it.second.vIndex);
-                    Math::Vector3D<float> newNormal(layout.getNormal() / it.second.nbAdd);
+                    PrimitiveVertex& layout = ibo.getData(it.second.vIndex);
+                    Vector3D<float> newNormal(layout.getNormal() / it.second.nbAdd);
                     newNormal.normalize();
                     layout.setNormal(newNormal);
                 }

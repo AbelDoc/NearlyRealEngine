@@ -8,3 +8,4 @@
      */
     
     #include "../Model/Mesh/NRE_Mesh.hpp"
+    #include "../Model/CullableMesh/NRE_CullableMesh.hpp"

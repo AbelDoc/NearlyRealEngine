@@ -32,7 +32,7 @@
             PerspectiveCamera camera;
 
             World::World world;
-            Utility::Vector<Mesh<Chunk>> meshes;
+            Utility::Vector<CullableMesh<Chunk, Frustum, Array<Plane<int>, 6>>> meshes;
 
             bool wireframeMode;
             bool normal;
@@ -102,19 +102,24 @@
                 }
                 void render() override {
                     clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    std::size_t count = 0;
                     Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
                         shader->sendCamera(camera);
-                        for (Mesh<Chunk> const& m : meshes) {
-                            m.draw();
+                        for (auto const& m : meshes) {
+                            bool hasBeenDrawn = m.draw(camera.getFrustum());
+                            if (hasBeenDrawn) {
+                                count++;
+                            }
                         }
                     shader->unbind();
+                    std::cout << "Chunk drawn : " << count << "/" << World::World::NB_CHUNKS << std::endl;
                     if (normal) {
                         DebugNormal* debug = ProgramManager::get<DebugNormal>();
                         debug->bind();
                             debug->sendCamera(camera);
-                            for (Mesh<Chunk> const& m : meshes) {
-                                m.draw();
+                            for (auto const& m : meshes) {
+                                m.draw(camera.getFrustum());
                             }
                         debug->unbind();
                     }
@@ -127,7 +132,7 @@
                     
                     meshes.reserve(World::World::NB_CHUNKS);
                     
-                    for (Chunk const& c : world) {
+                    for (Chunk& c : world) {
                         meshes.emplaceBack(c);
                     }
     
