@@ -26,7 +26,8 @@
              * @pure TextureBuffer
              * @brief Describe a base texture buffer for 2D & 3D texture specialization
              */
-            class TextureBuffer : public Attachable {
+            class TextureBuffer : public Attachable,
+                                  public Utility::Identifiable<TextureBuffer> {
                 private:    //Fields
                     TextureType type;    /**< The texture's pixel data type */
 
@@ -69,11 +70,11 @@
                         /**
                          * Bind the object
                          */
-                        void bind() const;
+                        void bind() const override;
                         /**
                          * Unbind the object
                          */
-                        void unbind() const;
+                        void unbind() const override;
                         /**
                          * Create the object's id
                          */

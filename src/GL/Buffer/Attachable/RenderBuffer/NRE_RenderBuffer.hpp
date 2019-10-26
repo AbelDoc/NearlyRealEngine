@@ -26,7 +26,8 @@
              * @class RenderBuffer
              * @brief Manage a render buffer
              */
-            class RenderBuffer : public Attachable  {
+            class RenderBuffer : public Attachable,
+                                 public Utility::Identifiable<RenderBuffer> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
@@ -58,11 +59,11 @@
                         /**
                          * Bind the object
                          */
-                        void bind() const;
+                        void bind() const override;
                         /**
                          * Unbind the object
                          */
-                        void unbind() const;
+                        void unbind() const override;
                         /**
                          * Create the object's id
                          */

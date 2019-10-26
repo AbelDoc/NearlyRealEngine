@@ -20,6 +20,7 @@
     using namespace NRE::Utility;
     using namespace NRE::Model;
     using namespace NRE::GL;
+    using namespace NRE::IO;
     using namespace NRE::World;
     using namespace std::chrono_literals;
 
@@ -32,7 +33,9 @@
             PerspectiveCamera camera;
 
             World::World world;
-            Utility::Vector<ChunkMesh> meshes;
+            Vector<ChunkMesh> meshes;
+            
+            Texture2D* texture;
 
             bool wireframeMode;
             bool normal;
@@ -96,6 +99,8 @@
                         camera.turn(event.getMotion());
                         return true;
                     });
+                    
+                    texture = new Texture2D("Data/Material/Mat_17/x1024/Normal.png", true);
                 }
                 void update() override {
                     camera.update();
@@ -106,12 +111,14 @@
                     Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
                         shader->sendCamera(camera);
+                        texture->bind();
                         for (auto const& m : meshes) {
                             bool hasBeenDrawn = m.draw(camera.getFrustum());
                             if (hasBeenDrawn) {
                                 count++;
                             }
                         }
+                        texture->unbind();
                     shader->unbind();
                     std::cout << "Chunk drawn : " << count << "/" << World::World::NB_CHUNKS << std::endl;
                     if (normal) {

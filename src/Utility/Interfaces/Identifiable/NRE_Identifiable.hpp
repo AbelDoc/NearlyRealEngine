@@ -79,7 +79,7 @@
                                 deleteId();
                                 assert(false);
                             }
-                            return this->impl().createId();
+                            this->impl().createId();
                         }
                         /**
                          * Delete the object's id
@@ -101,7 +101,7 @@
                          * Test if the id already exist
                          * @return the test's result
                          */
-                        bool exist() const  {
+                        bool exist() const {
                             return this->impl().exist();
                         }
     

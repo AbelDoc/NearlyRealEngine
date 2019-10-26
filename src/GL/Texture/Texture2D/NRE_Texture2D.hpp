@@ -74,7 +74,7 @@
                         /**
                          * Allocate the texture storage
                          */
-                        void allocate() override;
+                        void allocate();
                         /**
                          * Update data in the texture
                          * @param offset  the data's offset

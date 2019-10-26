@@ -29,8 +29,7 @@
              * @pure Attachable
              * @brief Describe an attachable object
              */
-            class Attachable : public Utility::Identifiable<Attachable>,
-                               public Utility::Allocable<Attachable>,
+            class Attachable : public Utility::Allocable<Attachable>,
                                public Utility::Bindable<Attachable>,
                                public Utility::Uncopyable<Attachable>,
                                public Utility::Stringable<Attachable> {
@@ -61,9 +60,17 @@
                          */
                         virtual void attach(AttachPoint target) const = 0;
                         /**
+                         * Bind the object
+                         */
+                        virtual void bind() const = 0;
+                        /**
+                         * Unbind the object
+                         */
+                        virtual void unbind() const = 0;
+                        /**
                          * Allocate the object
                          */
-                        virtual void allocate();
+                        void allocate();
                         /**
                          * Deallocate the object
                          */
