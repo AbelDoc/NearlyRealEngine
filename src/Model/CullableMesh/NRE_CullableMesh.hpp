@@ -23,7 +23,7 @@
         namespace Model {
         
             template <class T, class K = Math::Frustum, class Data = void*>
-            class CullableMesh : public Mesh<T>,
+            class CullableMesh : public TypedMesh<T>,
                                  public Utility::Observer {
                 private :   // Fields
                     T& target;

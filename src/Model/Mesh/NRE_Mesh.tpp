@@ -10,29 +10,24 @@
     namespace NRE {
         namespace Model {
         
-            template <class T>
-            inline Mesh<T>::Mesh(T const& o) : vbo(MeshFactory<T>::create(o)) {
+            inline Mesh::Mesh(GL::AbstractVBO* buffer) : vbo(buffer) {
                 vbo->allocateAndFill();
                 vao.access(getBuffer());
             }
             
-            template <class T>
-            inline GL::AbstractVBO* Mesh<T>::getBuffer() {
+            inline GL::AbstractVBO* Mesh::getBuffer() {
                 return vbo.get();
             }
             
-            template <class T>
-            inline void Mesh<T>::bind() const {
+            inline void Mesh::bind() const {
                 vao.bind();
             }
             
-            template <class T>
-            inline void Mesh<T>::unbind() const {
+            inline void Mesh::unbind() const {
                 vao.unbind();
             }
             
-            template <class T>
-            inline bool Mesh<T>::draw(GL::DrawMode mode) const {
+            inline bool Mesh::draw(GL::DrawMode mode) const {
                 if (vbo->getCount() > 0) {
                     bind();
                         vbo->draw(mode);
@@ -42,10 +37,9 @@
                 return false;
             }
             
-            template <class T>
-            inline Utility::String Mesh<T>::toString() const {
+            inline Utility::String Mesh::toString() const {
                 Utility::String res;
-                res << "Buffer : " << *getBuffer() << '\n';
+                res << "Buffer : " << vbo.get() << '\n';
                 res << "VAO : " << vao;
                 return res;
             }

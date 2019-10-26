@@ -11,19 +11,19 @@
         namespace Model {
             
             template <class T, class K, class Data>
-            CullableMesh<T, K, Data>::CullableMesh(T& o) : Mesh<T>(o), target(o) {
+            CullableMesh<T, K, Data>::CullableMesh(T& o) : TypedMesh<T>(o), target(o) {
                 o.add(this);
                 update(nullptr, nullptr);
             }
             
             template <class T, class K, class Data>
-            CullableMesh<T, K, Data>::CullableMesh(CullableMesh && m) : Mesh<T>(std::move(m)), target(m.target), cacheData(std::move(m.cacheData)) {
+            CullableMesh<T, K, Data>::CullableMesh(CullableMesh && m) : TypedMesh<T>(std::move(m)), target(m.target), cacheData(std::move(m.cacheData)) {
             }
         
             template <class T, class K, class Data>
             bool CullableMesh<T, K, Data>::draw(K const& boundObject, GL::DrawMode mode) const {
                 if (inBound(boundObject)) {
-                    return Mesh<T>::draw(mode);
+                    return Mesh::draw(mode);
                 }
                 return false;
             }
@@ -31,7 +31,7 @@
             template <class T, class K, class Data>
             CullableMesh<T, K, Data>& CullableMesh<T, K, Data>::operator=(CullableMesh && m) {
                 if (this != &m) {
-                    Mesh<T>::operator=(std::move(m));
+                    TypedMesh<T>::operator=(std::move(m));
                     target = m.target;
                     cacheData = std::move(m.cacheData);
                 }

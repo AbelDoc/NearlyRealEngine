@@ -23,12 +23,9 @@
          */
         namespace Model {
             
-            template<class> class MeshFactory;
-            
-            template <class T>
-            class Mesh : public Utility::Bindable<Mesh<T>>,
-                         public Utility::Stringable<Mesh<T>>,
-                         public Utility::Uncopyable<Mesh<T>> {
+            class Mesh : public Utility::Bindable<Mesh>,
+                         public Utility::Stringable<Mesh>,
+                         public Utility::Uncopyable<Mesh> {
                 private :   // Field
                     std::unique_ptr<GL::AbstractVBO> vbo;   /**< The mesh buffer */
                     GL::VAO vao;                            /**< The buffer vao */
@@ -40,10 +37,10 @@
                          */
                         Mesh() = delete;
                         /**
-                         * Construct a mesh from the object to render
-                         * @param o the object to construct the mesh
+                         * Construct a mesh from the mesh buffer
+                         * @param buffer the mesh buffer
                          */
-                        Mesh(T const& o);
+                        Mesh(GL::AbstractVBO* buffer);
     
                     //## Move Constructor ##//
                         /**

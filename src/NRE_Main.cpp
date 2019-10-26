@@ -120,6 +120,8 @@
                 }
                 void destroy() override {
                 }
+                
+        private :   // Methods
                 void updateChunks() {
                     Clock clock;
                     clock.update();
