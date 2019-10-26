@@ -131,6 +131,7 @@ set(COMPILE_LIST
         src/Model/CullableMesh/NRE_CullableMesh.tpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
+        src/World/Mesh/NRE_ChunkMesh.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.cpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
         src/World/NRE_World.cpp

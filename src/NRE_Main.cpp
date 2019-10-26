@@ -38,13 +38,12 @@
             Texture2D* texture;
 
             bool wireframeMode;
-            bool normal;
 
             Angle fov;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), normal(false), fov(70.0_deg) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), fov(70.0_deg) {
                     updateChunks();
 
                     glEnable(GL_DEPTH_TEST);
@@ -75,9 +74,6 @@
                             } else {
                                 polygonMode(GL_FRONT, GL_FILL);
                             }
-                            return true;
-                        } else if (event.isCode(KeyCode::N)) {
-                            normal = !normal;
                             return true;
                         }
                         return false;
@@ -121,15 +117,6 @@
                         texture->unbind();
                     shader->unbind();
                     std::cout << "Chunk drawn : " << count << "/" << World::World::NB_CHUNKS << std::endl;
-                    if (normal) {
-                        DebugNormal* debug = ProgramManager::get<DebugNormal>();
-                        debug->bind();
-                            debug->sendCamera(camera);
-                            for (auto const& m : meshes) {
-                                m.draw(camera.getFrustum());
-                            }
-                        debug->unbind();
-                    }
                 }
                 void destroy() override {
                 }
