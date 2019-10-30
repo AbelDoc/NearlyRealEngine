@@ -70,11 +70,11 @@
                         /**
                          * Allocate the object
                          */
-                        void allocate();
+                        void allocateImpl();
                         /**
                          * Deallocate the object
                          */
-                        void deallocate();
+                        void deallocateImpl();
 
                     //## Assignment Operator ##//
                         /**
@@ -90,7 +90,8 @@
                          * @return the converted attachable
                          */
                         virtual Utility::String toString() const = 0;
-
+    
+                    using Allocable<Attachable>::allocate;
             };
         }
     }

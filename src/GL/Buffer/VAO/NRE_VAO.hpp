@@ -30,7 +30,8 @@
              */
             class VAO : public Utility::Identifiable<VAO>,
                         public Utility::Stringable<VAO>,
-                        public Utility::Uncopyable<VAO>{
+                        public Utility::Uncopyable<VAO>,
+                        public Utility::Bindable<VAO> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
@@ -63,16 +64,16 @@
                         /**
                          * Create the object's id
                          */
-                        void createId();
+                        void createIdImpl();
                         /**
                          * Delete the object's id
                          */
-                        void deleteId();
+                        void deleteIdImpl();
                         /**
                          * Test if the id already exist
                          * @return the test's result
                          */
-                        bool exist() const;
+                        bool existImpl() const;
                         /**
                          * Access a vbo with the current vao
                          * @param buffer the vbo to save

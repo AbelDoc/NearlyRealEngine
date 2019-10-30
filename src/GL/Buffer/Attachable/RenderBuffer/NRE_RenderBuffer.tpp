@@ -22,19 +22,20 @@
                 bindRenderBuffer(GL_RENDERBUFFER, 0);
             }
 
-            inline void RenderBuffer::createId() {
+            inline void RenderBuffer::createIdImpl() {
                 id = generateRenderBuffer();
             }
 
-            inline void RenderBuffer::deleteId() {
+            inline void RenderBuffer::deleteIdImpl() {
                 deleteRenderBuffer(id);
             }
 
-            inline bool RenderBuffer::exist() const {
+            inline bool RenderBuffer::existImpl() const {
                 return isRenderBuffer(id);
             }
 
-            inline void RenderBuffer::allocate(RenderInternalFormat internalFormat, GLsizei w, GLsizei h) const {
+            inline void RenderBuffer::allocate(RenderInternalFormat internalFormat, GLsizei w, GLsizei h) {
+                allocate();
                 bind();
                     allocateRenderBuffer(GL_RENDERBUFFER, internalFormat, w, h);
                 unbind();

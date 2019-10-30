@@ -10,23 +10,6 @@
     namespace NRE {
         namespace GL {
 
-            inline FrameBuffer::FrameBuffer() : id(0) {
-                createId();
-            }
-
-            inline FrameBuffer::FrameBuffer(FrameBuffer && b) : id(b.id) {
-                b.id = 0;
-            }
-
-            inline FrameBuffer::~FrameBuffer() {
-                unbind();
-                deleteId();
-            }
-
-            inline Id FrameBuffer::getId() const {
-                return id;
-            }
-
             inline void FrameBuffer::bind() const {
                 bindFrameBuffer(GL_FRAMEBUFFER, getId());
             }
@@ -35,20 +18,15 @@
                 bindFrameBuffer(GL_FRAMEBUFFER, 0);
             }
 
-            inline void FrameBuffer::createId() {
-                if (exist()) {
-                    unbind();
-                    deleteId();
-                }
+            inline void FrameBuffer::createIdImpl() {
                 id = generateFrameBuffer();
             }
 
-            inline void FrameBuffer::deleteId() {
+            inline void FrameBuffer::deleteIdImpl() {
                 deleteFrameBuffer(id);
-                id = 0;
             }
 
-            inline bool FrameBuffer::exist() const {
+            inline bool FrameBuffer::existImpl() const {
                 return isFrameBuffer(id);
             }
 
@@ -62,14 +40,6 @@
                 Utility::String res;
                 res << id;
                 return res;
-            }
-
-            inline FrameBuffer& FrameBuffer::operator =(FrameBuffer && b) {
-                if (this != &b) {
-                    id = b.id;
-                    b.id = 0;
-                }
-                return *this;
             }
         }
     }

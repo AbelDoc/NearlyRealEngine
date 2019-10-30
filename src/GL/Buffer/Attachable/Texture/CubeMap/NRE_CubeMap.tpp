@@ -22,7 +22,7 @@
             }
 
             inline void CubeMap::allocate(GLint level, Surface const& surface) {
-                Utility::Allocable<Attachable>::allocate();
+                allocate();
                 bind();
                     for (unsigned int i = 0; i < Math::FACE_NUM; i++) {
                         send2DTextureData(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, level, surface.getInternalFormat(), surface.getSize(), 0, surface.getFormat(), getType(), nullptr);
@@ -48,7 +48,7 @@
             }
 
             inline void CubeMap::allocateAndFill(GLint level, Utility::Vector<Surface>& surfaces) {
-                Utility::Allocable<Attachable>::allocate();
+                allocate();
                 bind();
                     for (unsigned int i = 0; i < Math::FACE_NUM; i++) {
                         send2DTextureData(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, level, surfaces[i].getInternalFormat(), surfaces[i].getSize(), 0, surfaces[i].getFormat(), getType(), surfaces[i].getPixels());

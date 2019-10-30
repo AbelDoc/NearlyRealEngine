@@ -84,8 +84,8 @@
                         if (fov < 1.0_deg) {
                             fov = 1.0_deg;
                         }
-                        if (fov >= 80_deg) {
-                            fov = 80.0_deg;
+                        if (fov >= 89.9_deg) {
+                            fov = 89.9_deg;
                         }
                         camera.setFov(fov);
                         return true;

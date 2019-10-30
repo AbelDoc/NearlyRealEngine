@@ -18,15 +18,15 @@
                 bindVAO(0);
             }
 
-            inline void VAO::createId() {
+            inline void VAO::createIdImpl() {
                 id = generateVAO();
             }
 
-            inline void VAO::deleteId() {
+            inline void VAO::deleteIdImpl() {
                 deleteVAO(id);
             }
 
-            inline bool VAO::exist() const {
+            inline bool VAO::existImpl() const {
                 return isVAO(id);
             }
 

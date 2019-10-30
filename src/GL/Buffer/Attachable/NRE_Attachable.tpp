@@ -10,10 +10,10 @@
     namespace NRE {
         namespace GL {
 
-            inline void Attachable::allocate() {
+            inline void Attachable::allocateImpl() {
             }
 
-            inline void Attachable::deallocate() {
+            inline void Attachable::deallocateImpl() {
             }
         }
     }

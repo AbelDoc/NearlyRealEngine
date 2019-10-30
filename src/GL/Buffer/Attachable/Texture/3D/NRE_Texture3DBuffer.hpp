@@ -88,7 +88,8 @@
                          * @return      the reference of himself
                          */
                         Texture3DBuffer& operator =(Texture3DBuffer && b) = default;
-
+    
+                    using TextureBuffer::allocate;
             };
         }
     }

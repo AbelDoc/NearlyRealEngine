@@ -18,26 +18,26 @@
                 bindBuffer(getTarget(), 0);
             }
 
-            inline void ArrayBuffer::createId() {
+            inline void ArrayBuffer::createIdImpl() {
                 id = generateBuffer();
             }
 
-            inline void ArrayBuffer::deleteId() {
+            inline void ArrayBuffer::deleteIdImpl() {
                 deleteBuffer(id);
             }
 
-            inline bool ArrayBuffer::exist() const {
+            inline bool ArrayBuffer::existImpl() const {
                 return isBuffer(id);
             }
 
-            inline void ArrayBuffer::allocate() {
+            inline void ArrayBuffer::allocateImpl() {
             }
 
-            inline void ArrayBuffer::deallocate() {
+            inline void ArrayBuffer::deallocateImpl() {
             }
 
             inline void ArrayBuffer::allocate(std::size_t size, StreamUsage usage) {
-                Utility::Allocable<ArrayBuffer>::allocate();
+                allocate();
                 bind();
                     sendData(getTarget(), size, nullptr, usage);
                 unbind();
@@ -50,7 +50,7 @@
             }
 
             inline void ArrayBuffer::allocateAndFill(std::size_t size, const void* data, StreamUsage usage) {
-                Utility::Allocable<ArrayBuffer>::allocate();
+                allocate();
                 bind();
                     sendData(getTarget(), size, data, usage);
                 unbind();

@@ -99,7 +99,8 @@
                          * @return      the reference of himself
                          */
                         Texture2DBuffer& operator =(Texture2DBuffer && b) = default;
-
+    
+                    using TextureBuffer::allocate;
             };
         }
     }

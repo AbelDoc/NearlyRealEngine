@@ -78,16 +78,16 @@
                         /**
                          * Create the object's id
                          */
-                        void createId();
+                        void createIdImpl();
                         /**
                          * Delete the object's id
                          */
-                        void deleteId();
+                        void deleteIdImpl();
                         /**
                          * Test if the id already exist
                          * @return the test's result
                          */
-                        bool exist() const;
+                        bool existImpl() const;
 
                     //## Assignment Operator ##//
                         /**
@@ -103,7 +103,8 @@
                          * @return the converted texture buffer
                          */
                         Utility::String toString() const override;
-
+    
+                    using Attachable::allocate;
             };
         }
     }

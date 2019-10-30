@@ -67,23 +67,23 @@
                         /**
                          * Create the object's id
                          */
-                        void createId();
+                        void createIdImpl();
                         /**
                          * Delete the object's id
                          */
-                        void deleteId();
+                        void deleteIdImpl();
                         /**
                          * Test if the id already exist
                          * @return the test's result
                          */
-                        bool exist() const;
+                        bool existImpl() const;
                         /**
                          * Allocate the buffer's storage
                          * @param internalFormat the buffer's internal format
                          * @param w              the buffer's width
                          * @param h              the buffer's height
                          */
-                        void allocate(RenderInternalFormat internalFormat, GLsizei w, GLsizei h) const;
+                        void allocate(RenderInternalFormat internalFormat, GLsizei w, GLsizei h);
                         /**
                          * Attach the object to a defined point
                          * @param target the attachment point
@@ -104,7 +104,8 @@
                          * @return the converted render buffer
                          */
                         Utility::String toString() const override;
-
+    
+                    using Attachable::allocate;
             };
         }
     }

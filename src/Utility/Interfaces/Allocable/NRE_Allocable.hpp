@@ -80,14 +80,14 @@
                                 deallocate();
                                 assert(false);
                             }
-                            this->impl().allocate();
+                            this->impl().allocateImpl();
                             allocated = true;
                         }
                         /**
                          * Deallocate the object's resources
                          */
                         void deallocate() {
-                            this->impl().deallocate();
+                            this->impl().deallocateImpl();
                             allocated = false;
                         }
     

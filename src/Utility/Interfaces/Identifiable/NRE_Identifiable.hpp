@@ -79,14 +79,14 @@
                                 deleteId();
                                 assert(false);
                             }
-                            this->impl().createId();
+                            this->impl().createIdImpl();
                         }
                         /**
                          * Delete the object's id
                          */
                         void deleteId()  {
                             if (id != 0) {
-                                this->impl().deleteId();
+                                this->impl().deleteIdImpl();
                                 id = 0;
                             }
                         }
@@ -102,7 +102,7 @@
                          * @return the test's result
                          */
                         bool exist() const {
-                            return this->impl().exist();
+                            return this->impl().existImpl();
                         }
     
                     //## Assignment Operator ##//

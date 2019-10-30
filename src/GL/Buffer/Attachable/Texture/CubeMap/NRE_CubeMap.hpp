@@ -111,7 +111,8 @@
                          * @return      the reference of himself
                          */
                         CubeMap& operator =(CubeMap && c) = default;
-
+    
+                    using TextureBuffer::allocate;
             };
         }
     }

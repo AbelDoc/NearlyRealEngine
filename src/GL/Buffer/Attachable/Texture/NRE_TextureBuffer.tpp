@@ -28,15 +28,15 @@
                 GL::bindTexture(getTarget(), 0);
             }
 
-            inline void TextureBuffer::createId() {
+            inline void TextureBuffer::createIdImpl() {
                 id = GL::generateTexture();
             }
 
-            inline void TextureBuffer::deleteId() {
+            inline void TextureBuffer::deleteIdImpl() {
                 GL::deleteTexture(id);
             }
 
-            inline bool TextureBuffer::exist() const {
+            inline bool TextureBuffer::existImpl() const {
                 return GL::isTexture(id);
             }
 

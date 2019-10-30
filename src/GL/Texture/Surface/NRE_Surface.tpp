@@ -59,10 +59,10 @@
                 pixels = px;
             }
 
-            inline void Surface::allocate() {
+            inline void Surface::allocateImpl() {
             }
 
-            inline void Surface::deallocate() {
+            inline void Surface::deallocateImpl() {
                 deallocateSurface();
                 size = Math::Vector2D<GLsizei>(0, 0);
                 format = 0;
@@ -79,7 +79,7 @@
                 int w, h, n;
                 stbi_set_flip_vertically_on_load(true);
                 pixels = stbi_load(file.getPath().getCData(), &w, &h, &n, 0);
-                Utility::Allocable<Surface>::allocate();
+                allocate();
                 size = Math::Vector2D<GLsizei>(w, h);
                 if (n == 3) {
                     internalFormat = GL_RGB;
@@ -93,7 +93,7 @@
             }
 
             inline void Surface::update(IO::File const& file) {
-                Utility::Allocable<Surface>::deallocate();
+                deallocate();
                 load(file);
             }
 

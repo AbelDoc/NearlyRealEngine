@@ -26,42 +26,29 @@
              * @class FrameBuffer
              * @brief Manage the link between GPU Frame buffer and Engine
              */
-            class FrameBuffer : public Utility::Stringable<FrameBuffer> {
-                protected :   // Fields
-                    Id id;              /**< The frame buffer id */
-
+            class FrameBuffer : public Utility::Stringable<FrameBuffer>,
+                                public Utility::Identifiable<FrameBuffer>,
+                                public Utility::Bindable<FrameBuffer>,
+                                public Utility::Uncopyable<FrameBuffer> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        FrameBuffer();
-
-                    //## Copy-Constructor ##//
-                        /**
-                         * Copy forbidden
-                         * @param b the frame buffer to copy
-                         */
-                        FrameBuffer(FrameBuffer const& b) = delete;
+                        FrameBuffer() = default;
 
                     //## Move-Constructor ##//
                         /**
                          * Move b into this
                          * @param b the frame buffer to move
                          */
-                        FrameBuffer(FrameBuffer && b);
+                        FrameBuffer(FrameBuffer && b) = default;
 
                     //## Deconstructor ##//
                         /**
                          * FrameBuffer Deconstructor
                          */
-                        virtual ~FrameBuffer();
-
-                    //## Getter ##//
-                        /**
-                         * @return the frame buffer id
-                         */
-                        Id getId() const;
+                        virtual ~FrameBuffer() = default;
 
                     //## Methods ##//
                         /**
@@ -75,16 +62,16 @@
                         /**
                          * Create the object's id
                          */
-                        void createId();
+                        void createIdImpl();
                         /**
                          * Delete the object's id
                          */
-                        void deleteId();
+                        void deleteIdImpl();
                         /**
                          * Test if the id already exist
                          * @return the test's result
                          */
-                        bool exist() const;
+                        bool existImpl() const;
                         /**
                          * Attach an attachable to the framebuffer
                          * @param attachment the attachment's point
@@ -94,17 +81,11 @@
 
                     //## Assignment Operator ##//
                         /**
-                         * Copy assignment forbidden
-                         * @param b the frame buffer to copy
-                         * @return  the reference of himself
-                         */
-                        FrameBuffer& operator =(FrameBuffer const& b) = delete;
-                        /**
                          * Move assignment of b into this
                          * @param b the frame buffer to move into this
                          * @return  the reference of himself
                          */
-                        FrameBuffer& operator =(FrameBuffer && b);
+                        FrameBuffer& operator =(FrameBuffer && b) = default;
 
                     //## Stream Operator ##//
                         /**

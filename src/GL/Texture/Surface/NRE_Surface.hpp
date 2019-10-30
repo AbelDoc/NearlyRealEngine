@@ -110,11 +110,11 @@
                         /**
                          * Allocate the object
                          */
-                        void allocate();
+                        void allocateImpl();
                         /**
                          * Deallocate the object
                          */
-                        void deallocate();
+                        void deallocateImpl();
                         /**
                          * Deallocate the internal surface, keep surface parameter
                          */
