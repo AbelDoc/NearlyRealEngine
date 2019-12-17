@@ -75,16 +75,12 @@
                             if (edgeTable[corners] != 0) {
                                 Point3D<float> p0 = Point3D<float>(xF, yF, zF) + target.getPosition();
                                 Point3D<float> p1 = Point3D<float>(xF, yF, zF + levelF) + target.getPosition();
-                                Point3D<float> p2 =
-                                        Point3D<float>(xF + levelF, yF, zF + levelF) + target.getPosition();
+                                Point3D<float> p2 = Point3D<float>(xF + levelF, yF, zF + levelF) + target.getPosition();
                                 Point3D<float> p3 = Point3D<float>(xF + levelF, yF, zF) + target.getPosition();
                                 Point3D<float> p4 = Point3D<float>(xF, yF + levelF, zF) + target.getPosition();
-                                Point3D<float> p5 =
-                                        Point3D<float>(xF, yF + levelF, zF + levelF) + target.getPosition();
-                                Point3D<float> p6 =
-                                        Point3D<float>(xF + levelF, yF + levelF, zF + levelF) + target.getPosition();
-                                Point3D<float> p7 =
-                                        Point3D<float>(xF + levelF, yF + levelF, zF) + target.getPosition();
+                                Point3D<float> p5 = Point3D<float>(xF, yF + levelF, zF + levelF) + target.getPosition();
+                                Point3D<float> p6 = Point3D<float>(xF + levelF, yF + levelF, zF + levelF) + target.getPosition();
+                                Point3D<float> p7 = Point3D<float>(xF + levelF, yF + levelF, zF) + target.getPosition();
                                 
                                 if (edgeTable[corners] & 1) {
                                     vertices[0] = interpolator(threshold, p0, p1, v0, v1);

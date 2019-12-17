@@ -44,14 +44,14 @@
             typedef CullableMesh<World::Chunk, Math::Frustum, Utility::Array<Math::Point3D<int>, 8>> ChunkMesh;
         
             template <>
-            inline bool ChunkMesh::inBound(Math::Frustum const& bound) const {
+            inline bool ChunkMesh::inBound() const {
                 int in, out;
             
                 for (int i = 0; i < Math::FACE_NUM; i++) {
                     in = 0;
                     out = 0;
                     for (int j = 0; j < 8; j = j + 1) {
-                        if (bound.getPlane(i).distance(cacheData[j]) <= 0) {
+                        if (boundObject.getPlane(i).distance(cacheData[j]) <= 0) {
                             out++;
                         } else {
                             in++;

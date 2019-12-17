@@ -27,6 +27,7 @@
                                  public Utility::Observer {
                 private :   // Fields
                     T& target;
+                    K const& boundObject;
                     Data cacheData;
                 
                 public :    // Methods
@@ -37,9 +38,10 @@
                         CullableMesh() = delete;
                         /**
                          * Construct the mesh with the target object
-                         * @param o the object to create the mesh
+                         * @param o     the object to create the mesh
+                         * @param bound the object to test if the mesh in visible
                          */
-                        CullableMesh(T& o);
+                        CullableMesh(T& o, K const& bound);
     
                     //## Move Constructor ##//
                         /**
@@ -56,12 +58,9 @@
                     
                     //## Methods ##//
                         /**
-                         * Test if the target is in bound
-                         * @param target    the other to test
-                         * @param bound     the other object to test
                          * @return if target is in bound
                          */
-                        bool inBound(K const& bound) const;
+                        bool inBound() const;
                         /**
                          * Update the observer when the observable notify it
                          * @param obs the observable
@@ -70,11 +69,17 @@
                         void update(Utility::Observable* obs, void* arg) override;
                         /**
                          * Draw the mesh
-                         * @param boundObject the object to test if the mesh in visible
                          * @param mode        the drawing mode
                          * @return if the mesh has been drawn
                          */
-                        bool draw(K const& boundObject, GL::DrawMode mode = GL_TRIANGLES) const;
+                        bool draw(GL::DrawMode mode = GL_TRIANGLES) const override;
+                        /**
+                         * Draw the mesh as an instanced one
+                         * @param instance    the number of instances
+                         * @param mode        the drawing mode
+                         * @return if the mesh has been drawn
+                         */
+                        bool drawInstanced(int instance, GL::DrawMode mode = GL_TRIANGLES) const override;
     
                     //## Assignment Operator ##//
                         /**

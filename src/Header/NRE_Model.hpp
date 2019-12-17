@@ -10,3 +10,6 @@
     #include "../Model/Mesh/NRE_Mesh.hpp"
     #include "../Model/TypedMesh/NRE_TypedMesh.hpp"
     #include "../Model/CullableMesh/NRE_CullableMesh.hpp"
+    
+    #include "../Model/Model/NRE_Model.hpp"
+    #include "../Model/Model/Instanced/NRE_InstancedModel.hpp"

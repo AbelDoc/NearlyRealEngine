@@ -71,11 +71,24 @@
                          */
                         void unbind() const;
                         /**
+                         * Access a buffer with the mesh's vao
+                         * @param buf the buffer to access
+                         */
+                        void access(const GL::AbstractVBO* buf);
+                        /**
                          * Draw the mesh
-                         * @param mode the drawing mode
+                         * @param mode     the drawing mode
                          * @return if the mesh has been drawn
                          */
-                        bool draw(GL::DrawMode mode = GL_TRIANGLES) const;
+                        virtual bool draw(GL::DrawMode mode = GL_TRIANGLES) const;
+                        /**
+                         * Draw the mesh as an instanced one
+                         * @param drawData th draw extra data
+                         * @param instance the number of instances
+                         * @param mode     the drawing mode
+                         * @return if the mesh has been drawn
+                         */
+                        virtual bool drawInstanced(int instance, GL::DrawMode mode = GL_TRIANGLES) const;
                         
                     //## Assignment Operator ##//
                         /**

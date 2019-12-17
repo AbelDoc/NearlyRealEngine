@@ -20,6 +20,7 @@
     using namespace NRE::Utility;
     using namespace NRE::Model;
     using namespace NRE::GL;
+    using namespace NRE::Physics;
     using namespace NRE::IO;
     using namespace NRE::World;
     using namespace std::chrono_literals;
@@ -34,6 +35,8 @@
 
             World::World world;
             Vector<ChunkMesh> meshes;
+            
+            InstancedModel spheres;
             
             Texture2D* texture;
 
@@ -103,20 +106,22 @@
                 }
                 void render() override {
                     clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                    std::size_t count = 0;
                     Primitive3D* shader = ProgramManager::get<Primitive3D>();
                     shader->bind();
                         shader->sendCamera(camera);
                         texture->bind();
                         for (auto const& m : meshes) {
-                            bool hasBeenDrawn = m.draw(camera.getFrustum());
-                            if (hasBeenDrawn) {
-                                count++;
-                            }
+                            m.draw();
                         }
                         texture->unbind();
                     shader->unbind();
-                    std::cout << "Chunk drawn : " << count << "/" << World::World::NB_CHUNKS << std::endl;
+                    InstancedPrimitive3D* instancedShader = ProgramManager::get<InstancedPrimitive3D>();
+                    instancedShader->bind();
+                        instancedShader->sendCamera(camera);
+                        texture->bind();
+                            spheres.draw();
+                        texture->unbind();
+                    instancedShader->unbind();
                 }
                 void destroy() override {
                 }
@@ -129,8 +134,21 @@
                     meshes.reserve(World::World::NB_CHUNKS);
                     
                     for (Chunk& c : world) {
-                        meshes.emplaceBack(c);
+                        meshes.emplaceBack(c, camera.getFrustum());
                     }
+                    std::unique_ptr<VBO<MatrixInstance>> vbo(new VBO<MatrixInstance>(GL_STREAM_DRAW));
+                    vbo->allocate(10'000);
+
+                    Sphere s(Vector3D<float>(0, 0, 0), 1);
+                    std::unique_ptr<SphereMesh> mesh(new SphereMesh(s));
+                    spheres.addMesh(std::move(mesh));
+                    spheres.setModels(vbo);
+                    for (Matrix4x4<float>& m : spheres.getMatrixes()) {
+                        m.setIdentity();
+                        m.translate(Vector3D<float>(std::rand() % 1000, std::rand() % 1000, 100 + std::rand() % 1000));
+                        m.transpose();
+                    }
+                    spheres.update();
     
                     clock.update();
                     std::cout << "Time taken for update : " << clock.getDelta() << std::endl;

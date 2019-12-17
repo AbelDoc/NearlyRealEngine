@@ -17,6 +17,7 @@
 
     #include "../Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp"
     #include "../Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp"
+    #include "../Renderer/Program/Core/Primitive/Instanced3D/NRE_InstancedPrimitive3D.hpp"
 
     #include "../Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp"
 

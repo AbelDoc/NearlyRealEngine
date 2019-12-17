@@ -63,9 +63,13 @@ include_directories(src/Utility/Interfaces/Bindable)
 include_directories(src/Utility/Interfaces/Allocable)
 include_directories(src/Utility/Interfaces/Identifiable)
 include_directories(src/Model)
+include_directories(src/Model/Model)
+include_directories(src/Model/Model/Instanced)
 include_directories(src/Model/Mesh)
 include_directories(src/Model/TypedMesh)
 include_directories(src/Model/CullableMesh)
+include_directories(src/Physics)
+include_directories(src/Physics/Mesh)
 include_directories(src/World)
 include_directories(src/World/Chunk)
 include_directories(src/World/Factory)
@@ -128,10 +132,17 @@ set(COMPILE_LIST
         src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
         src/Model/Mesh/NRE_Mesh.hpp
         src/Model/Mesh/NRE_Mesh.tpp
+        src/Model/Model/NRE_Model.hpp
+        src/Model/Model/NRE_Model.tpp
+        src/Model/Model/Instanced/NRE_InstancedModel.hpp
+        src/Model/Model/Instanced/NRE_InstancedModel.tpp
         src/Model/TypedMesh/NRE_TypedMesh.hpp
         src/Model/TypedMesh/NRE_TypedMesh.tpp
         src/Model/CullableMesh/NRE_CullableMesh.hpp
         src/Model/CullableMesh/NRE_CullableMesh.tpp
+        src/Physics/Sphere/NRE_Sphere.hpp
+        src/Physics/Sphere/NRE_Sphere.tpp
+        src/Physics/Sphere/Mesh/NRE_SphereMesh.hpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Mesh/NRE_ChunkMesh.hpp

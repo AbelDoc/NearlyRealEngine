@@ -12,7 +12,7 @@
         
             inline Mesh::Mesh(GL::AbstractVBO* buffer) : vbo(buffer) {
                 vbo->allocateAndFill();
-                vao.access(getBuffer());
+                access(getBuffer());
             }
             
             inline GL::AbstractVBO* Mesh::getBuffer() {
@@ -26,11 +26,25 @@
             inline void Mesh::unbind() const {
                 vao.unbind();
             }
+    
+            inline void Mesh::access(const GL::AbstractVBO* buf) {
+                vao.access(buf);
+            }
             
             inline bool Mesh::draw(GL::DrawMode mode) const {
                 if (vbo->getCount() > 0) {
                     bind();
                         vbo->draw(mode);
+                    unbind();
+                    return true;
+                }
+                return false;
+            }
+    
+            inline bool Mesh::drawInstanced(int instance, GL::DrawMode mode) const {
+                if (vbo->getCount() > 0) {
+                    bind();
+                        vbo->drawInstanced(instance, mode);
                     unbind();
                     return true;
                 }

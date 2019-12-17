@@ -17,6 +17,8 @@
     #include "NRE_Texture.hpp"
 
     #include "NRE_Mesh.hpp"
+    
+    #include "NRE_Physics.hpp"
 
     #include "NRE_Camera.hpp"
     #include "NRE_World.hpp"

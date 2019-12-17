@@ -34,7 +34,6 @@
 
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::addIndex(Index idx) {
-                assert(idx < indexCounter);
                 index.emplaceBack(idx);
             }
 

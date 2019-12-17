@@ -11,19 +11,27 @@
         namespace Model {
             
             template <class T, class K, class Data>
-            CullableMesh<T, K, Data>::CullableMesh(T& o) : TypedMesh<T>(o), target(o) {
+            CullableMesh<T, K, Data>::CullableMesh(T& o, K const& bound) : TypedMesh<T>(o), target(o), boundObject(bound) {
                 o.add(this);
                 update(nullptr, nullptr);
             }
             
             template <class T, class K, class Data>
-            CullableMesh<T, K, Data>::CullableMesh(CullableMesh && m) : TypedMesh<T>(std::move(m)), target(m.target), cacheData(std::move(m.cacheData)) {
+            CullableMesh<T, K, Data>::CullableMesh(CullableMesh && m) : TypedMesh<T>(std::move(m)), target(m.target), boundObject(std::move(m.boundObject)), cacheData(std::move(m.cacheData)) {
             }
         
             template <class T, class K, class Data>
-            bool CullableMesh<T, K, Data>::draw(K const& boundObject, GL::DrawMode mode) const {
-                if (inBound(boundObject)) {
+            bool CullableMesh<T, K, Data>::draw(GL::DrawMode mode) const {
+                if (inBound()) {
                     return Mesh::draw(mode);
+                }
+                return false;
+            }
+    
+            template <class T, class K, class Data>
+            bool CullableMesh<T, K, Data>::drawInstanced(int instance, GL::DrawMode mode) const {
+                if (inBound()) {
+                    return Mesh::drawInstanced(instance, mode);
                 }
                 return false;
             }
