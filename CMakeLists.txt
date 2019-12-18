@@ -98,6 +98,8 @@ set(COMPILE_LIST
         src/GL/Texture/Texture2D/NRE_Texture2D.hpp
         src/GL/Texture/Texture2DArray/NRE_Texture2DArray.hpp
         src/GL/VBO/IBO/NRE_IBO.hpp
+        src/GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp
+        src/GL/VBO/Layout/Matrix/NRE_ColoredMatrixInstance.hpp
         src/GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp
         src/GL/VBO/Layout/NRE_Layout.hpp
         src/GL/VBO/NRE_AbstractVBO.hpp

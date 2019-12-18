@@ -27,17 +27,29 @@
              * @class InstancedModel
              * @brief Manage an instanced model
              */
+            template <class InstanceLayout>
             class InstancedModel : public Model {
+                public :    // Iterator
+                    /**< Shortcut to hide Iterator implementation */
+                    typedef typename GL::VBO<InstanceLayout>::Iterator         Iterator;
+                    /**< Shortcut to hide ConstIterator implementation */
+                    typedef typename GL::VBO<InstanceLayout>::ConstIterator    ConstIterator;
+                    
                 private:    //Fields
-                    std::unique_ptr<GL::VBO<GL::MatrixInstance>> models;    /**< The matrix instance buffer */
-                    Utility::Vector<Math::Matrix4x4<float>> matrixes;       /**< The matrixes */
+                    GL::VBO<InstanceLayout> models;    /**< The matrix instance buffer */
     
                 public:    // Methods
                     //## Constructor ##//
                         /**
-                         * Default constructor
+                         * No default constructor
                          */
-                        InstancedModel() = default;
+                        InstancedModel() = delete;
+                        /**
+                         * Construct the instanced model from the buffer's streaming usage
+                         * @param nbInstance the number of instance for this model
+                         * @param stream     the buffer's streaming usage
+                         */
+                        InstancedModel(std::size_t nbInstance, GL::StreamUsage stream);
         
                     //## Move-Constructor ##//
                         /**
@@ -52,31 +64,38 @@
                          */
                         ~InstancedModel() = default;
     
-                    //## Getter ##//
+                    //## Iterator Access ##//
                         /**
-                         * @return the matrixes
+                         * @return an iterator on the first element
                          */
-                        Utility::Vector<Math::Matrix4x4<float>>& getMatrixes();
-        
-                    //## Setter ##//
+                        Iterator begin();
                         /**
-                         * Models buffer setter
-                         * @param matrix the new models buffer
+                         * @return a const iterator on the first element
                          */
-                        void setModels(std::unique_ptr<GL::VBO<GL::MatrixInstance>>& matrix);
+                        ConstIterator begin() const;
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator cbegin() const;
+                        /**
+                         * @return an iterator on the end of the container
+                         */
+                        Iterator end();
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator end() const;
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator cend() const;
         
                     //## Methods ##//
                         /**
-                         * Update models' matrix
-                         * @param data   the external data's source with matrix's data
-                         * @param size   the data's size in bytes
-                         * @param offset the data's offset
+                         * Add a mesh in the model
+                         * @param mesh the mesh to add
                          */
-                        void updateModels(const void* data, std::size_t size, GLintptr offset = 0);
-                        /**
-                         * Orphan the models buffer
-                         */
-                        void orphanModels();
+                        virtual void addMesh(std::unique_ptr<Mesh> && mesh) override;
                         /**
                          * Draw the model
                          * @param mode     the drawing mode

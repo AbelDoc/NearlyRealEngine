@@ -3,21 +3,17 @@
 
     in vec4 normal;
     in vec4 pos;
-    in vec4 realPos;
+    in vec4 color;
 
     uniform vec3 camera;
-
-    uniform sampler2D tex;
 
     out vec4 out_Color;
 
     void main() {
-        vec3 clamped = (realPos.xyz + vec3(16 * 10, 0, 16 * 10)) / vec3(16 * 21, 16 * 5, 16 * 21);
-
         float ambientStrength = 0.5;
-        vec3 ambient = ambientStrength * texture(tex, clamped.xz).rgb;
+        vec3 ambient = ambientStrength * color.rgb;
 
-        vec3 norm = normalize((normal.xyz * texture(tex, clamped.xz).rgb) / 2);
+        vec3 norm = normal.xyz;
         vec3 lightDir = normalize(vec3(0, 200, 0) - pos.xyz);
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = diff * vec3(0.5);

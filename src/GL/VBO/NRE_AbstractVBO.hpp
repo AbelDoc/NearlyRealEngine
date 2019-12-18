@@ -80,7 +80,7 @@
                          * Allocate the VBO
                          * @param nb the number of vertex
                          */
-                        void allocate(int nb);
+                        void allocate(std::size_t nb);
                         /**
                          * Update the attribute buffer
                          * @param offset the data's offset
@@ -120,6 +120,11 @@
                          * @param capacity the capacity to get
                          */
                         virtual void reserve(std::size_t capacity) = 0;
+                        /**
+                         * Resize the attribute data's storage
+                         * @param capacity the capacity to get
+                         */
+                        virtual void resize(std::size_t capacity) = 0;
                         /**
                          * Draw the VBO
                          * @param mode the drawing mode

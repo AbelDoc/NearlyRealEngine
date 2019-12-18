@@ -132,7 +132,7 @@
                                     auto it0 = indexed.find(vertex0);
                                     if (it0 != indexed.end()) {
                                         PrimitiveVertex& layout = ibo.getData(it0->second.vIndex);
-                                        layout.setNormal(normal + layout.getNormal());
+                                        layout.normal = normal + layout.normal;
                                         it0->second.nbAdd++;
                                         ibo.addIndex(it0->second.index);
                                     } else {
@@ -146,7 +146,7 @@
                                     auto it1 = indexed.find(vertex1);
                                     if (it1 != indexed.end()) {
                                         PrimitiveVertex& layout = ibo.getData(it1->second.vIndex);
-                                        layout.setNormal(normal + layout.getNormal());
+                                        layout.normal = normal + layout.normal;
                                         it1->second.nbAdd++;
                                         ibo.addIndex(it1->second.index);
                                     } else {
@@ -160,7 +160,7 @@
                                     auto it2 = indexed.find(vertex2);
                                     if (it2 != indexed.end()) {
                                         PrimitiveVertex& layout = ibo.getData(it2->second.vIndex);
-                                        layout.setNormal(normal + layout.getNormal());
+                                        layout.normal = normal + layout.normal;
                                         it2->second.nbAdd++;
                                         ibo.addIndex(it2->second.index);
                                     } else {
@@ -178,9 +178,8 @@
                 
                 for (auto& it : indexed) {
                     PrimitiveVertex& layout = ibo.getData(it.second.vIndex);
-                    Vector3D<float> newNormal(layout.getNormal() / it.second.nbAdd);
-                    newNormal.normalize();
-                    layout.setNormal(newNormal);
+                    layout.normal /= it.second.nbAdd;
+                    layout.normal.normalize();
                 }
             }
             

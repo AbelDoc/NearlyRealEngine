@@ -31,23 +31,16 @@
             static constexpr int SCREEN_H = 720;
 
         private :   // Field
+            Angle fov;
             PerspectiveCamera camera;
-
-            World::World world;
-            Vector<ChunkMesh> meshes;
-            
-            InstancedModel spheres;
-            
-            Texture2D* texture;
+            InstancedModel<ColoredMatrixInstance> spheres;
 
             bool wireframeMode;
 
-            Angle fov;
-
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(50.0f, 70.0_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), wireframeMode(false), fov(70.0_deg) {
-                    updateChunks();
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), fov(70_deg), camera(50.0f, fov, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), spheres(10'000, GL_STREAM_DRAW), wireframeMode(false) {
+                    updateData();
 
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
@@ -83,7 +76,7 @@
                     });
 
                     addHandler<WheelMotionEvent>([&](WheelMotionEvent& event) {
-                        fov += (event.getDelta() * degree);
+                        fov -= (event.getDelta() * degree);
                         if (fov < 1.0_deg) {
                             fov = 1.0_deg;
                         }
@@ -98,55 +91,44 @@
                         camera.turn(event.getMotion());
                         return true;
                     });
-                    
-                    texture = new Texture2D("Data/Material/Mat_17/x1024/Normal.png", true);
                 }
                 void update() override {
                     camera.update();
+                    for (ColoredMatrixInstance& m : spheres) {
+                        float dist = static_cast <float> (m.color.norm());
+                        Vector4D<float> c4 = m.matrix.getL4();
+                        c4.setY(c4.getY() - dist);
+                        if (c4.getY() < 0) {
+                            c4.setY(400);
+                        }
+                        m.matrix.setL4(c4);
+                    }
+                    spheres.update();
                 }
                 void render() override {
                     clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                    Primitive3D* shader = ProgramManager::get<Primitive3D>();
-                    shader->bind();
-                        shader->sendCamera(camera);
-                        texture->bind();
-                        for (auto const& m : meshes) {
-                            m.draw();
-                        }
-                        texture->unbind();
-                    shader->unbind();
                     InstancedPrimitive3D* instancedShader = ProgramManager::get<InstancedPrimitive3D>();
                     instancedShader->bind();
                         instancedShader->sendCamera(camera);
-                        texture->bind();
-                            spheres.draw();
-                        texture->unbind();
+                        spheres.draw();
                     instancedShader->unbind();
                 }
                 void destroy() override {
                 }
                 
         private :   // Methods
-                void updateChunks() {
+                void updateData() {
                     Clock clock;
                     clock.update();
                     
-                    meshes.reserve(World::World::NB_CHUNKS);
-                    
-                    for (Chunk& c : world) {
-                        meshes.emplaceBack(c, camera.getFrustum());
-                    }
-                    std::unique_ptr<VBO<MatrixInstance>> vbo(new VBO<MatrixInstance>(GL_STREAM_DRAW));
-                    vbo->allocate(10'000);
-
                     Sphere s(Vector3D<float>(0, 0, 0), 1);
-                    std::unique_ptr<SphereMesh> mesh(new SphereMesh(s));
-                    spheres.addMesh(std::move(mesh));
-                    spheres.setModels(vbo);
-                    for (Matrix4x4<float>& m : spheres.getMatrixes()) {
-                        m.setIdentity();
-                        m.translate(Vector3D<float>(std::rand() % 1000, std::rand() % 1000, 100 + std::rand() % 1000));
-                        m.transpose();
+                    spheres.addMesh(std::unique_ptr<SphereMesh>(new SphereMesh(s)));
+                    
+                    for (ColoredMatrixInstance& m : spheres) {
+                        m.color = Vector4D<float>(static_cast <float> (std::rand() % 1000) / 1000, static_cast <float> (std::rand() % 1000) / 1000, static_cast <float> (std::rand() % 1000) / 1000, 1);
+                        m.matrix.setIdentity();
+                        m.matrix.translate(Vector3D<float>(-200 + std::rand() % 400, std::rand() % 400, -200 + std::rand() % 400));
+                        m.matrix.transpose();
                     }
                     spheres.update();
     

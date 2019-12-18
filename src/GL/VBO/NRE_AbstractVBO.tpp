@@ -22,15 +22,14 @@
                 return count;
             }
 
-            inline void AbstractVBO::allocate(int nb) {
-                count = nb;
+            inline void AbstractVBO::allocate(std::size_t nb) {
+                count = static_cast <GLsizei> (nb);
                 size = nb * getLayoutSize();
                 buffer.allocate(size, usage);
             }
 
             inline void AbstractVBO::update(GLintptr offset) {
                 buffer.update(offset, getDataSize(), getDataPointer());
-                clear();
             }
 
             inline void AbstractVBO::update(const void* data, std::size_t nb, GLintptr offset) {

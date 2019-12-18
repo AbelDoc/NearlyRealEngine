@@ -28,6 +28,12 @@
              */
             template <class Layout>
             class VBO : public AbstractVBO {
+                public :    // Iterator
+                    /**< Shortcut to hide Iterator implementation */
+                    typedef typename Utility::Vector<Layout>::Iterator         Iterator;
+                    /**< Shortcut to hide ConstIterator implementation */
+                    typedef typename Utility::Vector<Layout>::ConstIterator    ConstIterator;
+                    
                 private:    //Fields
                     Utility::Vector<Layout> datas;  /**< The vertex's data */
 
@@ -55,6 +61,32 @@
                          * VBO Deconstructor
                          */
                         virtual ~VBO() = default;
+    
+                    //## Iterator Access ##//
+                        /**
+                         * @return an iterator on the first element
+                         */
+                        Iterator begin();
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator begin() const;
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator cbegin() const;
+                        /**
+                         * @return an iterator on the end of the container
+                         */
+                        Iterator end();
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator end() const;
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator cend() const;
 
                     //## Getter ##//
                         /**
@@ -85,6 +117,11 @@
                          * @param capacity the capacity to get
                          */
                         void reserve(std::size_t capacity) override;
+                        /**
+                         * Resize the attribute data's storage
+                         * @param capacity the capacity to get
+                         */
+                        void resize(std::size_t capacity) override;
 
                     //## Assignment Operator ##//
                         /**

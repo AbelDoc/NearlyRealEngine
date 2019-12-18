@@ -3,6 +3,7 @@
 
     in vec4 in_Vertex;
     in vec4 in_Normal;
+    in vec4 in_Color;
     in mat4 in_Matrix;
 
     uniform mat4 modelview;
@@ -10,17 +11,11 @@
 
     out vec4 normal;
     out vec4 pos;
-    out vec4 realPos;
-
-    uniform sampler2D tex;
+    out vec4 color;
 
     void main() {
-        vec3 clamped = (in_Vertex.xyz + vec3(16 * 10, 0, 16 * 10)) / vec3(16 * 21, 16 * 5, 16 * 21);
-
         normal = in_Normal;
-
-        realPos = in_Matrix * (in_Vertex - vec4(texture(tex, clamped.xz).rgb, 0));
-        pos = modelview * realPos;
-
-        gl_Position = projection * modelview * realPos;
+        color = in_Color;
+        pos = modelview * in_Matrix * in_Vertex;
+        gl_Position = projection * pos;
     }

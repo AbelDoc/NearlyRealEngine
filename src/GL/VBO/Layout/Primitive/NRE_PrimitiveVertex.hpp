@@ -29,16 +29,16 @@
              * @brief A vertex layout : Position - Normal
              */
             class PrimitiveVertex : public Utility::Stringable<PrimitiveVertex> {
-                private:    //Fields
+                public:    //Fields
                     Math::Vector4D<float> position;    /**< Vertex's position */
                     Math::Vector4D<float> normal;      /**< Vertex's normal */
 
                 public:    // Methods
                     //## Constructor ##//
                         /**
-                         * No default constructor
+                         * Default constructor
                          */
-                        PrimitiveVertex() = delete;
+                        PrimitiveVertex() = default;
                         /**
                          * Construct a 2D primitive vertex
                          * @param pos the vertex's position
@@ -54,23 +54,6 @@
                          */
                         PrimitiveVertex(Math::Point3D<float> const& pos, Math::Vector4D<float> const& n)
                             : position(pos, 1), normal(n) {
-                        }
-
-                    //## Getter ##//
-                        /**
-                         * @return the vertex normal
-                         */
-                        Math::Vector4D<float> const& getNormal() const {
-                            return normal;
-                        }
-
-                    //## Setter ##//
-                        /**
-                         * Set the vertex normal
-                         * @param n the new normal
-                         */
-                        void setNormal(Math::Vector4D<float> const& n) {
-                            normal = n;
                         }
 
                     //## Methods ##//

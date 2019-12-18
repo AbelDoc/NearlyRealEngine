@@ -60,7 +60,7 @@
                          * Add a mesh in the model
                          * @param mesh the mesh to add
                          */
-                        void addMesh(std::unique_ptr<Mesh> && mesh);
+                        virtual void addMesh(std::unique_ptr<Mesh> && mesh);
                         /**
                          * Draw the model
                          * @param mode     the drawing mode

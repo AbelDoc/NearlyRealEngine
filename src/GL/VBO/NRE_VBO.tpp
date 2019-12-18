@@ -17,6 +17,36 @@
             template <class Layout>
             inline VBO<Layout>::VBO(VBO && b) : AbstractVBO(std::move(b)), datas(std::move(b.datas)) {
             }
+    
+            template <class Layout>
+            inline typename VBO<Layout>::Iterator VBO<Layout>::begin() {
+                return datas.begin();
+            }
+    
+            template <class Layout>
+            inline typename VBO<Layout>::ConstIterator VBO<Layout>::begin() const {
+                return datas.begin();
+            }
+    
+            template <class Layout>
+            inline typename VBO<Layout>::ConstIterator VBO<Layout>::cbegin() const {
+                return datas.cbegin();
+            }
+    
+            template <class Layout>
+            inline typename VBO<Layout>::Iterator VBO<Layout>::end() {
+                return datas.end();
+            }
+    
+            template <class Layout>
+            inline typename VBO<Layout>::ConstIterator VBO<Layout>::end() const {
+                return datas.end();
+            }
+    
+            template <class Layout>
+            inline typename VBO<Layout>::ConstIterator VBO<Layout>::cend() const {
+                return datas.cend();
+            }
 
             template <class Layout>
             inline std::size_t VBO<Layout>::getDataCount() const {
@@ -50,6 +80,11 @@
             template <class Layout>
             inline void VBO<Layout>::reserve(std::size_t capacity) {
                 datas.reserve(capacity);
+            }
+    
+            template <class Layout>
+            inline void VBO<Layout>::resize(std::size_t capacity) {
+                datas.resize(capacity);
             }
 
             template <class Layout>

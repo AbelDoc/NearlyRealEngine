@@ -1,9 +1,9 @@
 
     /**
-     * @file NRE_MatrixInstance.hpp
-     * @brief Declaration of Engine's GL's Object : MatrixInstance
+     * @file NRE_ColoredMatrixInstance.hpp
+     * @brief Declaration of Engine's GL's Object : ColoredMatrixInstance
      * @author Louis ABEL
-     * @date 04/11/2019
+     * @date 18/12/2019
      * @copyright CC-BY-NC-SA
      */
 
@@ -25,11 +25,12 @@
         namespace GL {
 
             /**
-             * @class MatrixInstance
-             * @brief A vertex layout : Matrix
+             * @class ColoredMatrixInstance
+             * @brief A vertex layout : Color - Matrix
              */
-            class MatrixInstance : public Utility::Stringable<MatrixInstance> {
+            class ColoredMatrixInstance : public Utility::Stringable<ColoredMatrixInstance> {
                 public:    //Fields
+                    Math::Vector4D<float> color;   /**< The instance color */
                     Math::Matrix4x4<float> matrix; /**< The matrix instance */
 
                 public:    // Methods
@@ -37,23 +38,19 @@
                         /**
                          * Default constructor
                          */
-                        MatrixInstance() = default;
-                        /**
-                         * Construct the layout from a given matrix
-                         * @param mat the layout's matrix
-                         */
-                        MatrixInstance(Math::Matrix4x4<float> const& mat) : matrix(mat) {
-                        }
+                        ColoredMatrixInstance() = default;
 
                     //## Methods ##//
                         /**
                          * Access the material vertex for VAO's command's storing
                          */
                         static void access() {
-                            Layout::enableAttribute( 7, 4, GL_FLOAT, sizeof(MatrixInstance), 0);
-                            Layout::enableAttribute( 8, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(1 * sizeof(Math::Vector4D<float>)));
-                            Layout::enableAttribute( 9, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(2 * sizeof(Math::Vector4D<float>)));
-                            Layout::enableAttribute(10, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(3 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute( 1, 4, GL_FLOAT, sizeof(ColoredMatrixInstance), 0);
+                            Layout::enableAttribute( 7, 4, GL_FLOAT, sizeof(ColoredMatrixInstance), (void*)(1 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute( 8, 4, GL_FLOAT, sizeof(ColoredMatrixInstance), (void*)(2 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute( 9, 4, GL_FLOAT, sizeof(ColoredMatrixInstance), (void*)(3 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute(10, 4, GL_FLOAT, sizeof(ColoredMatrixInstance), (void*)(4 * sizeof(Math::Vector4D<float>)));
+                            Layout::divideAttribute( 1, 1);
                             Layout::divideAttribute( 7, 1);
                             Layout::divideAttribute( 8, 1);
                             Layout::divideAttribute( 9, 1);
@@ -66,7 +63,7 @@
                          * @return the converted matrix vertex layout
                          */
                         Utility::String toString() const {
-                            return matrix.toString();
+                            return color.toString() + " - " + matrix.toString();
                         }
 
             };
