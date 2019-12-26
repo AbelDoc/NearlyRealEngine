@@ -122,6 +122,22 @@
                          * @param capacity the capacity to get
                          */
                         void resize(std::size_t capacity) override;
+    
+                    //## Access Operator ##//
+                        /**
+                         * Return a reference on a data's object
+                         * @warning No range check performed
+                         * @param   index the object's index
+                         * @return        the object's reference
+                         */
+                        Layout& operator [](std::size_t index);
+                        /**
+                         * Return a const reference on a data's object
+                         * @warning No range check performed
+                         * @param   index the object's index
+                         * @return        the object's reference
+                         */
+                        Layout const& operator [](std::size_t index) const;
 
                     //## Assignment Operator ##//
                         /**

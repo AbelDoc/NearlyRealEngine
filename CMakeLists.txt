@@ -101,6 +101,7 @@ set(COMPILE_LIST
         src/GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp
         src/GL/VBO/Layout/Matrix/NRE_ColoredMatrixInstance.hpp
         src/GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp
+        src/GL/VBO/Layout/Point/NRE_PointVertex.hpp
         src/GL/VBO/Layout/NRE_Layout.hpp
         src/GL/VBO/NRE_AbstractVBO.hpp
         src/GL/VBO/NRE_VBO.hpp
@@ -119,6 +120,8 @@ set(COMPILE_LIST
         src/Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp
         src/Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp
         src/Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp
+        src/Renderer/Program/Core/Primitive/Instanced3D/NRE_InstancedPrimitive3D.hpp
+        src/Renderer/Program/Core/Primitive/Line/NRE_Line3D.hpp
         src/Renderer/Program/Manager/NRE_ProgramManager.hpp
         src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp
         src/Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp

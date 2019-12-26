@@ -101,6 +101,16 @@
                 res << "]";
                 return res;
             }
+    
+            template <class Layout>
+            inline Layout& VBO<Layout>::operator [](std::size_t index) {
+                return datas[index];
+            }
+    
+            template <class Layout>
+            inline Layout const& VBO<Layout>::operator [](std::size_t index) const {
+                return datas[index];
+            }
 
             template <class Layout>
             inline VBO<Layout>& VBO<Layout>::operator =(VBO<Layout> && b) {
