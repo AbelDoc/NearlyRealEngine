@@ -47,8 +47,8 @@
                 void applyForce(Vector3D<float> const& force) {
                     acceleration += force;
                 }
-                void process(Vector<Boid>& flock) {
-                    Vector3D<float> separation(0), alignment(0), cohesion(0), sum(0);
+                void process(Vector<Boid>& flock, Vector3D<float> const& target) {
+                    Vector3D<float> separation(0), alignment(0), cohesion(0), sumAlg(0), sumCoh(0);
                     float countSep = 0, count = 0;
                     for (Boid& b : flock) {
                         long double dist = position.distance(b.position);
@@ -60,7 +60,8 @@
                             countSep++;
                         }
                         if (dist > 0 && dist < 50) {    // Alignment
-                            sum += b.velocity;
+                            sumAlg += target - b.velocity;
+                            sumCoh += b.position;
                             count++;
                         }
                     }
@@ -77,20 +78,19 @@
                         }
                     }
                     if (count > 0) {
-                        sum /= count;
-                        Vector3D<float> desired;
-                        desired = -sum;
+                        sumCoh /= count;
+                        Vector3D<float> desired = -sumCoh;
                         desired.normalize();
                         desired *= 3.5f;
-                        desired -= velocity;
-                        long double magAcc = acceleration.norm();
+                        cohesion = desired - velocity;
+                        long double magAcc = cohesion.norm();
                         if (magAcc > 0.5f) {
-                            acceleration /= magAcc;
+                            cohesion /= magAcc;
                         }
-                        cohesion = acceleration;
-                        sum.normalize();
-                        sum *= 3.5f;
-                        alignment = sum - velocity;
+                        sumAlg /= count;
+                        sumAlg.normalize();
+                        sumAlg *= 3.5f;
+                        alignment = sumAlg - velocity;
                         long double magAlg = alignment.norm();
                         if (magAlg > 0.5f) {
                             alignment /= magAlg;
@@ -101,8 +101,8 @@
                     applyForce(alignment);
                     applyForce(cohesion);
                 }
-                void run(Vector<Boid>& flock) {
-                    process(flock);
+                void run(Vector<Boid>& flock, Vector3D<float> target) {
+                    process(flock, target);
                     update();
                     borders();
                 }
@@ -194,9 +194,9 @@
                     return flock.cend();
                 }
             //## Methods ##//
-                void flocking() {
+                void flocking(Vector3D<float> target) {
                     for (Boid& b : flock) {
-                        b.run(flock);
+                        b.run(flock, target);
                     }
                 }
     
@@ -238,7 +238,7 @@
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), fov(70_deg), camera(50.0f, fov, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), spheres(NB_INSTANCE, GL_STREAM_DRAW), wireframeMode(false), splitMode(false) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), fov(70_deg), camera(90.0f, fov, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), spheres(NB_INSTANCE, GL_STREAM_DRAW), wireframeMode(false), splitMode(false) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
@@ -308,7 +308,7 @@
                 }
                 void update() override {
                     camera.update();
-                    flock.flocking();
+                    flock.flocking(static_cast <PerspectiveCamera const&> (camera).getEye());
                     int i = 0;
                     for (ColoredMatrixInstance& m : spheres) {
                         Boid& b = flock[i++];
