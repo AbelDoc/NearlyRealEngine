@@ -11,6 +11,7 @@
 
     #include "../NRE_Sphere.hpp"
     #include "../../../Header/NRE_Model.hpp"
+    #include "../../../Header/NRE_Buffer.hpp"
     
     /**
      * @namespace NRE
@@ -37,9 +38,9 @@
                 static GL::AbstractVBO* create(Physics::Sphere const& o) {
                     using namespace NRE::Math;
                     
-                    GL::IBO<GL::PrimitiveVertex>* buffer = new GL::IBO<GL::PrimitiveVertex>(GL_STATIC_DRAW);
-                    int rings = 10;
-                    int sectors = 10;
+                    GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
+                    int rings = 20;
+                    int sectors = 20;
                     float ring = 1.0f / static_cast <float> (rings - 1);
                     float sector = 1.0f / static_cast <float> (sectors - 1);
     
@@ -49,8 +50,10 @@
                                                          sin(-(1.0_pi / 2.0) + 1.0_pi * static_cast <float> (r) * ring),
                                                          sin(2.0_pi * static_cast <float> (s) * sector) * sin(1_pi * static_cast <float> (r) * ring));
     
+                            Math::Vector3D<float> tangent(Vector3D<float>(0, 1, 0) ^ normal);
                             Math::Vector3D<float> vertex(o.getCenter() + (normal * o.getRadius()));
-                            buffer->addData(vertex, normal);
+                            Math::Vector2D<float> uv(static_cast <float> (s) * sector, static_cast <float> (r) * ring);
+                            buffer->addData(vertex, normal, tangent, uv, static_cast <unsigned char> (0));
                         }
                     }
     

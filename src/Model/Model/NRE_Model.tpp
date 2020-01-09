@@ -17,13 +17,20 @@
             inline void Model::addMesh(std::unique_ptr<Mesh> && mesh) {
                 meshes.pushBack(std::move(mesh));
             }
-    
-            inline bool Model::draw(GL::DrawMode mode) const {
-                bool drawn = true;
-                for (auto& m : meshes) {
-                    drawn = drawn && m->draw(mode);
+            
+            inline bool Model::canBeDrawn() const {
+                bool drawn = false;
+                std::size_t i = 0;
+                while (!drawn && i < meshes.getSize()) {
+                    drawn = drawn || meshes[i++]->canBeDrawn();
                 }
                 return drawn;
+            }
+    
+            inline void Model::draw(GL::DrawMode mode) const {
+                for (auto& m : meshes) {
+                    m->draw(mode);
+                }
             }
             
         }

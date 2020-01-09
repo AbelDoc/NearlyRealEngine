@@ -57,6 +57,10 @@
                          */
                         void reserve(std::size_t capacity);
                         /**
+                         * @return tell if the model can be drawn
+                         */
+                        virtual bool canBeDrawn() const;
+                        /**
                          * Add a mesh in the model
                          * @param mesh the mesh to add
                          */
@@ -66,7 +70,7 @@
                          * @param mode     the drawing mode
                          * @return if the mesh has been drawn
                          */
-                        virtual bool draw(GL::DrawMode mode = GL_TRIANGLES) const;
+                        virtual void draw(GL::DrawMode mode = GL_TRIANGLES) const;
     
                     //## Assignment Operator ##//
                         /**

@@ -10,22 +10,22 @@
     namespace NRE {
         namespace Physics {
             
-            Sphere::Sphere(Math::Point3D<float> const& c, float r) : center(c), radius(r) {
+            inline Sphere::Sphere(Math::Point3D<float> const& c, float r) : center(c), radius(r) {
             }
-            
-            Math::Point3D<float> const& Sphere::getCenter() const {
+    
+            inline Math::Point3D<float> const& Sphere::getCenter() const {
                 return center;
             }
     
-            float Sphere::getRadius() const {
+            inline float Sphere::getRadius() const {
                 return radius;
             }
-            
-            void Sphere::setCenter(Math::Point3D<float> const& c) {
+    
+            inline void Sphere::setCenter(Math::Point3D<float> const& c) {
                 center = c;
             }
-            
-            void Sphere::setRadius(float r) {
+    
+            inline void Sphere::setRadius(float r) {
                 radius = r;
             }
         

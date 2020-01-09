@@ -19,21 +19,20 @@
             template <class T, class K, class Data>
             CullableMesh<T, K, Data>::CullableMesh(CullableMesh && m) : TypedMesh<T>(std::move(m)), target(m.target), boundObject(std::move(m.boundObject)), cacheData(std::move(m.cacheData)) {
             }
+    
+            template <class T, class K, class Data>
+            bool CullableMesh<T, K, Data>::canBeDrawn() const {
+                return inBound();
+            }
         
             template <class T, class K, class Data>
-            bool CullableMesh<T, K, Data>::draw(GL::DrawMode mode) const {
-                if (inBound()) {
-                    return Mesh::draw(mode);
-                }
-                return false;
+            void CullableMesh<T, K, Data>::draw(GL::DrawMode mode) const {
+                Mesh::draw(mode);
             }
     
             template <class T, class K, class Data>
-            bool CullableMesh<T, K, Data>::drawInstanced(int instance, GL::DrawMode mode) const {
-                if (inBound()) {
-                    return Mesh::drawInstanced(instance, mode);
-                }
-                return false;
+            void CullableMesh<T, K, Data>::drawInstanced(int instance, GL::DrawMode mode) const {
+                Mesh::drawInstanced(instance, mode);
             }
     
             template <class T, class K, class Data>

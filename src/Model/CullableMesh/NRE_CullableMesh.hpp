@@ -62,6 +62,10 @@
                          */
                         bool inBound() const;
                         /**
+                         * @return if the mesh can be drawn
+                         */
+                        bool canBeDrawn() const override;
+                        /**
                          * Update the observer when the observable notify it
                          * @param obs the observable
                          * @param arg notification data
@@ -69,17 +73,15 @@
                         void update(Utility::Observable* obs, void* arg) override;
                         /**
                          * Draw the mesh
-                         * @param mode        the drawing mode
-                         * @return if the mesh has been drawn
+                         * @param mode the drawing mode
                          */
-                        bool draw(GL::DrawMode mode = GL_TRIANGLES) const override;
+                        void draw(GL::DrawMode mode = GL_TRIANGLES) const override;
                         /**
                          * Draw the mesh as an instanced one
                          * @param instance    the number of instances
                          * @param mode        the drawing mode
-                         * @return if the mesh has been drawn
                          */
-                        bool drawInstanced(int instance, GL::DrawMode mode = GL_TRIANGLES) const override;
+                        void drawInstanced(int instance, GL::DrawMode mode = GL_TRIANGLES) const override;
     
                     //## Assignment Operator ##//
                         /**

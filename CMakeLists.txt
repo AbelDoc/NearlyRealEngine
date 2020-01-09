@@ -35,6 +35,9 @@ include_directories(src/GL/Buffer/FrameBuffer)
 include_directories(src/GL/Buffer/VAO)
 include_directories(src/GL/FBO)
 include_directories(src/GL/Texture)
+include_directories(src/GL/Texture/Material)
+include_directories(src/GL/Texture/Material/Array)
+include_directories(src/GL/Texture/SkyBox)
 include_directories(src/GL/Texture/Surface)
 include_directories(src/GL/Texture/Texture2D)
 include_directories(src/GL/Texture/Texture2DArray)
@@ -43,6 +46,8 @@ include_directories(src/GL/VBO/IBO)
 include_directories(src/GL/VBO/Layout)
 include_directories(src/GL/VBO/Layout/Primitive)
 include_directories(src/Header)
+include_directories(src/ECS/System)
+include_directories(src/ECS/Component)
 include_directories(src/lib/FastNoise)
 include_directories(src/Renderer/Program)
 include_directories(src/Renderer/Program/Core)
@@ -94,6 +99,10 @@ set(COMPILE_LIST
         src/GL/Buffer/FrameBuffer/NRE_FrameBuffer.hpp
         src/GL/Buffer/VAO/NRE_VAO.hpp
         src/GL/FBO/NRE_FBO.hpp
+        src/GL/Texture/SkyBox/NRE_SkyBox.cpp
+        src/GL/Texture/SkyBox/NRE_SkyBox.hpp
+        src/GL/Texture/Material/NRE_Material.hpp
+        src/GL/Texture/Material/Array/NRE_MaterialArray.hpp
         src/GL/Texture/Surface/NRE_Surface.hpp
         src/GL/Texture/Texture2D/NRE_Texture2D.hpp
         src/GL/Texture/Texture2DArray/NRE_Texture2DArray.hpp
@@ -102,26 +111,46 @@ set(COMPILE_LIST
         src/GL/VBO/Layout/Matrix/NRE_ColoredMatrixInstance.hpp
         src/GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp
         src/GL/VBO/Layout/Point/NRE_PointVertex.hpp
+        src/GL/VBO/Layout/Material/NRE_MaterialVertex.hpp
         src/GL/VBO/Layout/NRE_Layout.hpp
         src/GL/VBO/NRE_AbstractVBO.hpp
         src/GL/VBO/NRE_VBO.hpp
         src/GL/NRE_GL.cpp
         src/GL/NRE_GL.hpp
+        src/ECS/System/NRE_DeferredSystem.hpp
+        src/ECS/System/NRE_FlockSystem.hpp
+        src/ECS/System/NRE_GBufferSystem.hpp
+        src/ECS/System/NRE_InstancedGBufferSystem.hpp
+        src/ECS/Component/Light/NRE_Light.hpp
+        src/ECS/Component/Renderable/NRE_Renderable.hpp
+        src/ECS/Component/Renderable/NRE_InstancedRenderable.hpp
         src/Header/NRE_Buffer.hpp
         src/Header/NRE_Camera.hpp
         src/Header/NRE_Core.hpp
+        src/Header/NRE_ECS.hpp
         src/Header/NRE_Exception.hpp
         src/Header/NRE_GL.hpp
+        src/Header/NRE_Model.hpp
         src/Header/NRE_Shader.hpp
+        src/Header/NRE_Utility.hpp
         src/Header/NRE_Texture.hpp
+        src/Header/NRE_Renderer.hpp
+        src/Header/NRE_Physics.hpp
         src/Header/NRE_World.hpp
         src/lib/FastNoise/FastNoise.cpp
         src/lib/FastNoise/FastNoise.h
         src/Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp
+        src/Renderer/Program/Core/GBuffer/GBuffer/NRE_GBuffer.hpp
+        src/Renderer/Program/Core/GBuffer/InstancedGBuffer/NRE_InstancedGBuffer.hpp
+        src/Renderer/Program/Core/IBL/BRDF/NRE_BRDF.hpp
+        src/Renderer/Program/Core/IBL/Irradiance/NRE_Irradiance.hpp
+        src/Renderer/Program/Core/IBL/Prefilter/NRE_Prefilter.hpp
+        src/Renderer/Program/Core/PBR/NRE_PBR.hpp
+        src/Renderer/Program/Core/SkyBox/Capture/NRE_Capture.hpp
+        src/Renderer/Program/Core/SkyBox/SkyBox/NRE_SkyBox.hpp
         src/Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp
         src/Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp
         src/Renderer/Program/Core/Primitive/Instanced3D/NRE_InstancedPrimitive3D.hpp
-        src/Renderer/Program/Core/Primitive/Line/NRE_Line3D.hpp
         src/Renderer/Program/Manager/NRE_ProgramManager.hpp
         src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp
         src/Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp
@@ -132,6 +161,8 @@ set(COMPILE_LIST
         src/Renderer/Program/NRE_AbstractProgram.hpp
         src/Renderer/Program/NRE_Program.cpp
         src/Renderer/Program/NRE_Program.hpp
+        src/Renderer/Material/NRE_MaterialManager.hpp
+        src/Renderer/Deferred/NRE_DeferredRenderer.hpp
         src/Utility/Interfaces/Allocable/NRE_Allocable.hpp
         src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
         src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
@@ -148,6 +179,12 @@ set(COMPILE_LIST
         src/Physics/Sphere/NRE_Sphere.hpp
         src/Physics/Sphere/NRE_Sphere.tpp
         src/Physics/Sphere/Mesh/NRE_SphereMesh.hpp
+        src/Physics/Cube/NRE_Cube.hpp
+        src/Physics/Cube/NRE_Cube.tpp
+        src/Physics/Cube/Mesh/NRE_CubeMesh.hpp
+        src/Physics/Rectangle/NRE_Rectangle.hpp
+        src/Physics/Rectangle/NRE_Rectangle.tpp
+        src/Physics/Rectangle/Mesh/NRE_RectangleMesh.hpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Mesh/NRE_ChunkMesh.hpp

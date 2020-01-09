@@ -12,6 +12,7 @@
     #include "NRE_GL.hpp"
     #include "NRE_Exception.hpp"
     #include "NRE_Shader.hpp"
+    #include "NRE_Renderer.hpp"
 
     #include "NRE_Buffer.hpp"
     #include "NRE_Texture.hpp"
@@ -24,3 +25,5 @@
     #include "NRE_World.hpp"
 
     #include <Header/NRE_ECS.hpp>
+    
+    #include "NRE_ECS.hpp"

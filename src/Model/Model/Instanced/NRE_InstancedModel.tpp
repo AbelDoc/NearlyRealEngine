@@ -53,17 +53,25 @@
             }
     
             template <class InstanceLayout>
-            inline bool InstancedModel<InstanceLayout>::draw(GL::DrawMode mode) const {
-                bool drawn = true;
+            inline void InstancedModel<InstanceLayout>::draw(GL::DrawMode mode) const {
                 for (auto& m : meshes) {
-                    drawn = drawn && m->drawInstanced(static_cast <int> (models.getCount()), mode);
+                    m->drawInstanced(static_cast <int> (models.getCount()), mode);
                 }
-                return drawn;
             }
     
             template <class InstanceLayout>
             inline void InstancedModel<InstanceLayout>::update() {
                 models.update();
+            }
+    
+            template <class InstanceLayout>
+            inline InstanceLayout& InstancedModel<InstanceLayout>::operator [](std::size_t index) {
+                return models[index];
+            }
+    
+            template <class InstanceLayout>
+            inline InstanceLayout const& InstancedModel<InstanceLayout>::operator [](std::size_t index) const {
+                return models[index];
             }
             
         }

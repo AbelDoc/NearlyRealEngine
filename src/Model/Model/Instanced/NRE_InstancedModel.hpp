@@ -101,7 +101,7 @@
                          * @param mode     the drawing mode
                          * @return if the mesh has been drawn
                          */
-                        bool draw(GL::DrawMode mode = GL_TRIANGLES) const override;
+                        void draw(GL::DrawMode mode = GL_TRIANGLES) const override;
                         /**
                          * Update the buffer from the matrixes
                          */
@@ -114,6 +114,22 @@
                          * @return  the reference of himself
                          */
                         InstancedModel& operator =(InstancedModel && m) = default;
+    
+                    //## Access Operator ##//
+                        /**
+                         * Return a reference on a data's object
+                         * @warning No range check performed
+                         * @param   index the object's index
+                         * @return        the object's reference
+                         */
+                        InstanceLayout& operator [](std::size_t index);
+                        /**
+                         * Return a const reference on a data's object
+                         * @warning No range check performed
+                         * @param   index the object's index
+                         * @return        the object's reference
+                         */
+                        InstanceLayout const& operator [](std::size_t index) const;
             };
     
         }

@@ -34,10 +34,23 @@
             
             public:    // Methods
                 //## Constructor ##//
-                /**
-                 * Default constructor
-                 */
-                PointVertex() = default;
+                    /**
+                     * Default constructor
+                     */
+                    PointVertex() = default;
+                    /**
+                     * Construct the vertex from it's 3D position
+                     * @param p the vertex position
+                     */
+                    PointVertex(Math::Vector3D<float> const& p) : position(p, 1.0) {
+                    }
+                    /**
+                     * Construct the vertex from 2 positions
+                     * @param p  the vertex position
+                     * @param uv the vertex uv coordinates
+                     */
+                    PointVertex(Math::Vector2D<float> const& p, Math::Vector2D<float> const& uv) : position(p.getX(), p.getY(), uv.getX(), uv.getY()) {
+                    }
                 
                 //## Methods ##//
                 /**

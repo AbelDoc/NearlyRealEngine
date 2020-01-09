@@ -31,24 +31,20 @@
                 vao.access(buf);
             }
             
-            inline bool Mesh::draw(GL::DrawMode mode) const {
-                if (vbo->getCount() > 0) {
-                    bind();
-                        vbo->draw(mode);
-                    unbind();
-                    return true;
-                }
-                return false;
+            inline bool Mesh::canBeDrawn() const {
+                return vbo->getCount() > 0;
+            }
+            
+            inline void Mesh::draw(GL::DrawMode mode) const {
+                bind();
+                    vbo->draw(mode);
+                unbind();
             }
     
-            inline bool Mesh::drawInstanced(int instance, GL::DrawMode mode) const {
-                if (vbo->getCount() > 0) {
-                    bind();
-                        vbo->drawInstanced(instance, mode);
-                    unbind();
-                    return true;
-                }
-                return false;
+            inline void Mesh::drawInstanced(int instance, GL::DrawMode mode) const {
+                bind();
+                    vbo->drawInstanced(instance, mode);
+                unbind();
             }
             
             inline Utility::String Mesh::toString() const {

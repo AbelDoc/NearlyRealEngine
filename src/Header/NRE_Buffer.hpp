@@ -17,6 +17,7 @@
     #include "../GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp"
     #include "../GL/VBO/Layout/Matrix/NRE_ColoredMatrixInstance.hpp"
     #include "../GL/VBO/Layout/Point/NRE_PointVertex.hpp"
+    #include "../GL/VBO/Layout/Material/NRE_MaterialVertex.hpp"
 
     #include "../GL/VBO/NRE_VBO.hpp"
     #include "../GL/VBO/IBO/NRE_IBO.hpp"

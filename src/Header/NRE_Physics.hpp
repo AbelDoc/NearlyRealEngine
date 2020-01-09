@@ -8,5 +8,9 @@
      */
 
     #include "../Physics/Sphere/NRE_Sphere.hpp"
+    #include "../Physics/Cube/NRE_Cube.hpp"
+    #include "../Physics/Rectangle/NRE_Rectangle.hpp"
     
     #include "../Physics/Sphere/Mesh/NRE_SphereMesh.hpp"
+    #include "../Physics/Cube/Mesh/NRE_CubeMesh.hpp"
+    #include "../Physics/Rectangle/Mesh/NRE_RectangleMesh.hpp"

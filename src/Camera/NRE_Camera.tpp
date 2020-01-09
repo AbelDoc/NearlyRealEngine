@@ -97,9 +97,9 @@
             }
 
             inline void Camera::update() {
+                updateView();
                 computeAngle();
                 computeVector();
-                updateView();
             }
 
             inline Utility::String Camera::toString() const {
