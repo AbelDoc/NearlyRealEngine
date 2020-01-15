@@ -8,7 +8,7 @@
      */
 
     #include "Header/NRE_Core.hpp"
-
+    
     using namespace NRE;
     using namespace NRE::System;
     using namespace NRE::Math;
@@ -32,13 +32,12 @@
             
         private :   // Field
             PerspectiveCamera camera;
-            
-            bool splitMode;
+        
             bool pause;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(8, 8, 8), Vector3D<float>(0, 1, 0)), splitMode(false), pause(false) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(-1, 0, 0)), pause(true) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
@@ -60,9 +59,6 @@
                             camera.moveDown();
                         } else if (event.isCode(KeyCode::SPACE)) {
                             camera.moveUp();
-                        } else if (event.isCode(KeyCode::M)) {
-                            splitMode = !splitMode;
-                            return true;
                         } else if (event.isCode(KeyCode::P)) {
                             pause = !pause;
                             return true;
@@ -74,22 +70,21 @@
                         camera.turn(event.getMotion());
                         return true;
                     });
-    
-                    Entity light = Singleton<EntityManager>::get().create();
-                    light.assign<Light>(Point4D<float>(0, 1, 0, 0), Vector3D<float>(5), Vector3D<float>(0, -1, 0), 360.0f);
-    
+                    
                     Singleton<SystemManager>::get().add<FlockSystem>(camera);
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_HD.hdr");
                     Singleton<SystemManager>::get().add<GBufferSystem>(camera);
                     Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
-    
+        
                     Singleton<SystemManager>::get().configure();
-            }
+                    
+                }
                 void update() override {
-                    camera.update();
                     if (!pause) {
                         Singleton<SystemManager>::get().getSystem<FlockSystem>()->update();
+                        camera.setEye(Singleton<SystemManager>::get().getSystem<FlockSystem>()->getBoidPosition() - (const_cast <PerspectiveCamera const&> (camera).getForward() * 5.0f));
                     }
+                    camera.update();
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();

@@ -3,7 +3,7 @@
 
     in vec4 in_Vertex;
     in vec4 in_Normal;
-    in vec4 in_Color;
+    in vec4 in_Tangent;
     in mat4 in_Matrix;
 
     uniform mat4 modelview;
@@ -15,7 +15,7 @@
 
     void main() {
         normal = in_Normal;
-        color = in_Color;
-        pos = modelview * in_Matrix * in_Vertex;
+        color = in_Tangent;
+        pos = modelview * in_Matrix * vec4(in_Vertex.xyz, 1.0);
         gl_Position = projection * pos;
     }

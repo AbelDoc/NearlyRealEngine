@@ -64,13 +64,11 @@
                             addUniform("texMaterial");
                             addUniform("texRoughness");
                             addUniform("texMetallic");
-                            for (unsigned char i = 0; i < MAX_LIGHTS; i++) {
+                            for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
                                 Utility::String base("lights[");
                                 base << i;
                                 addUniform(base + "].position");
                                 addUniform(base + "].intensities");
-                                addUniform(base + "].direction");
-                                addUniform(base + "].angle");
                             }
                             addUniform("cameraV");
                             addUniform("invModelview");
@@ -110,7 +108,7 @@
                         }
 
                 public:     // Static
-                    constexpr static const GLuint MAX_LIGHTS = 10;  /**< The maximum number of light in a scene */
+                    constexpr static const GLuint MAX_LIGHTS = 150;  /**< The maximum number of light in a scene */
             };
         }
     }

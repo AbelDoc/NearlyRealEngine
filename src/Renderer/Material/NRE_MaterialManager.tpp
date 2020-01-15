@@ -10,7 +10,8 @@
     namespace NRE {
         namespace Renderer {
 
-            inline MaterialManager::MaterialManager() : materials(1) {
+            inline MaterialManager::MaterialManager() : materials(2) {
+                textures.emplaceBack("Data/Material/Mat_16/x1024");
                 textures.emplaceBack("Data/Material/Mat_17/x1024");
                 
                 int i = 0;

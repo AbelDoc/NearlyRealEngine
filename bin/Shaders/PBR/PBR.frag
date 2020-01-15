@@ -1,14 +1,12 @@
 
     #version 450
 
-    #define MAX_LIGHTS 10
+    #define MAX_LIGHTS 150
 
     uniform int numLights;
     uniform struct Light {
-       vec4 position;
+       vec3 position;
        vec3 intensities;
-       vec3 direction;
-       float angle;
     } lights[MAX_LIGHTS];
 
     in vec2 uv;
@@ -86,15 +84,13 @@
         vec3 vertex = (invModelview * worldPosFromDepth(uv)).xyz;
         vec4 normalAndId = texture(texNormal, uv);
         vec3 normal = normalAndId.xyz;
-        vec4 result;
 
-        const int materialResolution = 1024;
         if (normal != vec3(0.0, 0.0, 0.0)) {
             int id = int(normalAndId.w);
             vec3 N = normalize(normal);
             vec3 V = normalize(cameraV - vertex);
-            vec3 R = reflect(V, N);
-            vec2 tileUV = texture(texDiffuseUV, uv).xy / materialResolution;
+            vec3 R = reflect(-V, N);
+            vec2 tileUV = texture(texDiffuseUV, uv).xy;
             vec3 albedo = texture(texMaterial, vec3(tileUV, id)).rgb;
             float roughness = texture(texRoughness, vec3(tileUV, id)).r;
             float metallic = texture(texMetallic, vec3(tileUV, id)).r;
@@ -104,25 +100,24 @@
 
             vec3 Lo = vec3(0.0);
             for (int i = 0; i < numLights; i = i + 1) {
-                vec3 L = mix(normalize(lights[i].position.xyz), normalize(lights[i].position.xyz - vertex), lights[i].position.w);
+                vec3 L = normalize(lights[i].position - vertex);
                 vec3 H = normalize(V + L);
 
-                float distance = length(lights[i].position.xyz - vertex);
-                float attenuation = mix(1.0, 1.0 / (distance * distance), lights[i].position.w);
+                float distance = length(lights[i].position - vertex);
+                float attenuation = 1.0 / (distance * distance);
                 vec3 radiance = lights[i].intensities * attenuation;
 
                 float NDF = distributionGGX(N, H, roughness);
                 float G = geometrySmith(N, V, L, roughness);
                 vec3 F = fresnelSchlick(max(dot(H, V), 0.0), F0);
 
+                vec3 numerator = NDF * G * F;
+                float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001;
+                vec3 specular = numerator / denominator;
+
                 vec3 kS = F;
                 vec3 kD = vec3(1.0) - kS;
                 kD *= 1.0 - metallic;
-
-                vec3 numerator = NDF * G * F;
-                float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
-                vec3 specular = numerator / max(denominator, 0.001);
-
 
                 float NdotL = max(dot(N, L), 0.0);
                 Lo += (kD * albedo / PI + specular) * radiance * NdotL;
@@ -145,6 +140,8 @@
             vec3 ambient = (kD * diffuse + specular) ;
 
             vec3 color = (ambient + Lo);
+            color = color / (color + vec3(1.0));
+            color = pow(color, vec3(1.0/2.2));
 
             out_Color = vec4(color, 1.0);
         } else {

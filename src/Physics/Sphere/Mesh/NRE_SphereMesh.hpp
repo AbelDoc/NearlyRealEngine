@@ -39,39 +39,58 @@
                     using namespace NRE::Math;
                     
                     GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
-                    int rings = 20;
-                    int sectors = 20;
-                    float ring = 1.0f / static_cast <float> (rings - 1);
-                    float sector = 1.0f / static_cast <float> (sectors - 1);
+                    float rings = 50;
+                    float sectors = 50;
+                    
+                    float x, y, z, xy, u, v;
+                    
+                    float ringStep = static_cast <float> (Math::PI) / rings;
+                    float sectorStep = 2.0f * static_cast <float> (Math::PI) / sectors;
     
-                    for (int r = 0; r < rings; r++) {
-                        for (int s = 0; s < sectors; s++) {
-                            Math::Vector3D<float> normal(cos(2.0_pi * static_cast <float> (s) * sector) * sin(PI * static_cast <float> (r) * ring),
-                                                         sin(-(1.0_pi / 2.0) + 1.0_pi * static_cast <float> (r) * ring),
-                                                         sin(2.0_pi * static_cast <float> (s) * sector) * sin(1_pi * static_cast <float> (r) * ring));
-    
+                    float sectorAngle, ringAngle;
+                    float lengthInv = 1.0f / o.getRadius();
+
+                    for (int r = 0; r <= static_cast <int> (rings); r++) {
+                        ringAngle = static_cast <float> (Math::PI) / 2.0f - static_cast <float> (r) * ringStep;
+                        xy = o.getRadius() * std::cos(ringAngle);
+                        z  = o.getRadius() * std::sin(ringAngle);
+                        
+                        for (int s = 0; s <= static_cast <int> (sectors); s++) {
+                            sectorAngle = static_cast <float> (s) * sectorStep;
+                            
+                            x = xy * std::cos(sectorAngle);
+                            y = xy * std::sin(sectorAngle);
+                            
+                            Math::Vector3D<float> vertex(x, y, z);
+                            Math::Vector3D<float> normal(vertex * lengthInv);
                             Math::Vector3D<float> tangent(Vector3D<float>(0, 1, 0) ^ normal);
-                            Math::Vector3D<float> vertex(o.getCenter() + (normal * o.getRadius()));
-                            Math::Vector2D<float> uv(static_cast <float> (s) * sector, static_cast <float> (r) * ring);
+
+                            u = static_cast <float> (s) / sectors;
+                            v = static_cast <float> (r) / rings;
+                            
+                            Math::Vector2D<float> uv(u, v);
                             buffer->addData(vertex, normal, tangent, uv, static_cast <unsigned char> (0));
                         }
                     }
     
-                    std::uint32_t idx1, idx2, idx3, idx4;
-    
-                    for (GLint r = 0; r < rings - 1; r++) {
-                        for (GLint s = 0; s < sectors - 1; s++) {
-                            idx1 = r * sectors + s;
-                            idx2 = idx1 + 1;
-                            idx3 = idx2 + sectors;
-                            idx4 = idx1 + sectors;
-    
-                            buffer->addIndex(idx4);
-                            buffer->addIndex(idx2);
-                            buffer->addIndex(idx1);
-                            buffer->addIndex(idx2);
-                            buffer->addIndex(idx4);
-                            buffer->addIndex(idx3);
+                    std::uint32_t k1, k2;
+                    
+                    for (int s = 0; s < static_cast <int> (sectors); s++) {
+                        k1 = s * (static_cast <std::uint32_t> (sectors) + 1);
+                        k2 = k1 + static_cast <std::uint32_t> (sectors) + 1;
+                        
+                        for (int r = 0; r < static_cast <int> (rings); r++, k1++, k2++) {
+                            if (s != 0) {
+                                buffer->addIndex(k1);
+                                buffer->addIndex(k2);
+                                buffer->addIndex(k1 + 1);
+                            }
+                            
+                            if (s != static_cast <int> (sectors) - 1) {
+                                buffer->addIndex(k1 + 1);
+                                buffer->addIndex(k2);
+                                buffer->addIndex(k2 + 1);
+                            }
                         }
                     }
                     

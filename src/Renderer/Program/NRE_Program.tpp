@@ -117,6 +117,10 @@
             inline void Program::useMat4(Utility::String const& location, GLsizei count, const Math::Matrix4x4<float>* const value) const {
                 glUniformMatrix4fv(uniforms.getLocation(location), count, GL_TRUE, value->value());
             }
+            
+            inline void Program::useMat4(Utility::String const& location, GLsizei count, const glm::mat4* const value) const {
+                glUniformMatrix4fv(uniforms.getLocation(location), count, GL_FALSE, reinterpret_cast <const float* const> (value));
+            }
 
             inline void Program::use1IV(Utility::String const& location, GLsizei count, const GLint* const value) const {
                 glUniform1iv(uniforms.getLocation(location), count, value);

@@ -139,6 +139,7 @@
                                     skyBox.getPrefilter().unbind();
                                 glActiveTexture(GL_TEXTURE0);
                                     skyBox.getIrradiance().unbind();
+    
                             pbr->unbind();
                         }
                         /**
@@ -157,10 +158,8 @@
                             Utility::Singleton<EntityManager>::get().each<Light>([this, &nb, &pbr](Entity, Light& l) {
                                 Utility::String base("lights[");
                                 base << nb;
-                                pbr->use4FV(base + "].position", 1, l.position.value());
+                                pbr->use3FV(base + "].position", 1, l.position.value());
                                 pbr->use3FV(base + "].intensities", 1, l.intensities.value());
-                                pbr->use3FV(base + "].direction", 1, l.direction.value());
-                                pbr->use1FV(base + "].angle", 1, &(l.angle));
                                 nb++;
                             });
                             pbr->use1I("numLights", static_cast <int> (nb));

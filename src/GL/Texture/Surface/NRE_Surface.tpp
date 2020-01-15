@@ -88,7 +88,7 @@
                     internalFormat = GL_RGBA;
                     format = GL_RGBA;
                 } else {
-                    throw (Exception::STBException("Unknown Pixel Format"));
+                    throw (Exception::STBException(file.toString() + " : Unknown Pixel Format"));
                 }
             }
 

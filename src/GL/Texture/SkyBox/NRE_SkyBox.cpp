@@ -40,12 +40,12 @@
                 captureBuffer.createDepthBuffer<RenderBuffer>(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT24, SIZE, SIZE);
                 
                 Matrix4x4<float> modelviews[6];
-                modelviews[0].lookAt(Point3D<float>(0.0), Point3D<float>( -1.0,  0.0,  0.0), Vector3D<float>(0.0,  1.0,  0.0));
-                modelviews[1].lookAt(Point3D<float>(0.0), Point3D<float>(1.0,  0.0,  0.0), Vector3D<float>(0.0,  1.0,  0.0));
-                modelviews[2].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0, 1.0,  0.0), Vector3D<float>(0.0,  0.0,  -1.0));
-                modelviews[3].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0,  -1.0,  0.0), Vector3D<float>(0.0,  0.0, 1.0));
-                modelviews[4].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0,  0.0,  1.0), Vector3D<float>(0.0,  1.0,  0.0));
-                modelviews[5].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0,  0.0, -1.0), Vector3D<float>(0.0,  1.0,  0.0));
+                modelviews[0].lookAt(Point3D<float>(0.0), Point3D<float>( 1.0, 0.0,  0.0), Vector3D<float>(0.0,-1.0, 0.0));
+                modelviews[1].lookAt(Point3D<float>(0.0), Point3D<float>(-1.0, 0.0,  0.0), Vector3D<float>(0.0,-1.0, 0.0));
+                modelviews[2].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0, 1.0,  0.0), Vector3D<float>(0.0, 0.0, 1.0));
+                modelviews[3].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0,-1.0,  0.0), Vector3D<float>(0.0, 0.0,-1.0));
+                modelviews[4].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0, 0.0,  1.0), Vector3D<float>(0.0,-1.0, 0.0));
+                modelviews[5].lookAt(Point3D<float>(0.0), Point3D<float>( 0.0, 0.0, -1.0), Vector3D<float>(0.0,-1.0, 0.0));
 
                 ProgramManager::get<Capture>()->bind();
                     hdrMap.bind();
@@ -84,10 +84,6 @@
                     map.unbind();
                 ProgramManager::get<Irradiance>()->unbind();
                 
-                for (int i = 0; i < FACE_NUM; i++) {
-                    modelviews[i].rotate(90_deg, Vector3D<float>(-1, 0, 0));
-                }
-
                 ProgramManager::get<Prefilter>()->bind();
                     map.bind();
                         captureBuffer.bind();

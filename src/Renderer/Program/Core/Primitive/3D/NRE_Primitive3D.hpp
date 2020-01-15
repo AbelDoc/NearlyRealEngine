@@ -51,7 +51,12 @@
                         void addUniforms() override {
                             addUniform("modelview");
                             addUniform("projection");
-                            addUniform("camera");
+                        }
+                        void sendView(glm::mat4 const& m) const {
+                            useMat4("modelview", 1, &m);
+                        }
+                        void sendProjection(Math::Matrix4x4<float> const& m) const {
+                            useMat4("projection", 1, &m);
                         }
                         /**
                          * Send a mvp matrix to the shader
@@ -60,7 +65,6 @@
                         void sendCamera(Camera::Camera const& c) const {
                             useMat4("modelview", 1, &c.getView());
                             useMat4("projection", 1, &c.getProjection());
-                            use3FV("camera", 1, c.getEye().value());
                         }
             };
         }

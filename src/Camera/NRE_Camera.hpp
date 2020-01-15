@@ -30,11 +30,12 @@
             class Camera : public Utility::Stringable<Camera> {
                 private:    //Fields
                     float speed;                            /**< The camera's speed */
+                    Math::Angle yaw;
+                    Math::Angle pitch;
                     Math::Point3D<float> eye;               /**< The camera's point of view */
                     Math::Vector3D<float> forward;          /**< The camera's direction */
                     Math::Vector3D<float> up;               /**< The camera's up vector */
                     Math::Vector3D<float> right;            /**< The camera's right vector */
-                    Math::Vector2D<Math::Angle> angle;      /**< The camera's angle */
                     Math::Matrix4x4<float> view;            /**< The camera's view matrix */
                     Math::Matrix4x4<float> projection;      /**< The camera's projection matrix */
 
@@ -49,9 +50,10 @@
                          * @param s the camera's speed
                          * @param e the camera's eye position
                          * @param u the camera's up direction
-                         * @param a the camera's angle
+                         * @param y the camera's yaw
+                         * @param p the camera's pitch
                          */
-                        Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a = Math::Vector2D<Math::Angle>(0 * Math::degree, -90 * Math::degree));
+                        Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u = Math::Vector3D<float>(0, 1, 0), Math::Angle y = 0 * Math::degree, Math::Angle p = 0 * Math::degree);
 
                     //## Copy-Constructor ##//
                         /**
@@ -79,10 +81,6 @@
                          */
                         Math::Point3D<float> const& getEye() const;
                         /**
-                         * @return the camera's angle
-                         */
-                        Math::Vector2D<Math::Angle> const& getAngle() const;
-                        /**
                          * @return the camera's up vector
                          */
                         Math::Vector3D<float> const& getUp() const;
@@ -102,6 +100,13 @@
                          * @return the camera's projection view
                          */
                         Math::Matrix4x4<float> const& getProjection() const;
+    
+                    //## Setter ##//
+                        /**
+                         * Set the camera's eye
+                         * @param e the new eye position
+                         */
+                        void setEye(Math::Point3D<float> const& e);
 
                     //## Methods ##//
                         /**
@@ -203,8 +208,8 @@
                     Math::Matrix4x4<float>& getProjection();
 
                 private:    // Static
-                    static constexpr Math::Angle MAX_PITCH =  89.9 * Math::degree;    /**< The maximum phi */
-                    static constexpr Math::Angle MIN_PITCH = -89.9 * Math::degree;    /**< The minimum phi */
+                    static constexpr Math::Angle MAX_PITCH =  89.5 * Math::degree;    /**< The maximum phi */
+                    static constexpr Math::Angle MIN_PITCH = -89.5 * Math::degree;    /**< The minimum phi */
 
             };
         }

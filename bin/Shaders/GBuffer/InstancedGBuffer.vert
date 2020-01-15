@@ -18,10 +18,8 @@
     void main() {
         gl_Position = PV * in_Matrix * vec4(in_Vertex.xyz, 1.0);
 
-        const int materialResolution = 1024;
-
         int id = int(in_Vertex.w);
-        uv = vec2(in_Normal.w, in_Tangent.w) / materialResolution;
+        uv = vec2(in_Normal.w, in_Tangent.w);
         vec3 T = normalize(in_Tangent.xyz);
         vec3 N = normalize(in_Normal.xyz);
         vec3 B = cross(N, T);

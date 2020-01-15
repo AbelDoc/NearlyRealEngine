@@ -53,7 +53,7 @@
              */
             class FlockSystem : public System<FlockSystem> {
                 private :   // Static
-                    static constexpr int NB_INSTANCE = 1;
+                    static constexpr int NB_INSTANCE = 150;
                 
                 private :   // Fields
                     Camera::Camera const& target;
@@ -75,11 +75,13 @@
                             
                             flock.resize(NB_INSTANCE);
     
-                            Physics::Sphere s(Math::Vector3D<float>(0, 0, 0), 10);
+                            Physics::Sphere s(Math::Vector3D<float>(0, 0, 0), 1);
                             spheres.addMesh(std::unique_ptr<Model::SphereMesh>(new Model::SphereMesh(s)));
         
                             int i = 0;
                             for (GL::MatrixInstance& m : spheres) {
+                                Entity light = Utility::Singleton<EntityManager>::get().create();
+                                light.assign<Light>(flock[i].position, Math::Vector3D<float>((static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0, (static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0, (static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0));
                                 m.matrix.setIdentity();
                                 m.matrix.translate(flock[i++].position);
                                 m.matrix.transpose();
@@ -105,7 +107,7 @@
                                         countSep++;
                                     }
                                     if (dist > 0 && dist < 50) {    // Alignment
-                                        sumAlg += target.getEye() - otherB.velocity;
+                                        sumAlg += otherB.velocity + (target.getEye() - otherB.position);
                                         sumCoh += otherB.position;
                                         count++;
                                     }
@@ -173,9 +175,20 @@
                                 if (b.position.getZ() > 500) {
                                     b.position.setZ(-500);
                                 }
-                                spheres[i++].matrix.setL4(Math::Vector4D<float>(b.position, 1.0f));
+                                
+                                
+                                spheres[i].matrix.setIdentity();
+                                spheres[i].matrix.translate(b.position);
+                                spheres[i++].matrix.transpose();
                             }
+                            int nb = 0;
+                            Utility::Singleton<EntityManager>::get().each<Light>([this, &nb](Entity, Light& l) {
+                                l.position = flock[nb++].position;
+                            });
                             spheres.update();
+                        }
+                        Math::Vector3D<float> getBoidPosition() {
+                            return flock[0].position;
                         }
             };
         }

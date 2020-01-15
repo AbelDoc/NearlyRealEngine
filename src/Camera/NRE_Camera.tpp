@@ -7,19 +7,29 @@
      * @copyright CC-BY-NC-SA
      */
 
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wstrict-overflow"
+    #pragma GCC diagnostic ignored "-Warray-bounds"
+    #pragma GCC diagnostic ignored "-Wconversion"
+    
+    #define GLM_ENABLE_EXPERIMENTAL
+    #include <glm/glm.hpp>
+    #include <glm/gtc/matrix_transform.hpp>
+    #include <glm/gtx/string_cast.hpp>
+    
+    #pragma GCC diagnostic pop
+
     namespace NRE {
         namespace Camera {
 
-            inline Camera::Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Vector2D<Math::Angle> const& a) : speed(s), eye(e), up(u), angle(a) {
+            inline Camera::Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Angle y, Math::Angle p) : speed(s), yaw(y), pitch(p), eye(e), up(u) {
+                computeAngle();
                 computeVector();
             }
 
             inline Math::Point3D<float> const& Camera::getEye() const {
                 return eye;
-            }
-
-            inline Math::Vector2D<Math::Angle> const& Camera::getAngle() const {
-                return angle;
             }
 
             inline Math::Vector3D<float> const& Camera::getUp() const {
@@ -42,30 +52,33 @@
                 return projection;
             }
 
+            inline void Camera::setEye(Math::Point3D<float> const& e) {
+                eye = e;
+            }
+            
             inline void Camera::updateView() {
                 view.lookAt(eye, eye + forward, up);
             }
 
             inline void Camera::computeAngle() {
-                if (angle.getX() > MAX_PITCH) {
-                    angle.setX(MAX_PITCH);
-                } else if (angle.getX() < MIN_PITCH) {
-                    angle.setX(MIN_PITCH);
+                if (pitch > MAX_PITCH) {
+                    pitch = MAX_PITCH;
+                } else if (pitch < MIN_PITCH) {
+                    pitch = MIN_PITCH;
                 }
             }
 
             inline void Camera::computeVector() {
-                float tmp = static_cast <float> (Math::cos(angle.getX()));
-                forward.setX(tmp * static_cast <float> (Math::cos(angle.getY())));
-                forward.setY(      static_cast <float> (Math::sin(angle.getX())));
-                forward.setZ(tmp * static_cast <float> (Math::sin(angle.getY())));
+                float tmp = static_cast <float> (cos(pitch));
+                forward.setX(tmp * static_cast <float> (cos(yaw)));
+                forward.setY(      static_cast <float> (sin(pitch)));
+                forward.setZ(tmp * static_cast <float> (sin(yaw)));
                 forward.normalize();
-
+                
                 right = forward ^ Math::Vector3D<float>(0, 1, 0);
                 right.normalize();
 
                 up = right ^ forward;
-                up.normalize();
             }
 
             inline void Camera::moveFront() {
@@ -93,21 +106,24 @@
             }
 
             inline void Camera::turn(Math::Vector2D<int> const& motion) {
-                angle += Math::Vector2D<Math::Angle>(static_cast <float> (-motion.getY()) * Math::degree * 0.1f, static_cast <float> (motion.getX()) * Math::degree * 0.1f);
+                yaw   += static_cast <float> ( motion.getX()) * Math::degree * 0.1f;
+                pitch += static_cast <float> (-motion.getY()) * Math::degree * 0.1f;
             }
 
             inline void Camera::update() {
-                updateView();
                 computeAngle();
                 computeVector();
+                updateView();
             }
 
             inline Utility::String Camera::toString() const {
                 Utility::String res;
                 res << eye.toString();
-                res << " - ";
-                res << angle.toString();
-                res << '\n';
+                res << " - (";
+                res << yaw.toString();
+                res << ", ";
+                res << pitch.toString();
+                res << ")\n";
                 res << forward.toString();
                 res << " - ";
                 res << right.toString();

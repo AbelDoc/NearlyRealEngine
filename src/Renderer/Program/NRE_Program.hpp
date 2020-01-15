@@ -16,6 +16,7 @@
 
     #include "../../Header/NRE_GL.hpp"
     #include "../../Header/NRE_Exception.hpp"
+    #include "../../Header/NRE_Camera.hpp"
 
     #include "Uniforms/NRE_Uniforms.hpp"
     #include "Shader/Vertex/NRE_VertexShader.hpp"
@@ -242,6 +243,7 @@
                          * @param value    the pointer to the first matrix to passed
                          */
                         void useMat4(Utility::String const& location, GLsizei count, const Math::Matrix4x4<float>* const value) const;
+                        void useMat4(Utility::String const& location, GLsizei count, const glm::mat4* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 1 value by 1 value
                          * @param location the uniform to query the location

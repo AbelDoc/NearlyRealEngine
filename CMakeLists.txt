@@ -13,6 +13,7 @@ include_directories(C:/Users/abell/Documents/GitHub/NRE-IO/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-ECS/src)
 include_directories(C:/lib/Glew/include)
 include_directories(C:/lib/STB)
+include_directories(C:/lib/GLM)
 
 include_directories(src/Camera)
 include_directories(src/Camera/Perspective)
