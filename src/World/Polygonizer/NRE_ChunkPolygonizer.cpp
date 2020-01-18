@@ -16,7 +16,7 @@
     namespace NRE {
         namespace World {
             
-            void ChunkPolygonizer::polygonize(Chunk const& target, IBO <PrimitiveVertex>& ibo, float threshold,
+            void ChunkPolygonizer::polygonize(Chunk const& target, IBO <MaterialVertex>& ibo, float threshold,
                                               LODLevel level, Interpolator interpolator) {
                 Point3D<float> vertices[12];
                 UnorderedMap<Point3D<float>, IndexedData> indexed;
@@ -131,43 +131,43 @@
                                     
                                     auto it0 = indexed.find(vertex0);
                                     if (it0 != indexed.end()) {
-                                        PrimitiveVertex& layout = ibo.getData(it0->second.vIndex);
-                                        layout.normal = normal + layout.normal;
+                                        MaterialVertex& layout = ibo.getData(it0->second.vIndex);
+                                        layout.normalAndU = normal + layout.normalAndU;
                                         it0->second.nbAdd++;
                                         ibo.addIndex(it0->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex0] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex0, normal);
+                                        ibo.addData(vertex0, normal, static_cast <unsigned char> (0));
                                         ibo.addIndex(newIndex);
                                     }
                                     
                                     auto it1 = indexed.find(vertex1);
                                     if (it1 != indexed.end()) {
-                                        PrimitiveVertex& layout = ibo.getData(it1->second.vIndex);
-                                        layout.normal = normal + layout.normal;
+                                        MaterialVertex& layout = ibo.getData(it1->second.vIndex);
+                                        layout.normalAndU = normal + layout.normalAndU;
                                         it1->second.nbAdd++;
                                         ibo.addIndex(it1->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex1] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex1, normal);
+                                        ibo.addData(vertex1, normal, static_cast <unsigned char> (0));
                                         ibo.addIndex(newIndex);
                                     }
                                     
                                     auto it2 = indexed.find(vertex2);
                                     if (it2 != indexed.end()) {
-                                        PrimitiveVertex& layout = ibo.getData(it2->second.vIndex);
-                                        layout.normal = normal + layout.normal;
+                                        MaterialVertex& layout = ibo.getData(it2->second.vIndex);
+                                        layout.normalAndU = normal + layout.normalAndU;
                                         it2->second.nbAdd++;
                                         ibo.addIndex(it2->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex2] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex2, normal);
+                                        ibo.addData(vertex2, normal, static_cast <unsigned char> (0));
                                         ibo.addIndex(newIndex);
                                     }
                                 }
@@ -177,9 +177,17 @@
                 }
                 
                 for (auto& it : indexed) {
-                    PrimitiveVertex& layout = ibo.getData(it.second.vIndex);
-                    layout.normal /= it.second.nbAdd;
-                    layout.normal.normalize();
+                    MaterialVertex& layout = ibo.getData(it.second.vIndex);
+                    layout.normalAndU /= it.second.nbAdd;
+                    layout.normalAndU.normalize();
+                    layout.tangentAndV = Vector4D<float>(Vector3D<float>(0, 1, 0) ^ Vector3D<float>(layout.normalAndU));
+                    
+                    Vector3D<float> clamped(layout.positionAndMaterial);
+                    clamped += Vector3D<float>(Chunk::SIZE_X * World::H_SIZE_X, 0, Chunk::SIZE_Z * World::H_SIZE_Z);
+                    clamped /= Vector3D<float>(Chunk::SIZE_X * ((World::H_SIZE_X * 2) + 1), Chunk::SIZE_Y * World::SIZE_Y, Chunk::SIZE_Z * ((World::H_SIZE_Z * 2) + 1));
+                    
+                    layout.normalAndU.setW(clamped.getX());
+                    layout.tangentAndV.setW(clamped.getZ());
                 }
             }
             

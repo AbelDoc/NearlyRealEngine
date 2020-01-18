@@ -33,9 +33,9 @@
                     typedef const Chunk*    ConstIterator;
 
                 public :    // Static
-                    static constexpr int H_SIZE_X = 10;
-                    static constexpr int H_SIZE_Z = 10;
-                    static constexpr int   SIZE_Y = 5;
+                    static constexpr int H_SIZE_X = 3;
+                    static constexpr int H_SIZE_Z = 3;
+                    static constexpr int   SIZE_Y = 3;
                     static constexpr std::size_t NB_CHUNKS = ((static_cast <std::size_t> (H_SIZE_X) * 2) + 1) * ((static_cast <std::size_t> (H_SIZE_Z) * 2) + 1) * static_cast <std::size_t> (SIZE_Y);
 
                 private :   // Fields

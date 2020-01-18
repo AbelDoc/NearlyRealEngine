@@ -29,7 +29,7 @@
              * @brief A vertex layout : Position + Material - Normal+UVx - Tangent + Uvy
              */
             class MaterialVertex : public Utility::Stringable<MaterialVertex> {
-                private:    //Fields
+                public:    //Fields
                     Math::Vector4D<float> positionAndMaterial; /**< Packed vertex's position and material's id */
                     Math::Vector4D<float> normalAndU;          /**< Packed vertex's normal and u coord */
                     Math::Vector4D<float> tangentAndV;         /**< Packed vertex's tangent and v coord */
@@ -40,6 +40,14 @@
                          * Default constructor
                          */
                         MaterialVertex() = default;
+                        /**
+                         * Construct a material vertex
+                         * @param pos the vertex's position
+                         * @param n   the vertex's normal
+                         * @param m   the vertex's material's id
+                         */
+                        MaterialVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, unsigned char m): positionAndMaterial(pos, m), normalAndU(n) {
+                        }
                         /**
                          * Construct a material vertex
                          * @param pos the vertex's position

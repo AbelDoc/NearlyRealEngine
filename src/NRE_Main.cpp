@@ -33,6 +33,9 @@
         private :   // Field
             PerspectiveCamera camera;
         
+            World::World world;
+            Vector<Model::Model> models;
+            
             bool pause;
 
         public :    // Methods
@@ -70,21 +73,29 @@
                         camera.turn(event.getMotion());
                         return true;
                     });
-                    
+    
+                    models.reserve(World::World::NB_CHUNKS);
+        
+                    for (Chunk& c : world) {
+                        Entity r = Singleton<EntityManager>::get().create();
+                        models.emplaceBack();
+                        models.getLast().reserve(1);
+                        models.getLast().addMesh(std::unique_ptr<Mesh>(new ChunkMesh(c, camera.getFrustum())));
+                        r.assign<Renderable>(&models.getLast());
+                    }
+    
                     Singleton<SystemManager>::get().add<FlockSystem>(camera);
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_HD.hdr");
                     Singleton<SystemManager>::get().add<GBufferSystem>(camera);
                     Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
         
                     Singleton<SystemManager>::get().configure();
-                    
                 }
                 void update() override {
+                    camera.update();
                     if (!pause) {
                         Singleton<SystemManager>::get().getSystem<FlockSystem>()->update();
-                        camera.setEye(Singleton<SystemManager>::get().getSystem<FlockSystem>()->getBoidPosition() - (const_cast <PerspectiveCamera const&> (camera).getForward() * 5.0f));
                     }
-                    camera.update();
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();

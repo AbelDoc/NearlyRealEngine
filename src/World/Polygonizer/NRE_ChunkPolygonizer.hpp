@@ -9,7 +9,6 @@
 
     #pragma once
 
-    #include <cstdlib>
     #include "../../Header/NRE_GL.hpp"
     #include "../../Header/NRE_Buffer.hpp"
     #include "../NRE_World.hpp"
@@ -350,7 +349,7 @@
                      * @param level     the polygonization lod level
                      * @param linear    use the linear interpolation
                      */
-                    static void polygonize(Chunk const& target, GL::IBO<GL::PrimitiveVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
+                    static void polygonize(Chunk const& target, GL::IBO<GL::MaterialVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
                     /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold
