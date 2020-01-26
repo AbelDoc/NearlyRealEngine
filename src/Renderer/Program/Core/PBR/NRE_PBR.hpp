@@ -108,7 +108,7 @@
                         }
 
                 public:     // Static
-                    constexpr static const GLuint MAX_LIGHTS = 150;  /**< The maximum number of light in a scene */
+                    constexpr static const GLuint MAX_LIGHTS = 100;  /**< The maximum number of light in a scene */
             };
         }
     }

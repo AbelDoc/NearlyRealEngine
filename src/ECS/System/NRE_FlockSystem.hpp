@@ -77,7 +77,7 @@
     
                             Physics::Sphere s(Math::Vector3D<float>(0, 0, 0), 1);
                             spheres.addMesh(std::unique_ptr<Model::SphereMesh>(new Model::SphereMesh(s)));
-        
+    
                             int i = 0;
                             for (GL::MatrixInstance& m : spheres) {
                                 Entity light = Utility::Singleton<EntityManager>::get().create();

@@ -52,12 +52,6 @@
                             addUniform("modelview");
                             addUniform("projection");
                         }
-                        void sendView(glm::mat4 const& m) const {
-                            useMat4("modelview", 1, &m);
-                        }
-                        void sendProjection(Math::Matrix4x4<float> const& m) const {
-                            useMat4("projection", 1, &m);
-                        }
                         /**
                          * Send a mvp matrix to the shader
                          * @param m the mvp matrix

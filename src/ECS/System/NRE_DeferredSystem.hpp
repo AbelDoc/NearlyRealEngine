@@ -38,6 +38,7 @@
                     Renderer::DeferredRenderer renderer;   /**< The deferred renderer object */
                     Camera::Camera const& camera;          /**< The application's camera */
                     Model::RectangleMesh screen;           /**< The screen mesh */
+                    Renderer::SSAO ssao;                   /**< The ssao object */
                     GL::SkyBox skyBox;                     /**< The skybox */
 
             public:    // Methods
@@ -59,11 +60,20 @@
                         void configure() override {
                             Math::Matrix4x4<float> invProjection = camera.getProjection();
                             invProjection.inverse();
+                            
+                            auto pbr = Renderer::ProgramManager::get<Renderer::PBR>();
+                            auto ssaoEffect = Renderer::ProgramManager::get<Renderer::SSAOEffect>();
     
-                            Renderer::ProgramManager::get<Renderer::PBR>()->bind();
-                                Renderer::ProgramManager::get<Renderer::PBR>()->sendTexture();
-                                Renderer::ProgramManager::get<Renderer::PBR>()->sendInvProjection(invProjection);
-                            Renderer::ProgramManager::get<Renderer::PBR>()->unbind();
+                            pbr->bind();
+                                pbr->sendTexture();
+                                pbr->sendInvProjection(invProjection);
+                            pbr->unbind();
+                            ssaoEffect->bind();
+                                ssaoEffect->sendKernel(ssao);
+                                ssaoEffect->sendTexture();
+                                ssaoEffect->sendProjection(camera.getProjection());
+                                ssaoEffect->sendInvProjection(invProjection);
+                            ssaoEffect->unbind();
                         }
                         /**
                          * Perform the GBuffer pass
@@ -86,6 +96,39 @@
 
                                 SystemManager::get<GBufferSystem>()->update();
                                 SystemManager::get<InstancedGBufferSystem>()->update();
+                            renderer.unbind();
+                        }
+                        /**
+                         * Perform the SSAO pass
+                         */
+                        void SSAOPass() {
+                            renderer.bind();
+                                glDepthMask(false);
+                                glColorMask(false, false, false, true);
+                    
+                                GLenum buffers[] = {GL_COLOR_ATTACHMENT0};
+                                glDrawBuffers(1, buffers);
+                    
+                                Renderer::ProgramManager::get<Renderer::SSAOEffect>()->bind();
+                                    glActiveTexture(GL_TEXTURE0);
+                                        renderer.getDepthBuffer()->bind();
+                                    glActiveTexture(GL_TEXTURE1);
+                                        renderer.getColorBuffer(1)->bind();
+                                    glActiveTexture(GL_TEXTURE2);
+                                        ssao.getNoise().bind();
+                        
+                                    screen.draw();
+                        
+                                    glActiveTexture(GL_TEXTURE2);
+                                        ssao.getNoise().unbind();
+                                    glActiveTexture(GL_TEXTURE1);
+                                        renderer.getColorBuffer(1)->bind();
+                                    glActiveTexture(GL_TEXTURE0);
+                                        renderer.getDepthBuffer()->bind();
+                                Renderer::ProgramManager::get<Renderer::SSAOEffect>()->unbind();
+                    
+                                glColorMask(true, true, true, true);
+                                glDepthMask(true);
                             renderer.unbind();
                         }
                         /**
@@ -147,6 +190,7 @@
                          */
                         void update() override {
                             gBufferPass();
+                            SSAOPass();
                             PBRPass();
                         }
                         /**

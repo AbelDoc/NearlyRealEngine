@@ -1,7 +1,7 @@
 
     #version 450
 
-    #define MAX_LIGHTS 150
+    #define MAX_LIGHTS 100
 
     uniform int numLights;
     uniform struct Light {
@@ -79,6 +79,18 @@
         return ggx1 * ggx2;
     }
 
+    float computeBlur(vec2 uv) {
+        vec2 texelSize = 1.0 / vec2(textureSize(texDiffuseUV, 0));
+        float result = 0.0;
+        for (int x = -2; x < 2; x = x + 1) {
+            for (int y = -2; y < 2; y = y + 1) {
+                vec2 offset = vec2(float(x), float(y)) * texelSize;
+                result += texture(texDiffuseUV, uv + offset).a;
+            }
+        }
+
+        return result / (4.0 * 4.0);
+    }
 
     void main() {
         vec3 vertex = (invModelview * worldPosFromDepth(uv)).xyz;
@@ -137,7 +149,7 @@
             vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
             vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-            vec3 ambient = (kD * diffuse + specular) ;
+            vec3 ambient = (kD * diffuse + specular) * computeBlur(uv);
 
             vec3 color = (ambient + Lo);
             color = color / (color + vec3(1.0));

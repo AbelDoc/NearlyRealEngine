@@ -24,6 +24,8 @@
     
     #include "../Renderer/Program/Core/PBR/NRE_PBR.hpp"
     
+    #include "../Renderer/Program/Core/SSAO/NRE_SSAOEffect.hpp"
+    
     #include "../Renderer/Program/Core/IBL/BRDF/NRE_BRDF.hpp"
     #include "../Renderer/Program/Core/IBL/Irradiance/NRE_Irradiance.hpp"
     #include "../Renderer/Program/Core/IBL/Prefilter/NRE_Prefilter.hpp"

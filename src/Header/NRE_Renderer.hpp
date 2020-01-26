@@ -11,3 +11,5 @@
 
     #include "../Renderer/Deferred/NRE_DeferredRenderer.hpp"
     #include "../Renderer/Material/NRE_MaterialManager.hpp"
+    
+    #include "../Renderer/SSAO/NRE_SSAO.hpp"

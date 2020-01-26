@@ -7,19 +7,6 @@
      * @copyright CC-BY-NC-SA
      */
 
-
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wstrict-overflow"
-    #pragma GCC diagnostic ignored "-Warray-bounds"
-    #pragma GCC diagnostic ignored "-Wconversion"
-    
-    #define GLM_ENABLE_EXPERIMENTAL
-    #include <glm/glm.hpp>
-    #include <glm/gtc/matrix_transform.hpp>
-    #include <glm/gtx/string_cast.hpp>
-    
-    #pragma GCC diagnostic pop
-
     namespace NRE {
         namespace Camera {
 

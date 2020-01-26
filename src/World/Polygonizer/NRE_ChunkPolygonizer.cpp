@@ -139,7 +139,7 @@
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex0] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex0, normal, static_cast <unsigned char> (0));
+                                        ibo.addData(vertex0, normal, static_cast <unsigned char> (1));
                                         ibo.addIndex(newIndex);
                                     }
                                     
@@ -153,7 +153,7 @@
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex1] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex1, normal, static_cast <unsigned char> (0));
+                                        ibo.addData(vertex1, normal, static_cast <unsigned char> (1));
                                         ibo.addIndex(newIndex);
                                     }
                                     
@@ -167,7 +167,7 @@
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex2] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex2, normal, static_cast <unsigned char> (0));
+                                        ibo.addData(vertex2, normal, static_cast <unsigned char> (1));
                                         ibo.addIndex(newIndex);
                                     }
                                 }
