@@ -32,11 +32,12 @@
              */
             class MaterialArray {
                 private:    //Fields
-                    Texture2DArray albedos;     /**< The material's albedo texture array */
-                    Texture2DArray normals;     /**< The material's normal texture array */
-                    Texture2DArray roughness;   /**< The material's roughness texture array */
-                    Texture2DArray metallics;   /**< The material's metallic texture array */
-                    int nbMaterials;            /**< The number of materials */
+                    Texture2DArray albedos;         /**< The material's albedo texture array */
+                    Texture2DArray normals;         /**< The material's normal texture array */
+                    Texture2DArray roughness;       /**< The material's roughness texture array */
+                    Texture2DArray metallics;       /**< The material's metallic texture array */
+                    Texture2DArray displacements;   /**< The material's displacement texture array */
+                    int nbMaterials;                /**< The number of materials */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -65,27 +66,26 @@
 
                     //## Getter ##//
                         /**
-                         * Albedos getter
                          * @return the albedo texture array
                          */
                         GL::Texture2DArray const& getAlbedos() const;
                         /**
-                         * Normals getter
                          * @return the normal texture array
                          */
                         GL::Texture2DArray const& getNormals() const;
                         /**
-                         * Roughness getter
                          * @return the roughness texture array
                          */
                         GL::Texture2DArray const& getRoughness() const;
                         /**
-                         * Metallics getter
                          * @return the metallic texture array
                          */
                         GL::Texture2DArray const& getMetallics() const;
                         /**
-                         * NbMaterials getter
+                         * @return the displacement texture array
+                         */
+                        GL::Texture2DArray const& getDisplacements() const;
+                        /**
                          * @return the number of materials
                          */
                         int getNbMaterials() const;
@@ -112,7 +112,7 @@
                         MaterialArray& operator =(MaterialArray && a) = default;
                         
                 public :    // Static
-                    static int constexpr MAX_RESOLUTION = 1024;
+                    static int constexpr MAX_RESOLUTION = 2048;
             };
         }
     }

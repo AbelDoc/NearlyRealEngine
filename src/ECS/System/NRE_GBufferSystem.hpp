@@ -51,15 +51,13 @@
                         void update() override {
                             Renderer::GBuffer* shader = Renderer::ProgramManager::get<Renderer::GBuffer>();
                             shader->bind();
-                                Utility::Singleton<Renderer::MaterialManager>::get().getNormals().bind();
-                                    Math::Matrix4x4<float> PV = camera.getProjection()  * camera.getView();
-                                    Renderer::ProgramManager::get<Renderer::GBuffer>()->sendMatrix(PV);
-                                    Utility::Singleton<EntityManager>::get().each<Renderable>([this](Entity, Renderable& r) {
-                                        if (r.model->canBeDrawn()) {
-                                            r.model->draw();
-                                        }
-                                    });
-                                Utility::Singleton<Renderer::MaterialManager>::get().getNormals().unbind();
+                                Math::Matrix4x4<float> PV = camera.getProjection()  * camera.getView();
+                                shader->sendMatrix(PV);
+                                Utility::Singleton<EntityManager>::get().each<Renderable>([this](Entity, Renderable& r) {
+                                    if (r.model->canBeDrawn()) {
+                                        r.model->draw();
+                                    }
+                                });
                             shader->unbind();
                         }
 

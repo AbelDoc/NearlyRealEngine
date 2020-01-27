@@ -30,9 +30,10 @@
              */
             class MaterialVertex : public Utility::Stringable<MaterialVertex> {
                 public:    //Fields
-                    Math::Vector4D<float> positionAndMaterial; /**< Packed vertex's position and material's id */
-                    Math::Vector4D<float> normalAndU;          /**< Packed vertex's normal and u coord */
-                    Math::Vector4D<float> tangentAndV;         /**< Packed vertex's tangent and v coord */
+                    Math::Vector4D<float> position;         /**< Packed vertex's position */
+                    Math::Vector4D<float> normalAndU;       /**< Packed vertex's normal and u coord */
+                    Math::Vector4D<float> tangentAndV;      /**< Packed vertex's tangent and v coord */
+                    Math::Vector4D<float> materials;        /**< Packed vertex's materials */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -44,9 +45,9 @@
                          * Construct a material vertex
                          * @param pos the vertex's position
                          * @param n   the vertex's normal
-                         * @param m   the vertex's material's id
+                         * @param m   the vertex's materials ids
                          */
-                        MaterialVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, unsigned char m): positionAndMaterial(pos, m), normalAndU(n) {
+                        MaterialVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, Math::Vector3D<int> const& m): position(pos), normalAndU(n), materials(m, 0.0) {
                         }
                         /**
                          * Construct a material vertex
@@ -54,10 +55,10 @@
                          * @param n   the vertex's normal
                          * @param t   the vertex's tangent
                          * @param tex the vertex's uv
-                         * @param m   the vertex's material's id
+                         * @param m   the vertex's materials ids
                          */
-                        MaterialVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, Math::Vector3D<float> const& t, Math::Vector2D<float> const& tex, unsigned char m)
-                            : positionAndMaterial(pos, m), normalAndU(n, tex.getX()), tangentAndV(t, tex.getY()) {
+                        MaterialVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, Math::Vector3D<float> const& t, Math::Vector2D<float> const& tex, Math::Vector3D<int> const& m)
+                            : position(pos), normalAndU(n, tex.getX()), tangentAndV(t, tex.getY()), materials(m, 0.0) {
                         }
 
                     //## Deconstructor ##//
@@ -74,6 +75,7 @@
                             Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(MaterialVertex), 0);
                             Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(MaterialVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
                             Layout::enableAttribute(5, 4, GL_FLOAT, sizeof(MaterialVertex), (void*)(2 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute(6, 4, GL_FLOAT, sizeof(MaterialVertex), (void*)(3 * sizeof(Math::Vector4D<float>)));
                         }
 
                     //## Stream Operator ##//
@@ -82,7 +84,7 @@
                          * @return the converted material vertex layout
                          */
                         Utility::String toString() const {
-                            return positionAndMaterial.toString() + " - " + normalAndU.toString() + " - " + tangentAndV.toString();
+                            return position.toString() + " - " + normalAndU.toString() + " - " + tangentAndV.toString() + " /" + materials.toString();
                         }
 
             };

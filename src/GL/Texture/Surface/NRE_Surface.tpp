@@ -88,7 +88,8 @@
                     internalFormat = GL_RGBA;
                     format = GL_RGBA;
                 } else {
-                    throw (Exception::STBException(file.toString() + " : Unknown Pixel Format"));
+                    Utility::String err = file.toString() + " : Unknown Pixel Format : " + stbi_failure_reason();
+                    throw (Exception::STBException(err));
                 }
             }
 

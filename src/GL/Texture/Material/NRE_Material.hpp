@@ -32,6 +32,7 @@
                     Surface normal;         /**< The material's normal */
                     Surface roughness;      /**< The material's roughness */
                     Surface metallic;       /**< The material's metallic */
+                    Surface displacement;   /**< The material's displacement */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -60,25 +61,25 @@
 
                     //## Getter ##//
                         /**
-                         * Albedo getter
                          * @return the material's albedo
                          */
                         Surface& getAlbedo();
                         /**
-                         * Normal getter
                          * @return the material's normal
                          */
                         Surface& getNormal();
                         /**
-                         * Roughness getter
                          * @return the material's roughness
                          */
                         Surface& getRoughness();
                         /**
-                         * Metallic getter
                          * @return the material's metallic
                          */
                         Surface& getMetallic();
+                        /**
+                         * @return the material's displacement
+                         */
+                        Surface& getDisplacement();
 
                     //## Methods ##//
                         /**

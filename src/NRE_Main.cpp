@@ -35,10 +35,12 @@
         
             World::World world;
             Vector<Model::Model> models;
+            
+            bool pause;
 
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(-1, 0, 0)) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(-1, 0, 0)), pause(true) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
@@ -60,6 +62,9 @@
                             camera.moveDown();
                         } else if (event.isCode(KeyCode::SPACE)) {
                             camera.moveUp();
+                        } else if (event.isCode(KeyCode::P)) {
+                            pause = !pause;
+                            return true;
                         }
                         return false;
                     });
@@ -70,7 +75,6 @@
                     });
     
                     models.reserve(World::World::NB_CHUNKS);
-        
                     for (Chunk& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
                         models.emplaceBack();
@@ -79,7 +83,8 @@
                         r.assign<Renderable>(&models.getLast());
                     }
     
-                    Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_HD.hdr");
+                    Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
+                    Singleton<SystemManager>::get().add<FlockSystem>(camera);
                     Singleton<SystemManager>::get().add<GBufferSystem>(camera);
                     Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
     
@@ -87,6 +92,9 @@
                 }
                 void update() override {
                     camera.update();
+                    if (!pause) {
+                        Singleton<SystemManager>::get().getSystem<FlockSystem>()->update();
+                    }
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();

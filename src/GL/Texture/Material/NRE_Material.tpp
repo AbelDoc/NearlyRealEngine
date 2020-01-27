@@ -13,7 +13,10 @@
             inline Material::Material(IO::File const& path) : albedo(path.getPath() + "/Albedo.png"),
                                                        normal(path.getPath() + "/Normal.png"),
                                                     roughness(path.getPath() + "/Roughness.png"),
-                                                     metallic(path.getPath() + "/Metallic.png") {
+                                                     metallic(path.getPath() + "/Metallic.png"),
+                                                 displacement(path.getPath() + "/Displacement.png") {
+    
+                
             }
     
             inline Surface& Material::getAlbedo() {
@@ -32,11 +35,16 @@
                 return metallic;
             }
     
+            inline Surface& Material::getDisplacement() {
+                return displacement;
+            }
+    
             inline void Material::deallocate() {
                 albedo.deallocate();
                 normal.deallocate();
                 metallic.deallocate();
                 roughness.deallocate();
+                displacement.deallocate();
             }
 
         }

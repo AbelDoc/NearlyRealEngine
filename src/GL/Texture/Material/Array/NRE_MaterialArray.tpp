@@ -30,6 +30,10 @@
                 return metallics;
             }
     
+            inline Texture2DArray const& MaterialArray::getDisplacements() const {
+                return displacements;
+            }
+    
             inline int MaterialArray::getNbMaterials() const {
                 return nbMaterials;
             }
@@ -39,6 +43,27 @@
                 normals.allocate(nbLayers, Surface(Math::Vector2D<GLsizei>(MAX_RESOLUTION, MAX_RESOLUTION), GL_RGBA, GL_RGBA));
                 roughness.allocate(nbLayers, Surface(Math::Vector2D<GLsizei>(MAX_RESOLUTION, MAX_RESOLUTION), GL_RGBA, GL_RGBA));
                 metallics.allocate(nbLayers, Surface(Math::Vector2D<GLsizei>(MAX_RESOLUTION, MAX_RESOLUTION), GL_RGBA, GL_RGBA));
+                displacements.allocate(nbLayers, Surface(Math::Vector2D<GLsizei>(MAX_RESOLUTION, MAX_RESOLUTION), GL_RGBA, GL_RGBA));
+                albedos.bind();
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                albedos.unbind();
+                normals.bind();
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                normals.unbind();
+                roughness.bind();
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                roughness.unbind();
+                metallics.bind();
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                metallics.unbind();
+                displacements.bind();
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                displacements.unbind();
                 nbMaterials = nbLayers;
             }
     
@@ -48,6 +73,7 @@
                 normals.sendTexture(material.getNormal(), layer);
                 roughness.sendTexture(material.getRoughness(), layer);
                 metallics.sendTexture(material.getMetallic(), layer);
+                displacements.sendTexture(material.getDisplacement(), layer);
             }
 
         }

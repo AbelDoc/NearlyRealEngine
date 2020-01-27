@@ -139,7 +139,7 @@
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex0] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex0, normal, static_cast <unsigned char> (1));
+                                        ibo.addData(vertex0, normal, Math::Vector3D<int>(0, 1, 2));
                                         ibo.addIndex(newIndex);
                                     }
                                     
@@ -153,7 +153,7 @@
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex1] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex1, normal, static_cast <unsigned char> (1));
+                                        ibo.addData(vertex1, normal, Math::Vector3D<int>(0, 1, 2));
                                         ibo.addIndex(newIndex);
                                     }
                                     
@@ -167,7 +167,7 @@
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                         
                                         indexed[vertex2] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex2, normal, static_cast <unsigned char> (1));
+                                        ibo.addData(vertex2, normal, Math::Vector3D<int>(0, 1, 2));
                                         ibo.addIndex(newIndex);
                                     }
                                 }
@@ -180,14 +180,14 @@
                     MaterialVertex& layout = ibo.getData(it.second.vIndex);
                     layout.normalAndU /= it.second.nbAdd;
                     layout.normalAndU.normalize();
-                    layout.tangentAndV = Vector4D<float>(Vector3D<float>(0, 1, 0) ^ Vector3D<float>(layout.normalAndU));
                     
-                    Vector3D<float> clamped(layout.positionAndMaterial);
-                    clamped += Vector3D<float>(Chunk::SIZE_X * World::H_SIZE_X, 0, Chunk::SIZE_Z * World::H_SIZE_Z);
-                    clamped /= Vector3D<float>(Chunk::SIZE_X * ((World::H_SIZE_X * 2) + 1), Chunk::SIZE_Y * World::SIZE_Y, Chunk::SIZE_Z * ((World::H_SIZE_Z * 2) + 1));
+                    auto n = Vector3D<float>(layout.normalAndU);
+                    auto t = Vector3D<float>(0, 1, 0) ^ n;
                     
-                    layout.normalAndU.setW(clamped.getX());
-                    layout.tangentAndV.setW(clamped.getZ());
+                    layout.tangentAndV = Vector4D<float>(t);
+                    
+                    layout.normalAndU.setW(-1);
+                    layout.tangentAndV.setW(-1);
                 }
             }
             

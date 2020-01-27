@@ -53,7 +53,7 @@
              */
             class FlockSystem : public System<FlockSystem> {
                 private :   // Static
-                    static constexpr int NB_INSTANCE = 20;
+                    static constexpr int NB_INSTANCE = 50;
                 
                 private :   // Fields
                     Camera::Camera const& target;

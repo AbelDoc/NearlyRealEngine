@@ -117,7 +117,7 @@
                     void capture(IO::File const& file);
 
                 public:     // Static
-                    static constexpr GLuint SIZE = 1024;   /**< The skybox resolution */
+                    static constexpr GLuint SIZE = 2048;   /**< The skybox resolution */
             };
         }
     }

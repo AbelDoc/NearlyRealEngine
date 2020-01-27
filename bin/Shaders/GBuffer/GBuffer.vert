@@ -6,23 +6,23 @@
     in vec4 in_Vertex;
     in vec4 in_Normal;
     in vec4 in_Tangent;
+    in vec4 in_Material;
 
     uniform mat4 MVP;
 
     out vec2 uv;
-    out mat3 TBN;
-    out vec4 vertexAndId;
+    out vec3 vertex;
     out vec3 normal;
+    out vec3 tangent;
+    out vec3 materials;
 
     void main() {
         gl_Position = MVP * vec4(in_Vertex.xyz, 1.0);
 
-        int id = int(in_Vertex.w);
         uv = vec2(in_Normal.w, in_Tangent.w);
-        vec3 T = normalize(in_Tangent.xyz);
-        vec3 N = normalize(in_Normal.xyz);
-        vec3 B = cross(N, T);
-        vertexAndId = in_Vertex;
+
+        vertex = in_Vertex.xyz;
         normal = in_Normal.xyz;
-        TBN = mat3(T, B, N);
+        tangent = in_Tangent.xyz;
+        materials = in_Material.xyz;
     }

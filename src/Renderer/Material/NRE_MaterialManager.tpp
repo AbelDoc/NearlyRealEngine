@@ -10,9 +10,10 @@
     namespace NRE {
         namespace Renderer {
 
-            inline MaterialManager::MaterialManager() : materials(2) {
-                textures.emplaceBack("Data/Material/Mat_16/x1024");
-                textures.emplaceBack("Data/Material/Mat_17/x1024");
+            inline MaterialManager::MaterialManager() : materials(3) {
+                textures.emplaceBack("Data/Material/Mat_1/x2048");
+                textures.emplaceBack("Data/Material/Mat_2/x2048");
+                textures.emplaceBack("Data/Material/Mat_3/x2048");
                 
                 int i = 0;
                 for (GL::Material& m : textures) {
@@ -35,6 +36,10 @@
     
             inline GL::Texture2DArray const& MaterialManager::getMetallics() const {
                 return materials.getMetallics();
+            }
+    
+            inline GL::Texture2DArray const& MaterialManager::getDisplacements() const {
+                return materials.getDisplacements();
             }
 
 

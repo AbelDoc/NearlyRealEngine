@@ -39,25 +39,25 @@
                 public:    // Methods
                     //## Getter ##//
                         /**
-                         * Albedos getter
                          * @return the albedo texture array
                          */
                         GL::Texture2DArray const& getAlbedos() const;
                         /**
-                         * Normals getter
                          * @return the normal texture array
                          */
                         GL::Texture2DArray const& getNormals() const;
                         /**
-                         * Roughness getter
                          * @return the roughness texture array
                          */
                         GL::Texture2DArray const& getRoughness() const;
                         /**
-                         * Metallics getter
                          * @return the metallic texture array
                          */
                         GL::Texture2DArray const& getMetallics() const;
+                        /**
+                         * @return the displacement texture array
+                         */
+                        GL::Texture2DArray const& getDisplacements() const;
                 
                 private:   // Methods
                     //## Constructor ##//

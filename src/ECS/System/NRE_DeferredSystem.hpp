@@ -81,8 +81,8 @@
                         void gBufferPass() {
                             renderer.bind();
                                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                                GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-                                glDrawBuffers(2, buffers);
+                                GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
+                                glDrawBuffers(3, buffers);
 
                                 Math::Matrix4x4<float> MVP = camera.getProjection() * Math::Matrix4x4<float>(Math::Matrix3x3<float>(camera.getView()));
                                 glDepthFunc(GL_LEQUAL);
@@ -106,14 +106,14 @@
                                 glDepthMask(false);
                                 glColorMask(false, false, false, true);
                     
-                                GLenum buffers[] = {GL_COLOR_ATTACHMENT0};
+                                GLenum buffers[] = {GL_COLOR_ATTACHMENT2};
                                 glDrawBuffers(1, buffers);
                     
                                 Renderer::ProgramManager::get<Renderer::SSAOEffect>()->bind();
                                     glActiveTexture(GL_TEXTURE0);
                                         renderer.getDepthBuffer()->bind();
                                     glActiveTexture(GL_TEXTURE1);
-                                        renderer.getColorBuffer(1)->bind();
+                                        renderer.getColorBuffer(0)->bind();
                                     glActiveTexture(GL_TEXTURE2);
                                         ssao.getNoise().bind();
                         
@@ -122,7 +122,7 @@
                                     glActiveTexture(GL_TEXTURE2);
                                         ssao.getNoise().unbind();
                                     glActiveTexture(GL_TEXTURE1);
-                                        renderer.getColorBuffer(1)->bind();
+                                        renderer.getColorBuffer(0)->bind();
                                     glActiveTexture(GL_TEXTURE0);
                                         renderer.getDepthBuffer()->bind();
                                 Renderer::ProgramManager::get<Renderer::SSAOEffect>()->unbind();
@@ -156,20 +156,32 @@
                                 glActiveTexture(GL_TEXTURE5);
                                     renderer.getColorBuffer(1)->bind();
                                 glActiveTexture(GL_TEXTURE6);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getAlbedos().bind();
+                                    renderer.getColorBuffer(2)->bind();
                                 glActiveTexture(GL_TEXTURE7);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getRoughness().bind();
+                                    Utility::Singleton<Renderer::MaterialManager>::get().getAlbedos().bind();
                                 glActiveTexture(GL_TEXTURE8);
+                                    Utility::Singleton<Renderer::MaterialManager>::get().getNormals().bind();
+                                glActiveTexture(GL_TEXTURE9);
+                                    Utility::Singleton<Renderer::MaterialManager>::get().getRoughness().bind();
+                                glActiveTexture(GL_TEXTURE10);
                                     Utility::Singleton<Renderer::MaterialManager>::get().getMetallics().bind();
+                                glActiveTexture(GL_TEXTURE11);
+                                    Utility::Singleton<Renderer::MaterialManager>::get().getDisplacements().bind();
                                 
                                     screen.draw();
                                     
-                                glActiveTexture(GL_TEXTURE8);
+                                glActiveTexture(GL_TEXTURE11);
+                                    Utility::Singleton<Renderer::MaterialManager>::get().getDisplacements().unbind();
+                                glActiveTexture(GL_TEXTURE10);
                                     Utility::Singleton<Renderer::MaterialManager>::get().getMetallics().unbind();
-                                glActiveTexture(GL_TEXTURE7);
+                                glActiveTexture(GL_TEXTURE9);
                                     Utility::Singleton<Renderer::MaterialManager>::get().getRoughness().unbind();
-                                glActiveTexture(GL_TEXTURE6);
+                                glActiveTexture(GL_TEXTURE8);
+                                    Utility::Singleton<Renderer::MaterialManager>::get().getNormals().unbind();
+                                glActiveTexture(GL_TEXTURE7);
                                     Utility::Singleton<Renderer::MaterialManager>::get().getAlbedos().unbind();
+                                glActiveTexture(GL_TEXTURE6);
+                                    renderer.getColorBuffer(2)->unbind();
                                 glActiveTexture(GL_TEXTURE5);
                                     renderer.getColorBuffer(1)->unbind();
                                 glActiveTexture(GL_TEXTURE4);

@@ -50,14 +50,14 @@
                          * Access the material vertex for VAO's command's storing
                          */
                         static void access() {
-                            Layout::enableAttribute( 7, 4, GL_FLOAT, sizeof(MatrixInstance), 0);
-                            Layout::enableAttribute( 8, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(1 * sizeof(Math::Vector4D<float>)));
-                            Layout::enableAttribute( 9, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(2 * sizeof(Math::Vector4D<float>)));
-                            Layout::enableAttribute(10, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(3 * sizeof(Math::Vector4D<float>)));
-                            Layout::divideAttribute( 7, 1);
+                            Layout::enableAttribute( 8, 4, GL_FLOAT, sizeof(MatrixInstance), 0);
+                            Layout::enableAttribute( 9, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(1 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute( 10, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(2 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute(11, 4, GL_FLOAT, sizeof(MatrixInstance), (void*)(3 * sizeof(Math::Vector4D<float>)));
                             Layout::divideAttribute( 8, 1);
                             Layout::divideAttribute( 9, 1);
-                            Layout::divideAttribute(10, 1);
+                            Layout::divideAttribute( 10, 1);
+                            Layout::divideAttribute(11, 1);
                         }
 
                     //## Stream Operator ##//

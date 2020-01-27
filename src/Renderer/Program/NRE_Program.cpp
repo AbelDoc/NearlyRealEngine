@@ -31,8 +31,9 @@
                 bindAttributeLocation(id, 3, "in_UV");
                 bindAttributeLocation(id, 4, "in_Material");
                 bindAttributeLocation(id, 5, "in_Tangent");
-                bindAttributeLocation(id, 6, "in_Particle");
-                bindAttributeLocation(id, 7, "in_Matrix");
+                bindAttributeLocation(id, 6, "in_Material");
+                bindAttributeLocation(id, 7, "in_Particle");
+                bindAttributeLocation(id, 8, "in_Matrix");
 
                 linkProgram(id);
 
