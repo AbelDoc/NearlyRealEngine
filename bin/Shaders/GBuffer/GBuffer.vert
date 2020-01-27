@@ -1,8 +1,6 @@
 
     #version 450
 
-    #define MAX_MATERIALS_X4 8
-
     in vec4 in_Vertex;
     in vec4 in_Normal;
     in vec4 in_Tangent;

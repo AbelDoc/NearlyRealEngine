@@ -108,7 +108,6 @@ set(COMPILE_LIST
         src/GL/Texture/Texture2DArray/NRE_Texture2DArray.hpp
         src/GL/VBO/IBO/NRE_IBO.hpp
         src/GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp
-        src/GL/VBO/Layout/Matrix/NRE_ColoredMatrixInstance.hpp
         src/GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp
         src/GL/VBO/Layout/Point/NRE_PointVertex.hpp
         src/GL/VBO/Layout/Material/NRE_MaterialVertex.hpp
