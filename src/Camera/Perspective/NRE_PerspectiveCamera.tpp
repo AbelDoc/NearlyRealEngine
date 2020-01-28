@@ -31,16 +31,16 @@
             }
 
             inline void PerspectiveCamera::resize(Math::Vector2D<unsigned int> const& size) {
-                frustum.resize(size, getEye(), getForward(), getRight(), getUp());
+                frustum.resize(size, eye, forward, right, up);
                 computeProjectionMatrix();
             }
 
             inline void PerspectiveCamera::computeProjectionMatrix() {
-                frustum.computeProjectionMatrix(getProjection());
+                frustum.computeProjectionMatrix(projection);
             }
 
             inline void PerspectiveCamera::computePlane() {
-                frustum.computePlane(getEye(), getForward(), getRight(), getUp());
+                frustum.computePlane(eye, forward, right, up);
             }
 
         }

@@ -122,25 +122,5 @@
                 res << projection.toString();
                 return res;
             }
-
-            inline Math::Point3D<float>& Camera::getEye() {
-                return eye;
-            }
-
-            inline Math::Vector3D<float>& Camera::getForward() {
-                return forward;
-            }
-
-            inline Math::Vector3D<float>& Camera::getRight() {
-                return right;
-            }
-
-            inline Math::Vector3D<float>& Camera::getUp() {
-                return up;
-            }
-
-            inline Math::Matrix4x4<float>& Camera::getProjection() {
-                return projection;
-            }
         }
     }

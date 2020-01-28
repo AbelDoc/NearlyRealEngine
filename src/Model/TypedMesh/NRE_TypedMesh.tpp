@@ -14,5 +14,10 @@ namespace NRE {
         inline TypedMesh<T>::TypedMesh(T const& o) : Mesh(MeshFactory<T>::create(o)) {
         }
         
+        template <class T>
+        template <class ... Args>
+        inline TypedMesh<T>::TypedMesh(Args && ... args) : Mesh(MeshFactory<T>::create(T(std::forward<Args>(args)...))) {
+        }
+        
     }
 }

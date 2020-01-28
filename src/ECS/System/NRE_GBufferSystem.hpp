@@ -49,11 +49,13 @@
                          * Update the system
                          */
                         void update() override {
-                            Renderer::GBuffer* shader = Renderer::ProgramManager::get<Renderer::GBuffer>();
+                            using namespace Renderer;
+                            using namespace Utility;
+                            
+                            auto shader = ProgramManager::get<GBuffer>();
                             shader->bind();
-                                Math::Matrix4x4<float> PV = camera.getProjection()  * camera.getView();
-                                shader->sendMatrix(PV);
-                                Utility::Singleton<EntityManager>::get().each<Renderable>([this](Entity, Renderable& r) {
+                                shader->sendMatrix(camera.getProjection()  * camera.getView());
+                                Singleton<EntityManager>::get().each<Renderable>([this](Entity, Renderable& r) {
                                     if (r.model->canBeDrawn()) {
                                         r.model->draw();
                                     }

@@ -17,6 +17,10 @@
             inline void Model::addMesh(std::unique_ptr<Mesh> && mesh) {
                 meshes.pushBack(std::move(mesh));
             }
+    
+            inline void Model::addMesh(Mesh* mesh) {
+                meshes.emplaceBack(mesh);
+            }
             
             inline bool Model::canBeDrawn() const {
                 bool drawn = false;

@@ -38,6 +38,12 @@
                          * @param o the object to construct the mesh
                          */
                         TypedMesh(T const& o);
+                        /**
+                         * Construct a mesh from the object to render
+                         * @param args the parameters to construct the mesh objets
+                         */
+                        template <class ... Args>
+                        TypedMesh(Args && ... args);
                     
                     //## Move Constructor ##//
                         /**

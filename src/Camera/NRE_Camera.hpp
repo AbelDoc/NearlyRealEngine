@@ -30,8 +30,10 @@
             class Camera : public Utility::Stringable<Camera> {
                 private:    //Fields
                     float speed;                            /**< The camera's speed */
-                    Math::Angle yaw;
-                    Math::Angle pitch;
+                    Math::Angle yaw;                        /**< The camera's yaw */
+                    Math::Angle pitch;                      /**< The camera's pitch */
+                    
+                protected : // Fields
                     Math::Point3D<float> eye;               /**< The camera's point of view */
                     Math::Vector3D<float> forward;          /**< The camera's direction */
                     Math::Vector3D<float> up;               /**< The camera's up vector */
@@ -53,7 +55,7 @@
                          * @param y the camera's yaw
                          * @param p the camera's pitch
                          */
-                        Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u = Math::Vector3D<float>(0, 1, 0), Math::Angle y = 0 * Math::degree, Math::Angle p = 0 * Math::degree);
+                        Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Angle y, Math::Angle p);
 
                     //## Copy-Constructor ##//
                         /**
@@ -184,28 +186,6 @@
                          * @return the converted camera
                          */
                         Utility::String toString() const;
-
-                protected: // Methods
-                    /**
-                     * @return the camera's eye
-                     */
-                    Math::Point3D<float>& getEye();
-                    /**
-                     * @return the camera's forward vector
-                     */
-                    Math::Vector3D<float>& getForward();
-                    /**
-                     * @return the camera's right vector
-                     */
-                    Math::Vector3D<float>& getRight();
-                    /**
-                     * @return the camera's up vector
-                     */
-                    Math::Vector3D<float>& getUp();
-                    /**
-                     * @return the camera's projection matrix
-                     */
-                    Math::Matrix4x4<float>& getProjection();
 
                 private:    // Static
                     static constexpr Math::Angle MAX_PITCH =  89.5 * Math::degree;    /**< The maximum phi */

@@ -116,6 +116,9 @@ set(COMPILE_LIST
         src/GL/VBO/NRE_VBO.hpp
         src/GL/NRE_GL.cpp
         src/GL/NRE_GL.hpp
+        src/GL/NRE_GL.tpp
+        src/GL/NRE_GLUtils.hpp
+        src/GL/NRE_GLUtils.tpp
         src/ECS/System/NRE_DeferredSystem.hpp
         src/ECS/System/NRE_FlockSystem.hpp
         src/ECS/System/NRE_GBufferSystem.hpp
@@ -129,6 +132,7 @@ set(COMPILE_LIST
         src/Header/NRE_ECS.hpp
         src/Header/NRE_Exception.hpp
         src/Header/NRE_GL.hpp
+        src/Header/NRE_GLUtils.hpp
         src/Header/NRE_Model.hpp
         src/Header/NRE_Shader.hpp
         src/Header/NRE_Utility.hpp

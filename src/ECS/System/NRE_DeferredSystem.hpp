@@ -12,6 +12,7 @@
     #include <Header/NRE_ECS.hpp>
     
     #include "../../Header/NRE_Shader.hpp"
+    #include "../../Header/NRE_GLUtils.hpp"
     #include "../../Header/NRE_Renderer.hpp"
     
     #include "NRE_FlockSystem.hpp"
@@ -50,7 +51,7 @@
                          * @param mapPath    the application's skybox
                          */
                         DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
-                            glViewport(0, 0, screenSize.getW(), screenSize.getH());
+                            GL::setViewport(screenSize);
                         }
                         
                     //## Methods ##//
@@ -58,11 +59,13 @@
                          * Configure the system, called once before any rendering or update
                          */
                         void configure() override {
+                            using namespace Renderer;
+                            
                             Math::Matrix4x4<float> invProjection = camera.getProjection();
                             invProjection.inverse();
                             
-                            auto pbr = Renderer::ProgramManager::get<Renderer::PBR>();
-                            auto ssaoEffect = Renderer::ProgramManager::get<Renderer::SSAOEffect>();
+                            auto pbr = ProgramManager::get<PBR>();
+                            auto ssaoEffect = ProgramManager::get<SSAOEffect>();
     
                             pbr->bind();
                                 pbr->sendTexture();
@@ -79,20 +82,25 @@
                          * Perform the GBuffer pass
                          */
                         void gBufferPass() {
+                            using namespace Math;
+                            using namespace Renderer;
+                            using namespace GL;
+                            
                             renderer.bind();
-                                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                                GLenum buffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2};
-                                glDrawBuffers(3, buffers);
+                                clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                                setDrawTargets(GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2);
+                                
+                                auto shader = ProgramManager::get<Renderer::SkyBox>();
 
-                                Math::Matrix4x4<float> MVP = camera.getProjection() * Math::Matrix4x4<float>(Math::Matrix3x3<float>(camera.getView()));
-                                glDepthFunc(GL_LEQUAL);
-                                    Renderer::ProgramManager::get<Renderer::SkyBox>()->bind();
-                                    Renderer::ProgramManager::get<Renderer::SkyBox>()->sendMVP(MVP);
+                                Matrix4x4<float> MVP = camera.getProjection() * Matrix4x4<float>(Matrix3x3<float>(camera.getView()));
+                                setDepthFunction(GL_LEQUAL);
+                                    shader->bind();
+                                    shader->sendMVP(MVP);
                                         skyBox.getMap().bind();
                                             skyBox.getMesh().draw();
                                         skyBox.getMap().unbind();
-                                    Renderer::ProgramManager::get<Renderer::SkyBox>()->unbind();
-                                glDepthFunc(GL_LESS);
+                                    shader->unbind();
+                                setDepthFunction(GL_LESS);
 
                                 SystemManager::get<GBufferSystem>()->update();
                                 SystemManager::get<InstancedGBufferSystem>()->update();
@@ -102,98 +110,74 @@
                          * Perform the SSAO pass
                          */
                         void SSAOPass() {
+                            using namespace Renderer;
+                            using namespace GL;
+                            
                             renderer.bind();
-                                glDepthMask(false);
-                                glColorMask(false, false, false, true);
+                                setDepthMask(false);
+                                setColorMask(false, false, false, true);
                     
-                                GLenum buffers[] = {GL_COLOR_ATTACHMENT2};
-                                glDrawBuffers(1, buffers);
+                                setDrawTargets(GL_COLOR_ATTACHMENT2);
                     
-                                Renderer::ProgramManager::get<Renderer::SSAOEffect>()->bind();
-                                    glActiveTexture(GL_TEXTURE0);
-                                        renderer.getDepthBuffer()->bind();
-                                    glActiveTexture(GL_TEXTURE1);
-                                        renderer.getColorBuffer(0)->bind();
-                                    glActiveTexture(GL_TEXTURE2);
-                                        ssao.getNoise().bind();
+                                ProgramManager::get<SSAOEffect>()->bind();
+                                    bindTexture(renderer.getDepthBuffer(),  0);
+                                    bindTexture(renderer.getColorBuffer(0), 1);
+                                    bindTexture(ssao.getNoise(), 2);
                         
                                     screen.draw();
-                        
-                                    glActiveTexture(GL_TEXTURE2);
-                                        ssao.getNoise().unbind();
-                                    glActiveTexture(GL_TEXTURE1);
-                                        renderer.getColorBuffer(0)->bind();
-                                    glActiveTexture(GL_TEXTURE0);
-                                        renderer.getDepthBuffer()->bind();
-                                Renderer::ProgramManager::get<Renderer::SSAOEffect>()->unbind();
-                    
-                                glColorMask(true, true, true, true);
-                                glDepthMask(true);
+                                    
+                                    unbindTexture(ssao.getNoise(), 2);
+                                    unbindTexture(renderer.getColorBuffer(0), 1);
+                                    unbindTexture(renderer.getDepthBuffer(),  0);
+                                ProgramManager::get<SSAOEffect>()->unbind();
+    
+                                setColorMask(true, true, true, true);
+                                setDepthMask(true);
                             renderer.unbind();
                         }
                         /**
                          * Perform the PBR pass
                          */
                         void PBRPass() {
-                            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                            using namespace Renderer;
+                            using namespace Utility;
+                            using namespace GL;
+                            
+                            clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                            auto pbr = Renderer::ProgramManager::get<Renderer::PBR>();
+                            auto pbr = ProgramManager::get<PBR>();
                             
                             pbr->bind();
                                 pbr->sendCamera(camera);
                                 sendLight();
-
-                                glActiveTexture(GL_TEXTURE0);
-                                    skyBox.getIrradiance().bind();
-                                glActiveTexture(GL_TEXTURE1);
-                                    skyBox.getPrefilter().bind();
-                                glActiveTexture(GL_TEXTURE2);
-                                    skyBox.getBRDFLUT().bind();
-                                glActiveTexture(GL_TEXTURE3);
-                                    renderer.getDepthBuffer()->bind();
-                                glActiveTexture(GL_TEXTURE4);
-                                    renderer.getColorBuffer(0)->bind();
-                                glActiveTexture(GL_TEXTURE5);
-                                    renderer.getColorBuffer(1)->bind();
-                                glActiveTexture(GL_TEXTURE6);
-                                    renderer.getColorBuffer(2)->bind();
-                                glActiveTexture(GL_TEXTURE7);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getAlbedos().bind();
-                                glActiveTexture(GL_TEXTURE8);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getNormals().bind();
-                                glActiveTexture(GL_TEXTURE9);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getRoughness().bind();
-                                glActiveTexture(GL_TEXTURE10);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getMetallics().bind();
-                                glActiveTexture(GL_TEXTURE11);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getDisplacements().bind();
+    
+                                bindTexture(skyBox.getIrradiance(), 0);
+                                bindTexture(skyBox.getPrefilter(), 1);
+                                bindTexture(skyBox.getBRDFLUT(), 2);
+                                bindTexture(renderer.getDepthBuffer(), 3);
+                                bindTexture(renderer.getColorBuffer(0), 4);
+                                bindTexture(renderer.getColorBuffer(1), 5);
+                                bindTexture(renderer.getColorBuffer(2), 6);
+                                bindTexture(Singleton<MaterialManager>::get().getAlbedos(), 7);
+                                bindTexture(Singleton<MaterialManager>::get().getNormals(), 8);
+                                bindTexture(Singleton<MaterialManager>::get().getRoughness(), 9);
+                                bindTexture(Singleton<MaterialManager>::get().getMetallics(), 10);
+                                bindTexture(Singleton<MaterialManager>::get().getDisplacements(), 11);
                                 
                                     screen.draw();
-                                    
-                                glActiveTexture(GL_TEXTURE11);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getDisplacements().unbind();
-                                glActiveTexture(GL_TEXTURE10);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getMetallics().unbind();
-                                glActiveTexture(GL_TEXTURE9);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getRoughness().unbind();
-                                glActiveTexture(GL_TEXTURE8);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getNormals().unbind();
-                                glActiveTexture(GL_TEXTURE7);
-                                    Utility::Singleton<Renderer::MaterialManager>::get().getAlbedos().unbind();
-                                glActiveTexture(GL_TEXTURE6);
-                                    renderer.getColorBuffer(2)->unbind();
-                                glActiveTexture(GL_TEXTURE5);
-                                    renderer.getColorBuffer(1)->unbind();
-                                glActiveTexture(GL_TEXTURE4);
-                                    renderer.getColorBuffer(0)->unbind();
-                                glActiveTexture(GL_TEXTURE3);
-                                    renderer.getDepthBuffer()->unbind();
-                                glActiveTexture(GL_TEXTURE2);
-                                    skyBox.getBRDFLUT().unbind();
-                                glActiveTexture(GL_TEXTURE1);
-                                    skyBox.getPrefilter().unbind();
-                                glActiveTexture(GL_TEXTURE0);
-                                    skyBox.getIrradiance().unbind();
+    
+                                unbindTexture(Singleton<MaterialManager>::get().getDisplacements(), 11);
+                                unbindTexture(Singleton<MaterialManager>::get().getMetallics(), 10);
+                                unbindTexture(Singleton<MaterialManager>::get().getRoughness(), 9);
+                                unbindTexture(Singleton<MaterialManager>::get().getNormals(), 8);
+                                unbindTexture(Singleton<MaterialManager>::get().getAlbedos(), 7);
+                                unbindTexture(renderer.getColorBuffer(2), 6);
+                                unbindTexture(renderer.getColorBuffer(1), 5);
+                                unbindTexture(renderer.getColorBuffer(0), 4);
+                                unbindTexture(renderer.getDepthBuffer(), 3);
+                                unbindTexture(skyBox.getBRDFLUT(), 2);
+                                unbindTexture(skyBox.getPrefilter(), 1);
+                                unbindTexture(skyBox.getIrradiance(), 0);
     
                             pbr->unbind();
                         }
@@ -209,10 +193,13 @@
                          * Send light uniform to the PBR shader
                          */
                         void sendLight() {
+                            using namespace Renderer;
+                            using namespace Utility;
+                            
                             unsigned char nb = 0;
-                            auto pbr = Renderer::ProgramManager::get<Renderer::PBR>();
-                            Utility::Singleton<EntityManager>::get().each<Light>([this, &nb, &pbr](Entity, Light& l) {
-                                Utility::String base("lights[");
+                            auto pbr = ProgramManager::get<PBR>();
+                            Singleton<EntityManager>::get().each<Light>([this, &nb, &pbr](Entity, Light& l) {
+                                String base("lights[");
                                 base << nb;
                                 pbr->use3FV(base + "].position", 1, l.position.value());
                                 pbr->use3FV(base + "].intensities", 1, l.intensities.value());

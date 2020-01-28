@@ -42,6 +42,7 @@
             typedef GLenum ShaderType;
             typedef GLenum IndexType;
 
+            typedef GLenum TextureIndex;
             typedef GLenum TextureFormat;
             typedef GLenum TextureParameter;
             typedef GLint TextureInternalFormat;
@@ -50,9 +51,13 @@
 
             typedef GLenum StreamUsage;
             typedef GLenum DrawMode;
+            
+            typedef GLenum DepthFunc;
 
             typedef GLenum FaceType;
             typedef GLenum PolygonMode;
+            
+            typedef GLboolean Mask;
 
             /**
              * Clear the context screen and fill it with the given color
@@ -555,6 +560,52 @@
              * @param mode the new rendering mode
              */
             void polygonMode(FaceType face, PolygonMode mode);
+            /**
+             * Set the rendering viewport
+             * @param size  the viewport's size
+             */
+            void setViewport(Math::Vector2D<GLsizei> const& size);
+            /**
+             * Set the rendering viewport
+             * @param coord the viewport's coordinates on screen
+             * @param size  the viewport's size
+             */
+            void setViewport(Math::Vector2D<int> const& coord, Math::Vector2D<GLsizei> const& size);
+            /**
+             * Set the rendering targets
+             * @param targets the details of each target buffer
+             */
+            template <class ... Args>
+            void setDrawTargets(Args ... targets);
+            /**
+             * Set the rendering targets
+             * @param n       the number of targets
+             * @param targets the details of each target buffer
+             */
+            void setDrawTargets(int n, const BufferTarget* targets);
+            /**
+             * Set the depth comparison function
+             * @param f the new depth function
+             */
+            void setDepthFunction(DepthFunc f);
+            /**
+             * Set the depth write mask
+             * @param m the write mask
+             */
+            void setDepthMask(Mask m);
+            /**
+             * Set the color buffer write mask
+             * @param r the red mask
+             * @param g the green mask
+             * @param b the blue mask
+             * @param a the alpha mask
+             */
+            void setColorMask(Mask r, Mask g, Mask b, Mask a);
+            /**
+             * Set the current texture unit
+             * @param index the texture index
+             */
+            void setCurrentTexture(TextureIndex index);
 
         }
     }

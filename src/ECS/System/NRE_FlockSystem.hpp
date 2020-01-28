@@ -70,18 +70,22 @@
                         
                     //## Methods ##//
                         void configure() override {
-                            Entity flockE = Utility::Singleton<EntityManager>::get().create();
+                            using namespace Math;
+                            using namespace Utility;
+                            using namespace Model;
+                            using namespace Physics;
+                            
+                            Entity flockE = Singleton<EntityManager>::get().create();
                             flockE.assign<InstancedRenderable>(&spheres);
                             
                             flock.resize(NB_INSTANCE);
     
-                            Physics::Sphere s(Math::Vector3D<float>(0, 0, 0), 1);
-                            spheres.addMesh(std::unique_ptr<Model::SphereMesh>(new Model::SphereMesh(s)));
+                            spheres.addMesh(new SphereMesh(Vector3D<float>(0), 1.0f));
     
                             int i = 0;
                             for (GL::MatrixInstance& m : spheres) {
-                                Entity light = Utility::Singleton<EntityManager>::get().create();
-                                light.assign<Light>(flock[i].position, Math::Vector3D<float>((static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0, (static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0, (static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0));
+                                Entity light = Singleton<EntityManager>::get().create();
+                                light.assign<Light>(flock[i].position, Vector3D<float>((static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0, (static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0, (static_cast <float> (std::rand() % 1000) / 1000.0) * 300.0));
                                 m.matrix.setIdentity();
                                 m.matrix.translate(flock[i++].position);
                                 m.matrix.transpose();
@@ -92,9 +96,12 @@
                          * Update the system
                          */
                         void update() override {
+                            using namespace Math;
+                            using namespace Utility;
+                            
                             int i = 0;
                             for (Boid& b : flock) {
-                                Math::Vector3D<float> separation(0), alignment(0), cohesion(0), sumAlg(0), sumCoh(0);
+                                Vector3D<float> separation(0), alignment(0), cohesion(0), sumAlg(0), sumCoh(0);
                                 float countSep = 0, count = 0;
     
                                 for (Boid& otherB : flock) {
@@ -182,13 +189,10 @@
                                 spheres[i++].matrix.transpose();
                             }
                             int nb = 0;
-                            Utility::Singleton<EntityManager>::get().each<Light>([this, &nb](Entity, Light& l) {
+                            Singleton<EntityManager>::get().each<Light>([this, &nb](Entity, Light& l) {
                                 l.position = flock[nb++].position;
                             });
                             spheres.update();
-                        }
-                        Math::Vector3D<float> getBoidPosition() {
-                            return flock[0].position;
                         }
             };
         }

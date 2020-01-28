@@ -53,6 +53,12 @@
             }
     
             template <class InstanceLayout>
+            inline void InstancedModel<InstanceLayout>::addMesh(Mesh* mesh) {
+                Model::addMesh(mesh);
+                meshes.getLast()->access(&models);
+            }
+    
+            template <class InstanceLayout>
             inline void InstancedModel<InstanceLayout>::draw(GL::DrawMode mode) const {
                 for (auto& m : meshes) {
                     m->drawInstanced(static_cast <int> (models.getCount()), mode);

@@ -79,7 +79,7 @@
                         Entity r = Singleton<EntityManager>::get().create();
                         models.emplaceBack();
                         models.getLast().reserve(1);
-                        models.getLast().addMesh(std::unique_ptr<Mesh>(new ChunkMesh(c, camera.getFrustum())));
+                        models.getLast().addMesh(new ChunkMesh(c, camera.getFrustum()));
                         r.assign<Renderable>(&models.getLast());
                     }
     

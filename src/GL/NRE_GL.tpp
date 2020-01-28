@@ -325,5 +325,39 @@
                 glPolygonMode(face, mode);
             }
 
+            inline void setViewport(Math::Vector2D<GLsizei> const& size) {
+                setViewport({0, 0}, size);
+            }
+            
+            inline void setViewport(Math::Vector2D<int> const& coord, Math::Vector2D<GLsizei> const& size) {
+                glViewport(coord.getX(), coord.getY(), size.getW(), size.getH());
+            }
+            
+            template <class ... Args>
+            inline void setDrawTargets(Args ... targets) {
+                const BufferTarget array[] = {static_cast <BufferTarget> (targets)...};
+                setDrawTargets(static_cast <int> (sizeof...(targets)), array);
+            }
+            
+            inline void setDrawTargets(int n, const BufferTarget* targets) {
+                glDrawBuffers(n, targets);
+            }
+            
+            inline void setDepthFunction(DepthFunc f) {
+                glDepthFunc(f);
+            }
+            
+            inline void setDepthMask(Mask m) {
+                glDepthMask(m);
+            }
+            
+            inline void setColorMask(Mask r, Mask g, Mask b, Mask a) {
+                glColorMask(r, g, b, a);
+            }
+            
+            inline void setCurrentTexture(TextureIndex index) {
+                glActiveTexture(index);
+            }
+
         }
     }
