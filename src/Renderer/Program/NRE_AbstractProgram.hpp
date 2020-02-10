@@ -47,7 +47,6 @@
 
                 public:     // Static
                     /**
-                     * Category getter
                      * @return the program's category
                      */
                     static Category getCategory() {

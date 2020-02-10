@@ -204,4 +204,4 @@ set(EXEC_LIST
 
 add_executable(NearlyRealEngine ${EXEC_LIST})
 
-target_link_libraries(NearlyRealEngine "C:/lib/NRE/Windows/libNRE-System.a" "C:/lib/Glew/lib/libglew32.dll.a" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/OpenGL32.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Psapi.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Gdi32.Lib" "C:/lib/NRE/libNRE-Math.a" "C:/lib/NRE/libNRE-ECS.a")
+target_link_libraries(NearlyRealEngine "C:/lib/NRE/Windows/libNRE-System.a" "C:/lib/Glew/lib/libglew32.dll.a" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/OpenGL32.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Psapi.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Gdi32.Lib" "C:/lib/NRE/libNRE-ECS.a")

@@ -12,7 +12,7 @@
     #include <cassert>
     #include <Utility/Interfaces/NRE_StaticInterface.hpp>
 
-#include <iostream>
+    #include <iostream>
     
     /**
     * @namespace NRE

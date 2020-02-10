@@ -69,7 +69,7 @@
                             v = static_cast <float> (r) / rings;
                             
                             Math::Vector2D<float> uv(u, v);
-                            buffer->addData(vertex, normal, tangent, uv, Math::Vector3D<int>(0, 1, 2));
+                            buffer->addData(vertex, normal, tangent, uv, Math::Vector3D<int>(3, 3, 3));
                         }
                     }
     

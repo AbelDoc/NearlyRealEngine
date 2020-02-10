@@ -10,10 +10,11 @@
     namespace NRE {
         namespace Renderer {
 
-            inline MaterialManager::MaterialManager() : materials(3) {
+            inline MaterialManager::MaterialManager() : materials(4) {
                 textures.emplaceBack("Data/Material/Mat_1/x2048");
                 textures.emplaceBack("Data/Material/Mat_2/x2048");
                 textures.emplaceBack("Data/Material/Mat_3/x2048");
+                textures.emplaceBack("Data/Material/Mat_4/x2048");
                 
                 int i = 0;
                 for (GL::Material& m : textures) {
