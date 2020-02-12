@@ -51,11 +51,10 @@
                          * Construct a camera from a speed and a pair of point
                          * @param s the camera's speed
                          * @param e the camera's eye position
-                         * @param u the camera's up direction
                          * @param y the camera's yaw
                          * @param p the camera's pitch
                          */
-                        Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Angle y, Math::Angle p);
+                        Camera(float s, Math::Point3D<float> const& e, Math::Angle y, Math::Angle p);
 
                     //## Copy-Constructor ##//
                         /**

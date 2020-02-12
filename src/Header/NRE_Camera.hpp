@@ -11,3 +11,4 @@
 
     #include "../Camera/NRE_Camera.hpp"
     #include "../Camera/Perspective/NRE_PerspectiveCamera.hpp"
+    #include "../Camera/Orthographic/NRE_OrthographicCamera.hpp"

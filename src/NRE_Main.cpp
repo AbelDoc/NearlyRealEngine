@@ -38,7 +38,7 @@
             
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 3000.0f), Vector3D<float>(-1, 0, 0)) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(-100, 20, 0)) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
@@ -79,10 +79,12 @@
                     }
                     
                     Entity l = Singleton<EntityManager>::get().create();
-                    l.assign<Light>(Vector3D<float>(10, 50, 10), Vector3D<float>(9450, 8550, 6430));
+                    l.assign<Light>(Vector3D<float>(-100, 20, 0), Vector3D<float>(94500, 85500, 64300));
                     
     
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
+                    Singleton<SystemManager>::get().add<ShadowSystem>();
+                    Singleton<SystemManager>::get().add<InstancedShadowSystem>();
                     Singleton<SystemManager>::get().add<GBufferSystem>(camera);
                     Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
     

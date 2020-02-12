@@ -21,6 +21,9 @@
     
     #include "../Renderer/Program/Core/GBuffer/GBuffer/NRE_GBuffer.hpp"
     #include "../Renderer/Program/Core/GBuffer/InstancedGBuffer/NRE_InstancedGBuffer.hpp"
+
+    #include "../Renderer/Program/Core/Shadow/Shadow/NRE_Shadow.hpp"
+    #include "../Renderer/Program/Core/Shadow/InstancedShadow/NRE_InstancedShadow.hpp"
     
     #include "../Renderer/Program/Core/PBR/NRE_PBR.hpp"
     

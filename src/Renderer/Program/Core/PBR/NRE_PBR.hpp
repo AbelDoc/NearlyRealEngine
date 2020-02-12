@@ -56,6 +56,7 @@
                          */
                         void addUniforms() override {
                             addUniform("texDepth");
+                            addUniform("texShadow");
                             addUniform("texNormal");
                             addUniform("texTangent");
                             addUniform("texMaterials");
@@ -76,6 +77,7 @@
                             addUniform("cameraV");
                             addUniform("invModelview");
                             addUniform("invProjection");
+                            addUniform("lightSpace");
                             addUniform("numLights");
                         }
                         /**
@@ -94,6 +96,7 @@
                             use1I("texRoughness", 9);
                             use1I("texMetallics", 10);
                             use1I("texDisplacements", 11);
+                            use1I("texShadow", 12);
                         }
                         /**
                          * Send the inverse projection matrix to the shader
@@ -101,6 +104,13 @@
                          */
                         void sendInvProjection(Math::Matrix4x4<float> const& m) const {
                             useMat4("invProjection", 1, &m);
+                        }
+                        /**
+                         * Send the light space matrix to the shader
+                         * @param m the light space matrix
+                         */
+                        void sendLightSpace(Math::Matrix4x4<float> const& m) const {
+                            useMat4("lightSpace", 1, &m);
                         }
                         /**
                          * Send the camera's position to the camera

@@ -13,8 +13,10 @@
 
     uniform mat4 invModelview;
     uniform mat4 invProjection;
+    uniform mat4 lightSpace;
 
     uniform sampler2D texDepth;
+    uniform sampler2D texShadow;
     uniform sampler2D texNormal;
     uniform sampler2D texTangent;
     uniform sampler2D texMaterials;
@@ -121,6 +123,21 @@
         return sampleX * blending.x + sampleY * blending.y + sampleZ * blending.z;
     }
 
+    float LinearizeDepth(float depth) {
+        float z = depth * 2.0 - 1.0; // Back to NDC
+        return (2.0 * 0.1 * 300.0) / (300.0 + 0.1 - z * (300.0 - 0.1));
+    }
+
+    float computeShadow(vec4 vertexLightSpace) {
+        vec3 projCoords = vertexLightSpace.xyz / vertexLightSpace.w;
+        projCoords = projCoords * 0.5 + 0.5;
+        float closestDepth = texture(texShadow, projCoords.xy).r;
+        float currentDepth = projCoords.z;
+        float bias = 0.05;
+        float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+        return shadow;
+    }
+
     void main() {
         vec3 vertex = (invModelview * worldPosFromDepth(uv)).xyz;
         vec4 normalAndU = texture(texNormal, uv);
@@ -191,9 +208,9 @@
 
             vec3 ambient = (kD * diffuse + specular) * computeBlur(uv);
 
-            vec3 color = (ambient + Lo);
-            color = color / (color + vec3(1.0));
-            color = pow(color, vec3(1.0/2.2));
+            float shadow = computeShadow(lightSpace * vec4(vertex, 1.0));
+
+            vec3 color = (ambient + Lo * (1.0 - shadow));
 
             out_Color = vec4(color, 1.0);
         } else {

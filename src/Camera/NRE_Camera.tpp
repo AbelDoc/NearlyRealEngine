@@ -10,7 +10,7 @@
     namespace NRE {
         namespace Camera {
 
-            inline Camera::Camera(float s, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Angle y, Math::Angle p) : speed(s), yaw(y), pitch(p), eye(e), up(u) {
+            inline Camera::Camera(float s, Math::Point3D<float> const& e, Math::Angle y, Math::Angle p) : speed(s), yaw(y), pitch(p), eye(e) {
                 computeAngle();
                 computeVector();
             }

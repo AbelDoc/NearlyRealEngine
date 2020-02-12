@@ -1,15 +1,15 @@
 
     /**
-     * @file NRE_GBuffer.hpp
-     * @brief Declaration of Engine's Renderer's Object : GBuffer
+     * @file NRE_InstancedShadow.hpp
+     * @brief Declaration of Engine's Renderer's Object : InstancedShadow
      * @author Louis ABEL
-     * @date 24/09/2018
+     * @date 10/02/2020
      * @copyright CC-BY-NC-SA
      */
 
      #pragma once
 
-     #include "../../../NRE_AbstractProgram.hpp"
+    #include "../../../NRE_AbstractProgram.hpp"
 
      /**
      * @namespace NRE
@@ -23,16 +23,16 @@
         namespace Renderer {
 
             /**
-             * @class GBuffer
-             * @brief Manage a gbuffer shader to draw simple 3D primitives in a buffer
+             * @class InstancedShadow
+             * @brief Manage the shadow's instanced rendering shader
              */
-            class GBuffer : public AbstractProgram<GBuffer> {
+            class InstancedShadow : public AbstractProgram<InstancedShadow> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        GBuffer() {
+                        InstancedShadow() {
                             load();
                         }
 
@@ -41,21 +41,21 @@
                          * Add program's stages
                          */
                         void addStages() override {
-                            addStage<VertexShader>("GBuffer/GBuffer.vert");
-                            addStage<FragmentShader>("GBuffer/GBuffer.frag");
+                            addStage<VertexShader>("Shadow/InstancedShadow.vert");
+                            addStage<FragmentShader>("Shadow/InstancedShadow.frag");
                         }
                         /**
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("MVP");
+                            addUniform("lightPV");
                         }
                         /**
-                         * Send a matrix to the shader
-                         * @param m the matrix
+                         * Send the projection view matrix to the shader
+                         * @param m the projection view matrix
                          */
                         void sendMatrix(Math::Matrix4x4<float> const& m) const {
-                            useMat4("MVP", 1, &m);
+                            useMat4("lightPV", 1, &m);
                         }
             };
         }

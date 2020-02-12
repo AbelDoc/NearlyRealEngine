@@ -30,6 +30,7 @@
             class DeferredRenderer : public Utility::Bindable<DeferredRenderer>, public Utility::Uncopyable<DeferredRenderer>, public Utility::Stringable<DeferredRenderer> {
                 private:    //Fields
                     GL::FBO gBuffer;        /**< The gBuffer framebuffer */
+                    GL::FBO shadowMap;      /**< The shadow map framebuffer */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -71,6 +72,14 @@
                          * @return the gBuffer's depthbuffer
                          */
                         std::unique_ptr<GL::Attachable> const& getDepthBuffer() const;
+                        /**
+                         * @return the renderer's shadow map
+                         */
+                        std::unique_ptr<GL::Attachable> const& getShadowMap() const;
+                        /**
+                         * @return the renderer's shadow buffer
+                         */
+                        GL::FBO const& getShadowBuffer() const;
 
                     //## Methods ##//
                         /**

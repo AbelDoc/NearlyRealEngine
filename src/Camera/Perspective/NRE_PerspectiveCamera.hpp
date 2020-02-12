@@ -43,11 +43,10 @@
                          * @param r           the perspective ratio
                          * @param d           the far and near clipping plane distance
                          * @param e           the camera's eye position
-                         * @param u           the camera's up direction
                          * @param y           the camera's yaw
                          * @param p           the camera's pitch
                          */
-                        PerspectiveCamera(float s, Math::Angle fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Vector3D<float> const& u = Math::Vector3D<float>(0, 1, 0), Math::Angle y = 0 * Math::degree, Math::Angle p = 0 * Math::degree);
+                        PerspectiveCamera(float s, Math::Angle fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Angle y = 0 * Math::degree, Math::Angle p = 0 * Math::degree);
 
                     //## Copy-Constructor ##//
                         /**

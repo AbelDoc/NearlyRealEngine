@@ -10,7 +10,7 @@
     namespace NRE {
         namespace Camera {
 
-            inline PerspectiveCamera::PerspectiveCamera(float s, Math::Angle fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Vector3D<float> const& u, Math::Angle y, Math::Angle p) : Camera(s, e, u, y, p), frustum(fieldOfView, r, d) {
+            inline PerspectiveCamera::PerspectiveCamera(float s, Math::Angle fieldOfView, float r, Math::Vector2D<float> const& d, Math::Point3D<float> const& e, Math::Angle y, Math::Angle p) : Camera(s, e, y, p), frustum(fieldOfView, r, d) {
                 computePlane();
                 computeProjectionMatrix();
             }
