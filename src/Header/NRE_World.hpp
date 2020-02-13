@@ -10,8 +10,10 @@
     #pragma once
 
     #include "../World/Chunk/NRE_Chunk.hpp"
+    #include "../World/Chunk/NRE_WaterChunk.hpp"
     #include "../World/Polygonizer/NRE_ChunkPolygonizer.hpp"
     #include "../World/Factory/NRE_ChunkFactory.hpp"
     #include "../World/NRE_World.hpp"
     
     #include "../World/Mesh/NRE_ChunkMesh.hpp"
+    #include "../World/Mesh/NRE_WaterChunkMesh.hpp"

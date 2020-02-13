@@ -17,6 +17,7 @@
     
     #include "NRE_FlockSystem.hpp"
     #include "NRE_GBufferSystem.hpp"
+    #include "NRE_WaterSystem.hpp"
     #include "NRE_InstancedGBufferSystem.hpp"
     #include "NRE_ShadowSystem.hpp"
     #include "NRE_InstancedShadowSystem.hpp"
@@ -110,6 +111,7 @@
 
                                 SystemManager::get<GBufferSystem>()->update();
                                 SystemManager::get<InstancedGBufferSystem>()->update();
+                                SystemManager::get<WaterSystem>()->update();
                             renderer.unbind();
                         }
                         /**

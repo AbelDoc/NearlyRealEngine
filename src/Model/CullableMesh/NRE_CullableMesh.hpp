@@ -23,8 +23,7 @@
         namespace Model {
         
             template <class T, class K = Math::Frustum, class Data = void*>
-            class CullableMesh : public TypedMesh<T>,
-                                 public Utility::Observer {
+            class CullableMesh : public TypedMesh<T> {
                 private :   // Fields
                     T& target;
                     K const& boundObject;
@@ -65,12 +64,6 @@
                          * @return if the mesh can be drawn
                          */
                         bool canBeDrawn() const override;
-                        /**
-                         * Update the observer when the observable notify it
-                         * @param obs the observable
-                         * @param arg notification data
-                         */
-                        void update(Utility::Observable* obs, void* arg) override;
                         /**
                          * Draw the mesh
                          * @param mode the drawing mode

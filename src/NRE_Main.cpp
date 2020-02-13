@@ -35,6 +35,7 @@
         
             World::World world;
             Vector<Model::Model> models;
+            Vector<Model::Model> waters;
             
         public :    // Methods
             //## Constructor ##//
@@ -70,21 +71,27 @@
                     });
     
                     models.reserve(World::World::NB_CHUNKS);
-                    for (Chunk& c : world) {
+                    waters.reserve(World::World::NB_CHUNKS);
+                    for (WaterChunk& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
                         models.emplaceBack();
+                        waters.emplaceBack();
                         models.getLast().reserve(1);
-                        models.getLast().addMesh(new ChunkMesh(c, camera.getFrustum()));
+                        waters.getLast().reserve(1);
+                        models.getLast().addMesh(new ChunkMesh(c.getParent(), camera.getFrustum()));
+                        waters.getLast().addMesh(new WaterChunkMesh(c, camera.getFrustum()));
                         r.assign<Renderable>(&models.getLast());
+                        r.assign<WaterSurface>(&waters.getLast());
                     }
                     
                     Entity l = Singleton<EntityManager>::get().create();
-                    l.assign<Light>(Vector3D<float>(-100, 20, 0), Vector3D<float>(9450, 8550, 6430));
+                    l.assign<Light>(Vector3D<float>(-100, 20, 10), Vector3D<float>(9450, 8550, 6430));
                     
     
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
                     Singleton<SystemManager>::get().add<ShadowSystem>();
                     Singleton<SystemManager>::get().add<InstancedShadowSystem>();
+                    Singleton<SystemManager>::get().add<WaterSystem>(camera);
                     Singleton<SystemManager>::get().add<GBufferSystem>(camera);
                     Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
     

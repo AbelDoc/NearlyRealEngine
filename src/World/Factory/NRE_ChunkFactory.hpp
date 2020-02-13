@@ -44,16 +44,14 @@
                     /**
                      * Create a cloud of voxels (which isovalue represent the distance from the center) and then store the resulting cells into a given chunk
                      * @param target     the target chunk
-                     * @param resolution the generation resolution
-                     * @param radius     the sphere radius
                      */
                     static void createSphere(Chunk& target);
                     /**
                      * Create a cloud of voxels (which isovalue represent the terrain height) and then store the resulting cells into a given chunk
-                     * @param target     the target chunk
-                     * @param resolution the generation resolution
+                     * @param target the target chunk
+                     * @param water  the corresponding water mesh
                      */
-                    static void createTerrain(Chunk& target);
+                    static void createTerrain(Chunk& target, WaterChunk& water);
             };
 
         }

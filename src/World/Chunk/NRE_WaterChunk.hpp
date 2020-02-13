@@ -1,15 +1,15 @@
-/**
+    
+    /**
      * @file NRE_Chunk.hpp
      * @brief Declaration of Engine's World's Object : Chunk
      * @author Louis ABEL
-     * @date 12/09/2019
+     * @date 13/02/2020
      * @copyright CC-BY-NC-SA
      */
 
     #pragma once
 
-    #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include "NRE_Chunk.hpp"
 
     /**
      * @namespace NRE
@@ -23,91 +23,78 @@
         namespace World {
 
             /**
-             * @class Chunk
-             * @brief Manage a collection of voxels
+             * @class WaterChunk
+             * @brief Manage a collection of liquid voxels
              */
-            class Chunk : public Utility::Stringable<Chunk> {
-                public :    // Static
-                    static constexpr std::size_t SIZE_X     = 16;
-                    static constexpr std::size_t SIZE_Y     = 16;
-                    static constexpr std::size_t SIZE_Z     = 16;
-                    static constexpr std::size_t VOLUME     = SIZE_X * SIZE_Y * SIZE_Z;
-
-                    static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;
-                    static constexpr std::size_t VOXELS_LAYER_AREA  = VOXELS_LAYER_WIDTH * (SIZE_Z + 1);
-                    static constexpr std::size_t VOXELS_VOLUME      = VOXELS_LAYER_AREA  * (SIZE_Y + 1);
-
-                public :    // Iterator
-                    typedef Utility::Array<float, VOXELS_VOLUME> VoxelsContainer;
-                    /**< Shortcut to hide Iterator implementation */
-                    typedef VoxelsContainer::Iterator         Iterator;
-                    /**< Shortcut to hide ConstIterator implementation */
-                    typedef VoxelsContainer::ConstIterator    ConstIterator;
-
+            class WaterChunk : public Utility::Stringable<WaterChunk> {
                 private :   // Fields
-                    VoxelsContainer voxels;             /**< The chunk's cells */
-                    Math::Point3D<int> position;        /**< The chunk's position */
+                    Chunk::VoxelsContainer voxels;      /**< The chunk's cells */
+                    Chunk* parent;                      /**< The parent */
 
                 public :    // Methods
                     //## Constructor ##//
                         /**
-                         * Construct the chunk from its position
-                         * @param pos the chunk's position
+                         * Construct the chunk from its parent
+                         * @param p the chunk's parent
                          */
-                        Chunk(Math::Point3D<int> const& pos = {0, 0, 0});
+                        WaterChunk(Chunk* p = nullptr);
 
                     //## Copy-Constructor ##//
                         /**
                          * Copy c into this
                          * @param c the chunk to copy
                          */
-                         Chunk(Chunk const& c) = default;
+                        WaterChunk(WaterChunk const& c) = default;
 
                     //## Move-Constructor ##//
                         /**
                          * Move c into this
                          * @param c the chunk to move
                          */
-                        Chunk(Chunk && c) = default;
-
+                        WaterChunk(WaterChunk && c) = default;
+    
                     //## Getter ##//
                         /**
-                         * @return the chunk's position
+                         * @return the parent
                          */
-                        Math::Point3D<int> const& getPosition() const;
-
+                        Chunk const& getParent() const;
+                        /**
+                         * @return the parent
+                         */
+                        Chunk& getParent();
+    
                     //## Setter ##//
                         /**
-                         * Set the chunk's position
-                         * @param p the new position
+                         * Set the chunk's parent
+                         * @param p the new parent
                          */
-                        void setPosition(Math::Point3D<int> const& p);
+                        void setParent(Chunk* p);
 
                     //## Iterator Access ##//
                         /**
                          * @return an iterator on the first element
                          */
-                        Iterator begin();
+                        Chunk::Iterator begin();
                         /**
                          * @return a const iterator on the first element
                          */
-                        ConstIterator begin() const;
+                        Chunk::ConstIterator begin() const;
                         /**
                          * @return a const iterator on the first element
                          */
-                        ConstIterator cbegin() const;
+                        Chunk::ConstIterator cbegin() const;
                         /**
                          * @return an iterator on the end of the container
                          */
-                        Iterator end();
+                        Chunk::Iterator end();
                         /**
                          * @return a const iterator on the end of the container
                          */
-                        ConstIterator end() const;
+                        Chunk::ConstIterator end() const;
                         /**
                          * @return a const iterator on the end of the container
                          */
-                        ConstIterator cend() const;
+                        Chunk::ConstIterator cend() const;
 
                     //## Access Operator ##//
                         /**
@@ -131,13 +118,13 @@
                          * @param c the chunk to copy
                          * @return  the reference of himself
                          */
-                        Chunk& operator =(Chunk const& c) = default;
+                        WaterChunk& operator =(WaterChunk const& c) = default;
                         /**
                          * Move assignment of c into this
                          * @param c the chunk to move into this
                          * @return  the reference of himself
                          */
-                        Chunk& operator =(Chunk && c) = default;
+                        WaterChunk& operator =(WaterChunk && c) = default;
 
                     //## Stream Operator ##//
                         /**
@@ -150,4 +137,4 @@
         }
     }
 
-    #include "NRE_Chunk.tpp"
+    #include "NRE_WaterChunk.tpp"

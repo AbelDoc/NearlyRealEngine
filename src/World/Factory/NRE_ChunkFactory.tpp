@@ -23,7 +23,7 @@
                  }
              }
 
-             inline void ChunkFactory::createTerrain(Chunk& target) {
+             inline void ChunkFactory::createTerrain(Chunk& target, WaterChunk& water) {
                  FastNoise generator(16'09'2019);
 
                  for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
@@ -45,7 +45,7 @@
                              std::size_t index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
                              target[index] = (ny - e) + 0.0001f;
                              if (e < 5) {
-                                 target.setWater(index, ny - 0.0001f);
+                                 water[index] = ny - 0.0001f;
                              }
                          }
                      }

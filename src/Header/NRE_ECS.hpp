@@ -10,6 +10,7 @@
     #pragma once
     
     #include "../ECS/Component/Light/NRE_Light.hpp"
+    #include "../ECS/Component/Renderable/NRE_WaterSurface.hpp"
     #include "../ECS/Component/Renderable/NRE_Renderable.hpp"
     #include "../ECS/Component/Renderable/NRE_InstancedRenderable.hpp"
     

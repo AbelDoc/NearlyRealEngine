@@ -19,6 +19,7 @@
     #include "../Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp"
     #include "../Renderer/Program/Core/Primitive/Instanced3D/NRE_InstancedPrimitive3D.hpp"
     
+    #include "../Renderer/Program/Core/Water/NRE_Water.hpp"
     #include "../Renderer/Program/Core/GBuffer/GBuffer/NRE_GBuffer.hpp"
     #include "../Renderer/Program/Core/GBuffer/InstancedGBuffer/NRE_InstancedGBuffer.hpp"
 

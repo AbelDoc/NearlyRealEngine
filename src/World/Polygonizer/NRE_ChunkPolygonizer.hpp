@@ -358,7 +358,7 @@
                      * @param level     the polygonization lod level
                      * @param linear    use the linear interpolation
                      */
-                    static void polygonizeWater(Chunk const& target, GL::IBO<GL::MaterialVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
+                    static void polygonize(WaterChunk const& target, GL::IBO<GL::MaterialVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
                     /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold

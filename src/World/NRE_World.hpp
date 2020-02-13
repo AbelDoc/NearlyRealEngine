@@ -9,6 +9,7 @@
     #pragma once
 
     #include "Chunk/NRE_Chunk.hpp"
+    #include "Chunk/NRE_WaterChunk.hpp"
 
     /**
      * @namespace NRE
@@ -28,9 +29,9 @@
             class World {
                 public :    // Iterator
                     /**< Shortcut to hide Iterator implementation */
-                    typedef Chunk*          Iterator;
+                    typedef WaterChunk*          Iterator;
                     /**< Shortcut to hide ConstIterator implementation */
-                    typedef const Chunk*    ConstIterator;
+                    typedef const WaterChunk*    ConstIterator;
 
                 public :    // Static
                     static constexpr int H_SIZE_X = 3;
@@ -40,6 +41,7 @@
 
                 private :   // Fields
                     Chunk* chunks;      /**< The world's chunks */
+                    WaterChunk* waters; /**< The world's water chunks */
 
                 public :    // Methods
                     //## Constructor ##//
@@ -101,14 +103,14 @@
                          * @param   index the object's index
                          * @return        the object's reference
                          */
-                        Chunk& operator [](std::size_t index);
+                        WaterChunk& operator [](std::size_t index);
                         /**
                          * Return a const reference on a chunk's object
                          * @warning No range check performed
                          * @param   index the object's index
                          * @return        the object's reference
                          */
-                         Chunk const& operator [](std::size_t index) const;
+                        WaterChunk const& operator [](std::size_t index) const;
 
                     //## Assignment Operator ##//
                         /**

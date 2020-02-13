@@ -12,8 +12,6 @@
             
             template <class T, class K, class Data>
             CullableMesh<T, K, Data>::CullableMesh(T& o, K const& bound) : TypedMesh<T>(o), target(o), boundObject(bound) {
-                o.add(this);
-                update(nullptr, nullptr);
             }
             
             template <class T, class K, class Data>

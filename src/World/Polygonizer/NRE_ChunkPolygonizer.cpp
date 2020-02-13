@@ -191,7 +191,7 @@
                 }
             }
     
-            void ChunkPolygonizer::polygonizeWater(Chunk const& target, IBO <MaterialVertex>& ibo, float threshold,
+            void ChunkPolygonizer::polygonize(WaterChunk const& target, IBO <MaterialVertex>& ibo, float threshold,
                                               LODLevel level, Interpolator interpolator) {
                 Point3D<float> vertices[12];
                 UnorderedMap<Point3D<float>, IndexedData> indexed;
@@ -209,14 +209,14 @@
                             index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
                             std::uint8_t corners = 0b00000000;
                             topLayerIndex = index + area;
-                            float v0 = target.getWater(index);
-                            float v1 = target.getWater(index + width);
-                            float v2 = target.getWater(index + width + level);
-                            float v3 = target.getWater(index + level);
-                            float v4 = target.getWater(topLayerIndex);
-                            float v5 = target.getWater(topLayerIndex + width);
-                            float v6 = target.getWater(topLayerIndex + width + level);
-                            float v7 = target.getWater(topLayerIndex + level);
+                            float v0 = target[index];
+                            float v1 = target[index + width];
+                            float v2 = target[index + width + level];
+                            float v3 = target[index + level];
+                            float v4 = target[topLayerIndex];
+                            float v5 = target[topLayerIndex + width];
+                            float v6 = target[topLayerIndex + width + level];
+                            float v7 = target[topLayerIndex + level];
                     
                             float xF = static_cast <float> (x);
                             float zF = static_cast <float> (z);
@@ -247,14 +247,14 @@
                                 corners |= 0b10000000;
                             }
                             if (edgeTable[corners] != 0) {
-                                Point3D<float> p0 = Point3D<float>(xF, 5, zF) + target.getPosition();
-                                Point3D<float> p1 = Point3D<float>(xF, 5, zF + levelF) + target.getPosition();
-                                Point3D<float> p2 = Point3D<float>(xF + levelF, 5, zF + levelF) + target.getPosition();
-                                Point3D<float> p3 = Point3D<float>(xF + levelF, 5, zF) + target.getPosition();
-                                Point3D<float> p4 = Point3D<float>(xF, 5 + levelF, zF) + target.getPosition();
-                                Point3D<float> p5 = Point3D<float>(xF, 5 + levelF, zF + levelF) + target.getPosition();
-                                Point3D<float> p6 = Point3D<float>(xF + levelF, 5 + levelF, zF + levelF) + target.getPosition();
-                                Point3D<float> p7 = Point3D<float>(xF + levelF, 5 + levelF, zF) + target.getPosition();
+                                Point3D<float> p0 = Point3D<float>(xF, 5, zF) + target.getParent().getPosition();
+                                Point3D<float> p1 = Point3D<float>(xF, 5, zF + levelF) + target.getParent().getPosition();
+                                Point3D<float> p2 = Point3D<float>(xF + levelF, 5, zF + levelF) + target.getParent().getPosition();
+                                Point3D<float> p3 = Point3D<float>(xF + levelF, 5, zF) + target.getParent().getPosition();
+                                Point3D<float> p4 = Point3D<float>(xF, 5 + levelF, zF) + target.getParent().getPosition();
+                                Point3D<float> p5 = Point3D<float>(xF, 5 + levelF, zF + levelF) + target.getParent().getPosition();
+                                Point3D<float> p6 = Point3D<float>(xF + levelF, 5 + levelF, zF + levelF) + target.getParent().getPosition();
+                                Point3D<float> p7 = Point3D<float>(xF + levelF, 5 + levelF, zF) + target.getParent().getPosition();
                         
                                 if (edgeTable[corners] & 1) {
                                     vertices[0] = interpolator(threshold, p0, p1, v0, v1);

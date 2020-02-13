@@ -27,26 +27,26 @@
              * @brief Manage the creation of mesh's buffer
              */
             template <>
-            class MeshFactory<World::Chunk> {
+            class MeshFactory<World::WaterChunk> {
                 public :    // Static
                     /**
                      * Create a buffer from a given object
                      * @param o the object to create the buffer
                      * @return  the created buffer
                      */
-                    static GL::AbstractVBO* create(World::Chunk const& o) {
+                    static GL::AbstractVBO* create(World::WaterChunk const& o) {
                         GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
                         World::ChunkPolygonizer::polygonize(o, *buffer, 0, World::ChunkPolygonizer::LEVELS[0]);
                         return buffer;
                     }
             };
         
-            typedef CullableMesh<World::Chunk, Math::Frustum, void*> ChunkMesh;
+            typedef CullableMesh<World::WaterChunk, Math::Frustum, void*> WaterChunkMesh;
         
             template <>
-            inline bool ChunkMesh::inBound() const {
+            inline bool WaterChunkMesh::inBound() const {
                 for (int i = 0; i < Math::FACE_NUM; i++) {
-                    Math::Vector3D<float> p = target.getPosition();
+                    Math::Vector3D<float> p = target.getParent().getPosition();
                     Math::Vector3D<float> const& normal = boundObject.getPlane(i).getNormal();
                     if (normal.getX() >= 0) {
                         p.setX(p.getX() + World::Chunk::SIZE_X);
