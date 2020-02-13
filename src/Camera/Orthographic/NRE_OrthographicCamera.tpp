@@ -13,7 +13,6 @@
         namespace Camera {
         
             inline OrthographicCamera::OrthographicCamera(float s, Math::Point3D<float> const& e, Math::Vector2D<int> const& viewport, Math::Vector2D<float> const& d, Math::Angle y, Math::Angle p) : Camera(s, e, y, p), size(viewport), dist(d) {
-                std::cout << forward << std::endl;
                 computeProjectionMatrix();
             }
     
