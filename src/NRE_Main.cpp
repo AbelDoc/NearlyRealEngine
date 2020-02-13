@@ -79,7 +79,7 @@
                     }
                     
                     Entity l = Singleton<EntityManager>::get().create();
-                    l.assign<Light>(Vector3D<float>(-100, 20, 0), Vector3D<float>(94500, 85500, 64300));
+                    l.assign<Light>(Vector3D<float>(-100, 20, 0), Vector3D<float>(9450, 8550, 6430));
                     
     
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");

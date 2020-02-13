@@ -103,9 +103,9 @@
         float b = (blending.x + blending.y + blending.z);
         blending /= vec3(b, b, b);
 
-        vec3 sampleX = texture(sampler, vec3(worldPos.yz * 0.01, ids.x)).rgb; // Project along x axis
-        vec3 sampleY = texture(sampler, vec3(worldPos.xz * 0.01, ids.y)).rgb; // Project along y axis
-        vec3 sampleZ = texture(sampler, vec3(worldPos.xy * 0.01, ids.z)).rgb; // Project along z axis
+        vec3 sampleX = texture(sampler, vec3(worldPos.yz * 0.05, ids.x)).rgb; // Project along x axis
+        vec3 sampleY = texture(sampler, vec3(worldPos.xz * 0.05, ids.y)).rgb; // Project along y axis
+        vec3 sampleZ = texture(sampler, vec3(worldPos.xy * 0.05, ids.z)).rgb; // Project along z axis
 
         return sampleX * blending.x + sampleY * blending.y + sampleZ * blending.z;
     }
@@ -116,9 +116,9 @@
         float b = (blending.x + blending.y + blending.z);
         blending /= vec3(b, b, b);
 
-        float sampleX = texture(sampler, vec3(worldPos.yz * 0.01, ids.x)).r; // Project along x axis
-        float sampleY = texture(sampler, vec3(worldPos.xz * 0.01, ids.y)).r; // Project along y axis
-        float sampleZ = texture(sampler, vec3(worldPos.xy * 0.01, ids.z)).r; // Project along z axis
+        float sampleX = texture(sampler, vec3(worldPos.yz * 0.05, ids.x)).r; // Project along x axis
+        float sampleY = texture(sampler, vec3(worldPos.xz * 0.05, ids.y)).r; // Project along y axis
+        float sampleZ = texture(sampler, vec3(worldPos.xy * 0.05, ids.z)).r; // Project along z axis
 
         return sampleX * blending.x + sampleY * blending.y + sampleZ * blending.z;
     }
