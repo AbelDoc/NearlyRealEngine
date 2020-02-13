@@ -134,7 +134,15 @@
         float closestDepth = texture(texShadow, projCoords.xy).r;
         float currentDepth = projCoords.z;
         float bias = 0.05;
-        float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+        float shadow = 0.0;
+        vec2 texelSize = 1.0 / textureSize(texShadow, 0);
+        for(int x = -2; x <= 2; ++x) {
+            for(int y = -2; y <= 2; ++y) {
+                float pcfDepth = texture(texShadow, projCoords.xy + vec2(x, y) * texelSize).r;
+                shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+            }
+        }
+        shadow /= 16.0;
         return shadow;
     }
 
@@ -206,9 +214,9 @@
             vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
             vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
+            float shadow = computeShadow(lightSpace * vec4(vertex, 1.0));
             vec3 ambient = (kD * diffuse + specular) * computeBlur(uv);
 
-            float shadow = computeShadow(lightSpace * vec4(vertex, 1.0));
 
             vec3 color = (ambient + Lo * (1.0 - shadow));
 
