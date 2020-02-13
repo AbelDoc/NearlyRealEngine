@@ -16,11 +16,19 @@
              inline Math::Point3D<int> const& Chunk::getPosition() const {
                  return position;
              }
+             
+             inline float Chunk::getWater(std::size_t index) const {
+                 return water[index];
+             }
 
              inline void Chunk::setPosition(Math::Point3D<int> const& p) {
                  position = p;
                  setChanged(true);
                  notifyAll();
+             }
+             
+             inline void Chunk::setWater(std::size_t index, float value) {
+                 water[index] = value;
              }
 
              inline typename Chunk::Iterator Chunk::begin() {

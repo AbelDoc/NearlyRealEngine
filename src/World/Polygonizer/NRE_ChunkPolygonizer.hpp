@@ -351,6 +351,15 @@
                      */
                     static void polygonize(Chunk const& target, GL::IBO<GL::MaterialVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
                     /**
+                     * Polygonize a chunk water using the marching cubes algorithm
+                     * @param target    the chunk to polygonize
+                     * @param ibo       the indexed buffer to fill
+                     * @param threshold the polygonize threshold
+                     * @param level     the polygonization lod level
+                     * @param linear    use the linear interpolation
+                     */
+                    static void polygonizeWater(Chunk const& target, GL::IBO<GL::MaterialVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
+                    /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold
                      * @param p1        the first voxel

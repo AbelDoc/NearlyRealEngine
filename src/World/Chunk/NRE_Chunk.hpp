@@ -46,6 +46,7 @@
 
                 private :   // Fields
                     VoxelsContainer voxels;             /**< The chunk's cells */
+                    VoxelsContainer water;              /**< The chunk's water */
                     Math::Point3D<int> position;        /**< The chunk's position */
 
                 public :    // Methods
@@ -75,6 +76,12 @@
                          * @return the chunk's position
                          */
                         Math::Point3D<int> const& getPosition() const;
+                        /**
+                         * Query a water voxel
+                         * @param index the voxel's index
+                         * @return      the corresponding isovalue
+                         */
+                        float getWater(std::size_t index) const;
 
                     //## Setter ##//
                         /**
@@ -82,6 +89,12 @@
                          * @param p the new position
                          */
                         void setPosition(Math::Point3D<int> const& p);
+                        /**
+                         * Set a water voxel
+                         * @param index the voxel's index
+                         * @param value the new isovalue
+                         */
+                        void setWater(std::size_t index, float value);
 
                     //## Iterator Access ##//
                         /**

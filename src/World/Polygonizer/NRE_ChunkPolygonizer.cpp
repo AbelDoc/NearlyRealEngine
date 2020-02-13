@@ -190,6 +190,180 @@
                     layout.tangentAndV.setW(-1);
                 }
             }
+    
+            void ChunkPolygonizer::polygonizeWater(Chunk const& target, IBO <MaterialVertex>& ibo, float threshold,
+                                              LODLevel level, Interpolator interpolator) {
+                Point3D<float> vertices[12];
+                UnorderedMap<Point3D<float>, IndexedData> indexed;
+                indexed.reserve(3000);
+        
+                std::size_t width = Chunk::VOXELS_LAYER_WIDTH * level;
+                std::size_t area = Chunk::VOXELS_LAYER_AREA * level;
+        
+                std::size_t index = 0;
+                std::size_t topLayerIndex;
+        
+                for (std::size_t y = 0; y < Chunk::SIZE_Y; y += level) {
+                    for (std::size_t z = 0; z < Chunk::SIZE_Z; z += level) {
+                        for (std::size_t x = 0; x < Chunk::SIZE_X; x += level) {
+                            index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
+                            std::uint8_t corners = 0b00000000;
+                            topLayerIndex = index + area;
+                            float v0 = target.getWater(index);
+                            float v1 = target.getWater(index + width);
+                            float v2 = target.getWater(index + width + level);
+                            float v3 = target.getWater(index + level);
+                            float v4 = target.getWater(topLayerIndex);
+                            float v5 = target.getWater(topLayerIndex + width);
+                            float v6 = target.getWater(topLayerIndex + width + level);
+                            float v7 = target.getWater(topLayerIndex + level);
+                    
+                            float xF = static_cast <float> (x);
+                            float zF = static_cast <float> (z);
+                            float levelF = static_cast <float> (level);
+                    
+                            if (v0 < threshold) {
+                                corners |= 0b00000001;
+                            }
+                            if (v1 < threshold) {
+                                corners |= 0b00000010;
+                            }
+                            if (v2 < threshold) {
+                                corners |= 0b00000100;
+                            }
+                            if (v3 < threshold) {
+                                corners |= 0b00001000;
+                            }
+                            if (v4 < threshold) {
+                                corners |= 0b00010000;
+                            }
+                            if (v5 < threshold) {
+                                corners |= 0b00100000;
+                            }
+                            if (v6 < threshold) {
+                                corners |= 0b01000000;
+                            }
+                            if (v7 < threshold) {
+                                corners |= 0b10000000;
+                            }
+                            if (edgeTable[corners] != 0) {
+                                Point3D<float> p0 = Point3D<float>(xF, 5, zF) + target.getPosition();
+                                Point3D<float> p1 = Point3D<float>(xF, 5, zF + levelF) + target.getPosition();
+                                Point3D<float> p2 = Point3D<float>(xF + levelF, 5, zF + levelF) + target.getPosition();
+                                Point3D<float> p3 = Point3D<float>(xF + levelF, 5, zF) + target.getPosition();
+                                Point3D<float> p4 = Point3D<float>(xF, 5 + levelF, zF) + target.getPosition();
+                                Point3D<float> p5 = Point3D<float>(xF, 5 + levelF, zF + levelF) + target.getPosition();
+                                Point3D<float> p6 = Point3D<float>(xF + levelF, 5 + levelF, zF + levelF) + target.getPosition();
+                                Point3D<float> p7 = Point3D<float>(xF + levelF, 5 + levelF, zF) + target.getPosition();
+                        
+                                if (edgeTable[corners] & 1) {
+                                    vertices[0] = interpolator(threshold, p0, p1, v0, v1);
+                                }
+                                if (edgeTable[corners] & 2) {
+                                    vertices[1] = interpolator(threshold, p1, p2, v1, v2);
+                                }
+                                if (edgeTable[corners] & 4) {
+                                    vertices[2] = interpolator(threshold, p2, p3, v2, v3);
+                                }
+                                if (edgeTable[corners] & 8) {
+                                    vertices[3] = interpolator(threshold, p3, p0, v3, v0);
+                                }
+                                if (edgeTable[corners] & 16) {
+                                    vertices[4] = interpolator(threshold, p4, p5, v4, v5);
+                                }
+                                if (edgeTable[corners] & 32) {
+                                    vertices[5] = interpolator(threshold, p5, p6, v5, v6);
+                                }
+                                if (edgeTable[corners] & 64) {
+                                    vertices[6] = interpolator(threshold, p6, p7, v6, v7);
+                                }
+                                if (edgeTable[corners] & 128) {
+                                    vertices[7] = interpolator(threshold, p7, p4, v7, v4);
+                                }
+                                if (edgeTable[corners] & 256) {
+                                    vertices[8] = interpolator(threshold, p0, p4, v0, v4);
+                                }
+                                if (edgeTable[corners] & 512) {
+                                    vertices[9] = interpolator(threshold, p1, p5, v1, v5);
+                                }
+                                if (edgeTable[corners] & 1024) {
+                                    vertices[10] = interpolator(threshold, p2, p6, v2, v6);
+                                }
+                                if (edgeTable[corners] & 2048) {
+                                    vertices[11] = interpolator(threshold, p3, p7, v3, v7);
+                                }
+                                for (int i = 0; triTable[corners][i] != 0xFF; i += 3) {
+                                    std::uint8_t p0Index = triTable[corners][i];
+                                    std::uint8_t p1Index = triTable[corners][i + 2];
+                                    std::uint8_t p2Index = triTable[corners][i + 1];
+                            
+                                    Point3D<float> vertex0 = vertices[p0Index];
+                                    Point3D<float> vertex1 = vertices[p1Index];
+                                    Point3D<float> vertex2 = vertices[p2Index];
+                            
+                                    Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 0.0);
+                            
+                                    auto it0 = indexed.find(vertex0);
+                                    if (it0 != indexed.end()) {
+                                        MaterialVertex& layout = ibo.getData(it0->second.vIndex);
+                                        layout.normalAndU = normal + layout.normalAndU;
+                                        it0->second.nbAdd++;
+                                        ibo.addIndex(it0->second.index);
+                                    } else {
+                                        std::uint32_t newIndex = ibo.getNextIndex();
+                                
+                                        indexed[vertex0] = {ibo.getDataCount(), newIndex, 1};
+                                        ibo.addData(vertex0, normal, Math::Vector3D<int>(3));
+                                        ibo.addIndex(newIndex);
+                                    }
+                            
+                                    auto it1 = indexed.find(vertex1);
+                                    if (it1 != indexed.end()) {
+                                        MaterialVertex& layout = ibo.getData(it1->second.vIndex);
+                                        layout.normalAndU = normal + layout.normalAndU;
+                                        it1->second.nbAdd++;
+                                        ibo.addIndex(it1->second.index);
+                                    } else {
+                                        std::uint32_t newIndex = ibo.getNextIndex();
+                                
+                                        indexed[vertex1] = {ibo.getDataCount(), newIndex, 1};
+                                        ibo.addData(vertex1, normal, Math::Vector3D<int>(3));
+                                        ibo.addIndex(newIndex);
+                                    }
+                            
+                                    auto it2 = indexed.find(vertex2);
+                                    if (it2 != indexed.end()) {
+                                        MaterialVertex& layout = ibo.getData(it2->second.vIndex);
+                                        layout.normalAndU = normal + layout.normalAndU;
+                                        it2->second.nbAdd++;
+                                        ibo.addIndex(it2->second.index);
+                                    } else {
+                                        std::uint32_t newIndex = ibo.getNextIndex();
+                                
+                                        indexed[vertex2] = {ibo.getDataCount(), newIndex, 1};
+                                        ibo.addData(vertex2, normal, Math::Vector3D<int>(3));
+                                        ibo.addIndex(newIndex);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        
+                for (auto& it : indexed) {
+                    MaterialVertex& layout = ibo.getData(it.second.vIndex);
+                    layout.normalAndU /= it.second.nbAdd;
+                    layout.normalAndU.normalize();
+            
+                    auto n = Vector3D<float>(layout.normalAndU);
+                    auto t = Vector3D<float>(0, 1, 0) ^ n;
+            
+                    layout.tangentAndV = Vector4D<float>(t);
+            
+                    layout.normalAndU.setW(-1);
+                    layout.tangentAndV.setW(-1);
+                }
+            }
             
         }
     }

@@ -39,12 +39,12 @@
                         using namespace NRE::Math;
                         
                         GL::VBO<GL::PointVertex>* buffer = new GL::VBO<GL::PointVertex>(GL_STATIC_DRAW);
-                        buffer->addData(Vector2D<float>(o.getCoord().getX(),                              o.getCoord().getY()),                      Vector2D<float>(0, 0));
-                        buffer->addData(Vector2D<float>(o.getCoord().getX() + o.getSize().getW(),     o.getCoord().getY()),                      Vector2D<float>(1, 0));
+                        buffer->addData(Vector2D<float>(o.getCoord().getX(),                      o.getCoord().getY()),                      Vector2D<float>(0, 0));
+                        buffer->addData(Vector2D<float>(o.getCoord().getX() + o.getSize().getW(), o.getCoord().getY()),                      Vector2D<float>(1, 0));
                         buffer->addData(Vector2D<float>(o.getCoord().getX() + o.getSize().getW(), o.getCoord().getY() + o.getSize().getH()), Vector2D<float>(1, 1));
                         buffer->addData(Vector2D<float>(o.getCoord().getX() + o.getSize().getW(), o.getCoord().getY() + o.getSize().getH()), Vector2D<float>(1, 1));
-                        buffer->addData(Vector2D<float>(o.getCoord().getX(),                          o.getCoord().getY() + o.getSize().getH()), Vector2D<float>(0, 1));
-                        buffer->addData(Vector2D<float>(o.getCoord().getX(),                              o.getCoord().getY()),                      Vector2D<float>(0, 0));
+                        buffer->addData(Vector2D<float>(o.getCoord().getX(),                      o.getCoord().getY() + o.getSize().getH()), Vector2D<float>(0, 1));
+                        buffer->addData(Vector2D<float>(o.getCoord().getX(),                      o.getCoord().getY()),                      Vector2D<float>(0, 0));
                         
                         return buffer;
                     }

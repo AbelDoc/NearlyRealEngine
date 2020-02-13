@@ -42,7 +42,11 @@
                          e *= Chunk::SIZE_Y * World::SIZE_Y;
                          for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                              float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY());
-                             target[y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x] = (ny - e) + 0.0001f;
+                             std::size_t index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
+                             target[index] = (ny - e) + 0.0001f;
+                             if (e < 5) {
+                                 target.setWater(index, ny - 0.0001f);
+                             }
                          }
                      }
                  }
