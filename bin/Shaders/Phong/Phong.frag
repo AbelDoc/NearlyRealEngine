@@ -65,7 +65,7 @@
                 vec3 halfwayDir = normalize(lightDir + viewDir);
                 float diff = max(dot(lightDir, normal), 0.0);
                 diffuse += color * diff;
-                float spec = pow(max(dot(normal, halfwayDir), 0.0), 32);
+                float spec = pow(max(dot(normal, halfwayDir), 0.0), 64);
                 specular += lights[i].intensities * spec;
             }
             out_Color = vec4(ambient + diffuse + specular, 1.0);

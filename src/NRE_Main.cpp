@@ -89,9 +89,6 @@
                     
     
                     Singleton<SystemManager>::get().add<DebugDeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
-                    Singleton<SystemManager>::get().add<WaterSystem>(camera);
-                    Singleton<SystemManager>::get().add<GBufferSystem>(camera);
-                    Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
     
                     Singleton<SystemManager>::get().configure();
                 }

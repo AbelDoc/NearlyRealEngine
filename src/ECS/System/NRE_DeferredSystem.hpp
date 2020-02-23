@@ -56,6 +56,12 @@
                          */
                         DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), light(0, Math::Vector3D<float>(-64, 0, 0), Math::Vector2D<float>(256), Math::Vector2D<float>(0.1, 300.0f), 0 * Math::degree, -20 * Math::degree), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
                             GL::setViewport(screenSize);
+    
+                            Utility::Singleton<SystemManager>::get().add<WaterSystem>(camera);
+                            Utility::Singleton<SystemManager>::get().add<GBufferSystem>(camera);
+                            Utility::Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
+                            Utility::Singleton<SystemManager>::get().add<ShadowSystem>();
+                            Utility::Singleton<SystemManager>::get().add<InstancedShadowSystem>();
                         }
                         
                     //## Methods ##//
