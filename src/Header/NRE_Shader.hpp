@@ -27,6 +27,7 @@
     #include "../Renderer/Program/Core/Shadow/InstancedShadow/NRE_InstancedShadow.hpp"
     
     #include "../Renderer/Program/Core/PBR/NRE_PBR.hpp"
+    #include "../Renderer/Program/Core/Phong/NRE_Phong.hpp"
     
     #include "../Renderer/Program/Core/SSAO/NRE_SSAOEffect.hpp"
     

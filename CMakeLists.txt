@@ -120,6 +120,7 @@ set(COMPILE_LIST
         src/GL/NRE_GLUtils.hpp
         src/GL/NRE_GLUtils.tpp
         src/ECS/System/NRE_DeferredSystem.hpp
+        src/ECS/System/NRE_DebugDeferredSystem.hpp
         src/ECS/System/NRE_FlockSystem.hpp
         src/ECS/System/NRE_GBufferSystem.hpp
         src/ECS/System/NRE_InstancedGBufferSystem.hpp

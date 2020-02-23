@@ -16,6 +16,7 @@
     
     #include "../ECS/System/NRE_FlockSystem.hpp"
     #include "../ECS/System/NRE_DeferredSystem.hpp"
+    #include "../ECS/System/NRE_DebugDeferredSystem.hpp"
     #include "../ECS/System/NRE_GBufferSystem.hpp"
     #include "../ECS/System/NRE_InstancedGBufferSystem.hpp"
 
