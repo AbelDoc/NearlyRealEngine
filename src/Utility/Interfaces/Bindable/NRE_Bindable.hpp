@@ -27,7 +27,7 @@
              * @brief Describe a bindable object
              */
             template <class T>
-            class Bindable : public StaticInterface<T, Bindable> {
+            class Bindable : public StaticInterface<Bindable<T>> {
                 public:    // Methods
                     /**
                      * Bind the object

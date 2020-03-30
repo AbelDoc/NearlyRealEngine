@@ -48,6 +48,7 @@
             //## Methods ##//
                 void create() override {
                     NRE::System::System::get().setRelativeMode(true);
+                    NRE::System::System::get().showCursor(false);
                     addHandler<KeyEvent>([&](KeyEvent& event) {
                         if (event.isCode(KeyCode::Z)) {
                             camera.moveFront();

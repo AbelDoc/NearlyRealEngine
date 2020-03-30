@@ -30,7 +30,7 @@
              * @brief Describe an allocable object which manage some resources
              */
             template <class T>
-            class Allocable : public StaticInterface<T, Allocable> {
+            class Allocable : public StaticInterface<Allocable<T>> {
                 private :   // Field
                     bool allocated; /**< The objet's allocation state */
                     

@@ -29,7 +29,7 @@
              * @brief Describe an identifiable object
              */
             template <class T>
-            class Identifiable : public StaticInterface<T, Identifiable> {
+            class Identifiable : public StaticInterface<Identifiable<T>> {
                 protected :    //Fields
                     Id id;      /**< The object's id */
     

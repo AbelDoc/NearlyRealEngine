@@ -17,7 +17,7 @@
     }
 
     void main() {
-        const float freq = 0.5;
+        const float freq = 0.05;
         const float amp = 0.1;
 
         float d = wave(time, freq, amp, vertex.x)
