@@ -89,7 +89,7 @@
                     l.assign<Light>(Vector3D<float>(-100, 20, 10), Vector3D<float>(0.9, 0.8, 0.6));
                     
     
-                    Singleton<SystemManager>::get().add<DebugDeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
+                    Singleton<SystemManager>::get().add<DebugDeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_HD.hdr");
     
                     Singleton<SystemManager>::get().configure();
                 }

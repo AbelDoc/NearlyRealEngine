@@ -71,10 +71,6 @@
                          * MaterialManager Deconstructor
                          */
                         ~MaterialManager() = default;
-                
-                public:     // Static
-                    static constexpr std::size_t RESOLUTION = 1024;    /**< The material resolution */
-                    
             };
         }
     }
