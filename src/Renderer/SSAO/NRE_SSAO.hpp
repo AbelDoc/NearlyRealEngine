@@ -94,7 +94,7 @@
                     void generateNoise();
 
                 private:    // Static
-                    static std::size_t constexpr NOISE_SIZE = 4;     /**< The ssao's noise texture's size */
+                    static std::size_t constexpr NOISE_SIZE = 8;     /**< The ssao's noise texture's size */
 
                 public:     // Static
                     static std::size_t constexpr KERNEL_SIZE = NOISE_SIZE * NOISE_SIZE;    /**< The ssao's kernel size */

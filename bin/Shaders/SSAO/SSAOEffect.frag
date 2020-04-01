@@ -10,7 +10,10 @@
     uniform sampler2D texNoise;
 
     uniform float gSampleRad;
-    const int MAX_KERNEL_SIZE = 16;
+    const int MAX_KERNEL_SIZE = 64;
+    const float radius = 0.5;
+    const float bias = 0.025;
+
     uniform vec3 gKernel[MAX_KERNEL_SIZE];
 
     const vec2 noiseOffset = vec2(1280.0 / 4.0, 720.0 / 4.0);
@@ -31,7 +34,7 @@
         if (normal != vec3(0.0, 0.0, 0.0)) {
             vec3 vertex = WorldPosFromDepth(uv).xyz;
 
-            vec3 noise = texture(texNoise, uv * noiseOffset).xyz;
+            vec3 noise = normalize(texture(texNoise, uv * noiseOffset).xyz);
 
             vec3 tangent = normalize(noise - normal * dot(noise, normal));
             vec3 bitangent = cross(normal, tangent);
@@ -49,13 +52,12 @@
                 offset.xy = offset.xy * 0.5 + 0.5;
 
                 float sampleDepth = WorldPosFromDepth(offset.xy).z;
-
-                occlusion += step(sampleDepth, sampleV.z);
+                float rangeCheck = smoothstep(0.0, 1.0, radius / abs(vertex.z - sampleDepth));
+                occlusion += (sampleDepth >= sampleV.z + bias ? 1.0 : 0.0) * rangeCheck;
             }
 
-            occlusion = occlusion / float(MAX_KERNEL_SIZE);
-            occlusion = pow(occlusion, 2.0);
-            fragData = vec4(occlusion);
+            occlusion = 1 - (occlusion / float(MAX_KERNEL_SIZE));
+            fragData = vec4(pow(occlusion, 2.0));
         } else {
             fragData = vec4(0.0, 0.0, 0.0, 0.0);
         }
