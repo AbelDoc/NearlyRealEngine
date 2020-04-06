@@ -37,9 +37,12 @@
             Vector<Model::Model> models;
             Vector<Model::Model> waters;
             
+            bool firstLoad;
+            std::chrono::time_point<std::chrono::high_resolution_clock> loadStart;
+            
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(-100, 20, 0)) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(-100, 20, 0)), firstLoad(true), loadStart(std::chrono::high_resolution_clock::now()) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
@@ -98,6 +101,10 @@
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();
+                    if (firstLoad) {
+                        std::cout << "Loading time : " << std::chrono::duration<float>(std::chrono::high_resolution_clock::now() - loadStart).count() << "s" << std::endl;
+                        firstLoad = false;
+                    }
                 }
                 void destroy() override {
                 }
