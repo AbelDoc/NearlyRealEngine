@@ -9,7 +9,22 @@
 
     #pragma once
 
+    #include <Header/NRE_IO.hpp>
     #include "../Mesh/NRE_Mesh.hpp"
+
+    #include "../../GL/VBO/IBO/NRE_IBO.hpp"
+    #include "../../GL/VBO/Layout/Material/NRE_MaterialVertex.hpp"
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wfloat-equal"
+    #pragma GCC diagnostic ignored "-Wconversion"
+    #pragma GCC diagnostic ignored "-Wfloat-conversion"
+    
+        #include <assimp/Importer.hpp>
+        #include <assimp/scene.h>
+        #include <assimp/postprocess.h>
+    
+    #pragma GCC diagnostic pop
 
     /**
      * @namespace NRE
@@ -36,6 +51,11 @@
                          * Default constructor
                          */
                         Model() = default;
+                        /**
+                         * Load an object model
+                         * @param path the object's path
+                         */
+                        Model(IO::File const& path);
     
                     //## Move Constructor ##//
                         /**
@@ -84,6 +104,20 @@
                          * @return  the reference of himself
                          */
                         Model& operator =(Model && m) = default;
+                        
+                private :   // Methods
+                    /**
+                     * Construct a model from an assimp loaded model
+                     * @param node  the current assimp's node
+                     * @param scene the assimp's scene
+                     */
+                    void constructModel(aiNode *node, const aiScene *scene);
+                    /**
+                     * Process an assimp's mesh and turn it into a nre's mesh
+                     * @param  mesh the assimp's mesh
+                     * @return      the converted mesh
+                     */
+                    Mesh* processMesh(aiMesh *mesh);
             };
     
         }

@@ -12,6 +12,7 @@ include_directories(C:/Users/abell/Documents/GitHub/NRE-Math/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-System/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-IO/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-ECS/src)
+include_directories(C:/lib/Assimp-3.1.1/include)
 include_directories(C:/lib/Glew/include)
 include_directories(C:/lib/STB)
 
@@ -206,4 +207,4 @@ set(EXEC_LIST
 
 add_executable(NearlyRealEngine ${EXEC_LIST})
 
-target_link_libraries(NearlyRealEngine "C:/lib/NRE/Windows/libNRE-System.a" "C:/lib/Glew/lib/libglew32.dll.a" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/OpenGL32.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Psapi.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Gdi32.Lib" "C:/lib/NRE/libNRE-ECS.a")
+target_link_libraries(NearlyRealEngine "C:/lib/NRE/Windows/libNRE-System.a" "C:/lib/Glew/lib/libglew32.dll.a" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/OpenGL32.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Psapi.Lib" "C:/lib/WindowsKits/10/Lib/10.0.17763.0/um/x64/Gdi32.Lib" "C:/lib/NRE/libNRE-ECS.a" "C:/lib/Assimp-3.1.1/build/code/libassimp.dll.a")

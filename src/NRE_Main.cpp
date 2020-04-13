@@ -33,16 +33,11 @@
         private :   // Field
             PerspectiveCamera camera;
         
-            World::World world;
-            Vector<Model::Model> models;
-            Vector<Model::Model> waters;
-            
-            bool firstLoad;
-            std::chrono::time_point<std::chrono::high_resolution_clock> loadStart;
-            
+            Model::Model ship;
+        
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(-100, 20, 0)), firstLoad(true), loadStart(std::chrono::high_resolution_clock::now()) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Interceptor/source/interceptor.obj") {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
@@ -73,27 +68,14 @@
                         camera.turn(event.getMotion());
                         return true;
                     });
-    
-                    models.reserve(World::World::NB_CHUNKS);
-                    waters.reserve(World::World::NB_CHUNKS);
-                    for (WaterChunk& c : world) {
-                        Entity r = Singleton<EntityManager>::get().create();
-                        models.emplaceBack();
-                        waters.emplaceBack();
-                        models.getLast().reserve(1);
-                        waters.getLast().reserve(1);
-                        models.getLast().addMesh(new ChunkMesh(c.getParent(), camera.getFrustum()));
-                        waters.getLast().addMesh(new WaterChunkMesh(c, camera.getFrustum()));
-                        r.assign<Renderable>(&models.getLast());
-                        r.assign<WaterSurface>(&waters.getLast());
-                    }
                     
                     Entity l = Singleton<EntityManager>::get().create();
                     l.assign<Light>(Vector3D<float>(-100, 20, 10), Vector3D<float>(9000, 8000, 6000));
                     
+                    Entity s = Singleton<EntityManager>::get().create();
+                    s.assign<Renderable>(&ship);
     
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_HD.hdr");
-    
                     Singleton<SystemManager>::get().configure();
                 }
                 void update() override {
@@ -101,10 +83,6 @@
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();
-                    if (firstLoad) {
-                        std::cout << "Loading time : " << std::chrono::duration<float>(std::chrono::high_resolution_clock::now() - loadStart).count() << "s" << std::endl;
-                        firstLoad = false;
-                    }
                 }
                 void destroy() override {
                 }
