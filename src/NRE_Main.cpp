@@ -37,10 +37,10 @@
         
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Interceptor/source/interceptor.obj") {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj") {
                     glEnable(GL_DEPTH_TEST);
-                    glEnable(GL_CULL_FACE);
-                        glCullFace(GL_BACK);
+                    /*glEnable(GL_CULL_FACE);
+                        glCullFace(GL_BACK);*/
                 }
 
             //## Methods ##//
@@ -69,8 +69,8 @@
                         return true;
                     });
                     
-                    Entity l = Singleton<EntityManager>::get().create();
-                    l.assign<Light>(Vector3D<float>(-100, 20, 10), Vector3D<float>(9000, 8000, 6000));
+                    Entity l1 = Singleton<EntityManager>::get().create();
+                    l1.assign<Light>(Vector3D<float>(0, 20, 0), Vector3D<float>(900, 800, 600));
                     
                     Entity s = Singleton<EntityManager>::get().create();
                     s.assign<Renderable>(&ship);

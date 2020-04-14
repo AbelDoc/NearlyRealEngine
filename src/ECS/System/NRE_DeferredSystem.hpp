@@ -220,7 +220,7 @@
                         void update() override {
                             gBufferPass();
                             SSAOPass();
-                            shadowPass();
+                            //shadowPass();
                             PBRPass();
                         }
                         /**

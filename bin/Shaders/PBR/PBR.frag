@@ -162,15 +162,15 @@
 
             vec2 tileUV = vec2(normalAndU.w, tangentAndV.w);
 
-            N = TBN * normalize(queryVec3(texNormals, normal, vertex, ids) * 2.0 - 1.0);
+            N = TBN * normalize(texture(texNormals, vec3(tileUV, ids.x)).rgb * 2.0 - 1.0);
 
             vec3 V = normalize(cameraV - vertex);
             vec3 R = reflect(-V, N);
 
-            vec3 albedo = queryVec3(texAlbedos, normal, vertex, ids);
-            float roughness = queryFloat(texRoughness, normal, vertex, ids);
-            float metallic = queryFloat(texMetallics, normal, vertex, ids);
-            float displacement = queryFloat(texDisplacements, normal, vertex, ids);
+            vec3 albedo = texture(texAlbedos, vec3(tileUV, ids.x)).rgb;
+            float roughness = texture(texRoughness, vec3(tileUV, ids.x)).r;
+            float metallic = texture(texMetallics, vec3(tileUV, ids.x)).r;
+            float displacement = texture(texDisplacements, vec3(tileUV, ids.x)).r;
 
             vec3 F0 = vec3(0.04);
             F0 = mix(F0, albedo, metallic);

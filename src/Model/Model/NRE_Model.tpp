@@ -15,7 +15,7 @@
                     throw (Exception::FileNotExistingException(path.getPath()));
                 }
                 Assimp::Importer importer;
-                const aiScene* scene = importer.ReadFile(path.getPath().getData(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+                const aiScene* scene = importer.ReadFile(path.getPath().getData(), aiProcess_Triangulate | aiProcess_CalcTangentSpace);
     
                 if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
                     throw (Exception::AssimpException(importer.GetErrorString()));
@@ -62,7 +62,7 @@
                 }
             }
     
-            inline Mesh* Model::processMesh(aiMesh *mesh) {
+            inline Mesh* Model::processMesh(aiMesh* mesh) {
                 GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
     
                 buffer->reserve(mesh->mNumVertices);
