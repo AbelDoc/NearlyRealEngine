@@ -68,6 +68,10 @@
                     static_cast <RenderBuffer*> (captureBuffer.getDepthBuffer())->allocate(GL_DEPTH_COMPONENT24, 32, 32);
                 captureBuffer.unbind();
                 
+                map.bind();
+                    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+                map.unbind();
+                
                 ProgramManager::get<Irradiance>()->bind();
                     map.bind();
                         glViewport(0, 0, 32, 32);
@@ -110,6 +114,10 @@
                         captureBuffer.unbind();
                     map.unbind();
                 ProgramManager::get<Prefilter>()->unbind();
+    
+                prefilter.bind();
+                    glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+                prefilter.unbind();
                 
                 ProgramManager::get<BRDF>()->bind();
                     captureBuffer.bind();

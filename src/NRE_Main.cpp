@@ -39,6 +39,7 @@
             //## Constructor ##//
                 DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj") {
                     glEnable(GL_DEPTH_TEST);
+                    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
                     /*glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);*/
                 }
@@ -75,7 +76,7 @@
                     Entity s = Singleton<EntityManager>::get().create();
                     s.assign<Renderable>(&ship);
     
-                    Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_HD.hdr");
+                    Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
                     Singleton<SystemManager>::get().configure();
                 }
                 void update() override {

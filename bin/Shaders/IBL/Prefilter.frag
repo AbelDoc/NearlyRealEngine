@@ -10,6 +10,19 @@
 
     const float PI = 3.14159265359;
 
+    float DistributionGGX(vec3 N, vec3 H, float roughness) {
+        float a = roughness*roughness;
+        float a2 = a*a;
+        float NdotH = max(dot(N, H), 0.0);
+        float NdotH2 = NdotH*NdotH;
+
+        float nom   = a2;
+        float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+        denom = PI * denom * denom;
+
+        return nom / denom;
+    }
+
     float radicalInverse_VdC(uint bits) {
         bits = (bits << 16u) | (bits >> 16u);
         bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
@@ -58,7 +71,19 @@
 
             float NdotL = max(dot(N, L), 0.0);
             if (NdotL > 0.0) {
-                prefilteredColor += texture(skyBox, L).rgb * NdotL;
+                // sample from the environment's mip level based on roughness/pdf
+                float D   = DistributionGGX(N, H, roughness);
+                float NdotH = max(dot(N, H), 0.0);
+                float HdotV = max(dot(H, V), 0.0);
+                float pdf = D * NdotH / (4.0 * HdotV) + 0.0001;
+
+                float resolution = 2048.0; // resolution of source cubemap (per face)
+                float saTexel  = 4.0 * PI / (6.0 * resolution * resolution);
+                float saSample = 1.0 / (float(SAMPLE_COUNT) * pdf + 0.0001);
+
+                float mipLevel = roughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel);
+
+                prefilteredColor += textureLod(skyBox, L, mipLevel).rgb * NdotL;
                 totalWeight      += NdotL;
             }
         }
