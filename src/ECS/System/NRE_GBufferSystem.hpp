@@ -11,7 +11,9 @@
 
      #include <Header/NRE_ECS.hpp>
     
-     #include "../Component/Renderable/NRE_Renderable.hpp"
+     #include "../Component/Renderable/NRE_Terrain.hpp"
+     #include "../Component/Renderable/NRE_Water.hpp"
+     #include "../Component/Renderable/NRE_Model.hpp"
     
      #include "../../Header/NRE_Shader.hpp"
      #include "../../Header/NRE_Renderer.hpp"
@@ -34,6 +36,7 @@
             class GBufferSystem : public System<GBufferSystem> {
                 private:    //Fields
                     Camera::Camera const& camera;
+                    float time;
 
                 public:    // Methods
                     //## Constructor ##//
@@ -41,7 +44,7 @@
                          * Construct the GBuffer system from the application's camera
                          * @param c the application's camera
                          */
-                        GBufferSystem(Camera::Camera const& c) : camera(c) {
+                        GBufferSystem(Camera::Camera const& c) : camera(c), time(0) {
                         }
 
                     //## Methods ##//
@@ -51,16 +54,53 @@
                         void update() override {
                             using namespace Renderer;
                             using namespace Utility;
+                            time += Time::Clock::TIMESTEP;
                             
-                            auto shader = ProgramManager::get<GBuffer>();
-                            shader->bind();
-                                shader->sendMatrix(camera.getProjection()  * camera.getView());
-                                Singleton<EntityManager>::get().each<Renderable>([this](Entity, Renderable& r) {
-                                    if (r.model->canBeDrawn()) {
-                                        r.model->draw();
+                            auto terrain = ProgramManager::get<Renderer::Terrain>();
+                            auto water = ProgramManager::get<Renderer::Water>();
+                            auto model = ProgramManager::get<Renderer::Model>();
+                            auto VP = camera.getProjection()  * camera.getView();
+                            terrain->bind();
+                                terrain->sendMatrix(VP);
+                                bindTexture(Singleton<MaterialManager>::get().getAlbedos(), 0);
+                                bindTexture(Singleton<MaterialManager>::get().getNormals(), 1);
+                                bindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
+                                bindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
+                                Singleton<EntityManager>::get().each<ECS::Terrain>([this](Entity, ECS::Terrain& t) {
+                                    if (t.mesh->canBeDrawn()) {
+                                        t.mesh->draw();
                                     }
                                 });
-                            shader->unbind();
+                                unbindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
+                                unbindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
+                                unbindTexture(Singleton<MaterialManager>::get().getNormals(), 1);
+                                unbindTexture(Singleton<MaterialManager>::get().getAlbedos(), 0);
+                            terrain->unbind();
+                            water->bind();
+                                water->sendMatrix(VP);
+                                water->sendTime(time);
+                                Singleton<EntityManager>::get().each<ECS::Water>([this](Entity, ECS::Water& w) {
+                                    if (w.mesh->canBeDrawn()) {
+                                        w.mesh->draw();
+                                    }
+                                });
+                            water->unbind();
+                            model->bind();
+                                bindTexture(Singleton<MaterialManager>::get().getAlbedos(), 0);
+                                bindTexture(Singleton<MaterialManager>::get().getNormals(), 1);
+                                bindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
+                                bindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
+                                Singleton<EntityManager>::get().each<ECS::Model>([this, &model](Entity, ECS::Model& m) {
+                                    if (m.mesh->canBeDrawn()) {
+                                        model->sendMatrix(camera.getProjection()  * camera.getView() * m.model);
+                                        m.mesh->draw();
+                                    }
+                                });
+                                unbindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
+                                unbindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
+                                unbindTexture(Singleton<MaterialManager>::get().getNormals(), 1);
+                                unbindTexture(Singleton<MaterialManager>::get().getAlbedos(), 0);
+                            model->unbind();
                         }
 
             };

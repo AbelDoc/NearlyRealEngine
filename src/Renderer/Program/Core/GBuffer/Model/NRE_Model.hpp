@@ -1,9 +1,9 @@
 
     /**
-     * @file NRE_InstancedGBuffer.hpp
-     * @brief Declaration of Engine's Renderer's Object : InstancedGBuffer
+     * @file NRE_Model.hpp
+     * @brief Declaration of Engine's Renderer's Object : Model
      * @author Louis ABEL
-     * @date 24/09/2018
+     * @date 15/04/2020
      * @copyright CC-BY-NC-SA
      */
 
@@ -23,16 +23,16 @@
         namespace Renderer {
 
             /**
-             * @class InstancedGBuffer
-             * @brief Manage a gbuffer shader to draw simple 3D primitives in a buffer
+             * @class Model
+             * @brief Manage a gbuffer shader to draw textured model
              */
-            class InstancedGBuffer : public AbstractProgram<InstancedGBuffer> {
+            class Model : public AbstractProgram<Model> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        InstancedGBuffer() {
+                        Model() {
                             load();
                         }
 
@@ -41,21 +41,34 @@
                          * Add program's stages
                          */
                         void addStages() override {
-                            addStage<VertexShader>("GBuffer/InstancedGBuffer.vert");
-                            addStage<FragmentShader>("GBuffer/InstancedGBuffer.frag");
+                            addStage<VertexShader>("GBuffer/Model.vert");
+                            addStage<FragmentShader>("GBuffer/Model.frag");
                         }
                         /**
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("PV");
+                            addUniform("MVP");
+                            addUniform("texAlbedos");
+                            addUniform("texNormals");
+                            addUniform("texRoughness");
+                            addUniform("texMetallics");
+                        }
+                        /**
+                         * Send textures binding point to the shader
+                         */
+                        void sendTexture() const {
+                            use1I("texAlbedos", 0);
+                            use1I("texNormals", 1);
+                            use1I("texRoughness", 2);
+                            use1I("texMetallics", 3);
                         }
                         /**
                          * Send a matrix to the shader
                          * @param m the matrix
                          */
                         void sendMatrix(Math::Matrix4x4<float> const& m) const {
-                            useMat4("PV", 1, &m);
+                            useMat4("MVP", 1, &m);
                         }
             };
         }

@@ -1,9 +1,9 @@
 
     /**
-     * @file NRE_Water.hpp
-     * @brief Declaration of Engine's Renderer's Object : Water
+     * @file NRE_Terrain.hpp
+     * @brief Declaration of Engine's Renderer's Object : Terrain
      * @author Louis ABEL
-     * @date 24/09/2018
+     * @date 15/04/2020
      * @copyright CC-BY-NC-SA
      */
 
@@ -23,16 +23,16 @@
         namespace Renderer {
 
             /**
-             * @class Water
-             * @brief Manage a water shader to draw fluid in a buffer
+             * @class Terrain
+             * @brief Manage a gbuffer shader to draw triplanar terrain
              */
-            class Water : public AbstractProgram<Water> {
+            class Terrain : public AbstractProgram<Terrain> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        Water() {
+                        Terrain() {
                             load();
                         }
 
@@ -41,15 +41,27 @@
                          * Add program's stages
                          */
                         void addStages() override {
-                            addStage<VertexShader>("Water/Water.vert");
-                            addStage<FragmentShader>("Water/Water.frag");
+                            addStage<VertexShader>("GBuffer/Terrain.vert");
+                            addStage<FragmentShader>("GBuffer/Terrain.frag");
                         }
                         /**
                          * Add program's uniforms
                          */
                         void addUniforms() override {
                             addUniform("MVP");
-                            addUniform("time");
+                            addUniform("texAlbedos");
+                            addUniform("texNormals");
+                            addUniform("texRoughness");
+                            addUniform("texMetallics");
+                        }
+                        /**
+                         * Send textures binding point to the shader
+                         */
+                        void sendTexture() const {
+                            use1I("texAlbedos", 0);
+                            use1I("texNormals", 1);
+                            use1I("texRoughness", 2);
+                            use1I("texMetallics", 3);
                         }
                         /**
                          * Send a matrix to the shader
@@ -57,13 +69,6 @@
                          */
                         void sendMatrix(Math::Matrix4x4<float> const& m) const {
                             useMat4("MVP", 1, &m);
-                        }
-                        /**
-                         * Send the time to the shader
-                         * @param t the time
-                         */
-                        void sendTime(float t) const {
-                            use1F("time", t);
                         }
             };
         }

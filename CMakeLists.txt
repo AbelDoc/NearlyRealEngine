@@ -46,18 +46,32 @@ include_directories(src/GL/Texture/Texture2DArray)
 include_directories(src/GL/VBO)
 include_directories(src/GL/VBO/IBO)
 include_directories(src/GL/VBO/Layout)
-include_directories(src/GL/VBO/Layout/Primitive)
+include_directories(src/GL/VBO/Layout/Matrix)
+include_directories(src/GL/VBO/Layout/Model)
+include_directories(src/GL/VBO/Layout/Point)
+include_directories(src/GL/VBO/Layout/Terrain)
+include_directories(src/GL/VBO/Layout/Water)
 include_directories(src/Header)
 include_directories(src/ECS/System)
 include_directories(src/ECS/Component)
 include_directories(src/lib/FastNoise)
 include_directories(src/Renderer/Program)
 include_directories(src/Renderer/Program/Core)
-include_directories(src/Renderer/Program/Core/Debug)
-include_directories(src/Renderer/Program/Core/Debug/Normal)
-include_directories(src/Renderer/Program/Core/Primitive)
-include_directories(src/Renderer/Program/Core/Primitive/2D)
-include_directories(src/Renderer/Program/Core/Primitive/3D)
+include_directories(src/Renderer/Program/Core/SSAO)
+include_directories(src/Renderer/Program/Core/PBR)
+include_directories(src/Renderer/Program/Core/SkyBox)
+include_directories(src/Renderer/Program/Core/SkyBox/Capture)
+include_directories(src/Renderer/Program/Core/SkyBox/SkyBox)
+include_directories(src/Renderer/Program/Core/Shadow)
+include_directories(src/Renderer/Program/Core/Shadow/Shadow)
+include_directories(src/Renderer/Program/Core/IBL)
+include_directories(src/Renderer/Program/Core/IBL/BRDF)
+include_directories(src/Renderer/Program/Core/IBL/Irradiance)
+include_directories(src/Renderer/Program/Core/IBL/Prefilter)
+include_directories(src/Renderer/Program/Core/GBuffer)
+include_directories(src/Renderer/Program/Core/GBuffer/Model)
+include_directories(src/Renderer/Program/Core/GBuffer/Terrain)
+include_directories(src/Renderer/Program/Core/GBuffer/Water)
 include_directories(src/Renderer/Program/Manager)
 include_directories(src/Renderer/Program/Shader)
 include_directories(src/Renderer/Program/Shader/Fragment)
@@ -76,59 +90,92 @@ include_directories(src/Model/Mesh)
 include_directories(src/Model/TypedMesh)
 include_directories(src/Model/CullableMesh)
 include_directories(src/Physics)
-include_directories(src/Physics/Mesh)
+include_directories(src/Physics/Cube)
+include_directories(src/Physics/Cube/Mesh)
+include_directories(src/Physics/Rectangle)
+include_directories(src/Physics/Rectangle/Mesh)
+include_directories(src/Physics/Sphere)
+include_directories(src/Physics/Sphere/Mesh)
 include_directories(src/World)
 include_directories(src/World/Chunk)
+include_directories(src/World/Mesh)
 include_directories(src/World/Factory)
 include_directories(src/World/Polygonizer)
 
 set(COMPILE_LIST
         src/Camera/Perspective/NRE_PerspectiveCamera.hpp
+        src/Camera/Perspective/NRE_PerspectiveCamera.tpp
+        src/Camera/Orthographic/NRE_OrthographicCamera.hpp
+        src/Camera/Orthographic/NRE_OrthographicCamera.tpp
         src/Camera/NRE_Camera.hpp
+        src/Camera/NRE_Camera.tpp
+        src/ECS/Component/Light/NRE_Light.hpp
+        src/ECS/Component/Renderable/NRE_Terrain.hpp
+        src/ECS/Component/Renderable/NRE_Model.hpp
+        src/ECS/Component/Renderable/NRE_Water.hpp
+        src/ECS/System/NRE_DeferredSystem.hpp
+        src/ECS/System/NRE_GBufferSystem.hpp
+        src/ECS/System/NRE_ShadowSystem.hpp
+        src/Exception/NRE_AssimpException.hpp
         src/Exception/NRE_GLException.hpp
         src/Exception/NRE_ShaderException.hpp
         src/Exception/NRE_STBException.hpp
         src/GL/Buffer/Array/Attribute/NRE_AttributeBuffer.hpp
+        src/GL/Buffer/Array/Attribute/NRE_AttributeBuffer.tpp
         src/GL/Buffer/Array/Element/NRE_ElementBuffer.hpp
+        src/GL/Buffer/Array/Element/NRE_ElementBuffer.tpp
         src/GL/Buffer/Array/Uniform/NRE_UniformBuffer.hpp
+        src/GL/Buffer/Array/Uniform/NRE_UniformBuffer.tpp
         src/GL/Buffer/Array/NRE_ArrayBuffer.hpp
+        src/GL/Buffer/Array/NRE_ArrayBuffer.tpp
         src/GL/Buffer/Attachable/RenderBuffer/NRE_RenderBuffer.hpp
+        src/GL/Buffer/Attachable/RenderBuffer/NRE_RenderBuffer.tpp
         src/GL/Buffer/Attachable/Texture/2D/NRE_Texture2DBuffer.hpp
+        src/GL/Buffer/Attachable/Texture/2D/NRE_Texture2DBuffer.tpp
         src/GL/Buffer/Attachable/Texture/3D/NRE_Texture3DBuffer.hpp
+        src/GL/Buffer/Attachable/Texture/3D/NRE_Texture3DBuffer.tpp
         src/GL/Buffer/Attachable/Texture/CubeMap/NRE_CubeMap.hpp
+        src/GL/Buffer/Attachable/Texture/CubeMap/NRE_CubeMap.tpp
         src/GL/Buffer/Attachable/Texture/NRE_TextureBuffer.hpp
+        src/GL/Buffer/Attachable/Texture/NRE_TextureBuffer.tpp
         src/GL/Buffer/Attachable/NRE_Attachable.hpp
+        src/GL/Buffer/Attachable/NRE_Attachable.tpp
         src/GL/Buffer/FrameBuffer/NRE_FrameBuffer.hpp
+        src/GL/Buffer/FrameBuffer/NRE_FrameBuffer.tpp
         src/GL/Buffer/VAO/NRE_VAO.hpp
+        src/GL/Buffer/VAO/NRE_VAO.tpp
         src/GL/FBO/NRE_FBO.hpp
+        src/GL/FBO/NRE_FBO.tpp
+        src/GL/Texture/Material/NRE_Material.hpp
+        src/GL/Texture/Material/NRE_Material.tpp
+        src/GL/Texture/Material/Array/NRE_MaterialArray.hpp
+        src/GL/Texture/Material/Array/NRE_MaterialArray.tpp
         src/GL/Texture/SkyBox/NRE_SkyBox.cpp
         src/GL/Texture/SkyBox/NRE_SkyBox.hpp
-        src/GL/Texture/Material/NRE_Material.hpp
-        src/GL/Texture/Material/Array/NRE_MaterialArray.hpp
+        src/GL/Texture/SkyBox/NRE_SkyBox.tpp
         src/GL/Texture/Surface/NRE_Surface.hpp
+        src/GL/Texture/Surface/NRE_Surface.tpp
         src/GL/Texture/Texture2D/NRE_Texture2D.hpp
+        src/GL/Texture/Texture2D/NRE_Texture2D.tpp
         src/GL/Texture/Texture2DArray/NRE_Texture2DArray.hpp
+        src/GL/Texture/Texture2DArray/NRE_Texture2DArray.tpp
         src/GL/VBO/IBO/NRE_IBO.hpp
+        src/GL/VBO/IBO/NRE_IBO.tpp
         src/GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp
-        src/GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp
+        src/GL/VBO/Layout/Model/NRE_ModelVertex.hpp
         src/GL/VBO/Layout/Point/NRE_PointVertex.hpp
-        src/GL/VBO/Layout/Material/NRE_MaterialVertex.hpp
+        src/GL/VBO/Layout/Terrain/NRE_TerrainVertex.hpp
+        src/GL/VBO/Layout/Water/NRE_WaterVertex.hpp
         src/GL/VBO/Layout/NRE_Layout.hpp
         src/GL/VBO/NRE_AbstractVBO.hpp
+        src/GL/VBO/NRE_AbstractVBO.tpp
         src/GL/VBO/NRE_VBO.hpp
+        src/GL/VBO/NRE_VBO.tpp
         src/GL/NRE_GL.cpp
         src/GL/NRE_GL.hpp
         src/GL/NRE_GL.tpp
         src/GL/NRE_GLUtils.hpp
         src/GL/NRE_GLUtils.tpp
-        src/ECS/System/NRE_DeferredSystem.hpp
-        src/ECS/System/NRE_DebugDeferredSystem.hpp
-        src/ECS/System/NRE_FlockSystem.hpp
-        src/ECS/System/NRE_GBufferSystem.hpp
-        src/ECS/System/NRE_InstancedGBufferSystem.hpp
-        src/ECS/Component/Light/NRE_Light.hpp
-        src/ECS/Component/Renderable/NRE_Renderable.hpp
-        src/ECS/Component/Renderable/NRE_InstancedRenderable.hpp
         src/Header/NRE_Buffer.hpp
         src/Header/NRE_Camera.hpp
         src/Header/NRE_Core.hpp
@@ -137,53 +184,24 @@ set(COMPILE_LIST
         src/Header/NRE_GL.hpp
         src/Header/NRE_GLUtils.hpp
         src/Header/NRE_Model.hpp
-        src/Header/NRE_Shader.hpp
-        src/Header/NRE_Utility.hpp
-        src/Header/NRE_Texture.hpp
-        src/Header/NRE_Renderer.hpp
         src/Header/NRE_Physics.hpp
+        src/Header/NRE_Renderer.hpp
+        src/Header/NRE_Shader.hpp
+        src/Header/NRE_Texture.hpp
+        src/Header/NRE_Utility.hpp
         src/Header/NRE_World.hpp
         src/lib/FastNoise/FastNoise.cpp
         src/lib/FastNoise/FastNoise.h
-        src/Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp
-        src/Renderer/Program/Core/GBuffer/GBuffer/NRE_GBuffer.hpp
-        src/Renderer/Program/Core/GBuffer/InstancedGBuffer/NRE_InstancedGBuffer.hpp
-        src/Renderer/Program/Core/IBL/BRDF/NRE_BRDF.hpp
-        src/Renderer/Program/Core/IBL/Irradiance/NRE_Irradiance.hpp
-        src/Renderer/Program/Core/IBL/Prefilter/NRE_Prefilter.hpp
-        src/Renderer/Program/Core/PBR/NRE_PBR.hpp
-        src/Renderer/Program/Core/SkyBox/Capture/NRE_Capture.hpp
-        src/Renderer/Program/Core/SkyBox/SkyBox/NRE_SkyBox.hpp
-        src/Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp
-        src/Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp
-        src/Renderer/Program/Core/Primitive/Instanced3D/NRE_InstancedPrimitive3D.hpp
-        src/Renderer/Program/Manager/NRE_ProgramManager.hpp
-        src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp
-        src/Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp
-        src/Renderer/Program/Shader/Vertex/NRE_VertexShader.hpp
-        src/Renderer/Program/Shader/NRE_Shader.cpp
-        src/Renderer/Program/Shader/NRE_Shader.hpp
-        src/Renderer/Program/Uniforms/NRE_Uniforms.hpp
-        src/Renderer/Program/NRE_AbstractProgram.hpp
-        src/Renderer/Program/NRE_Program.cpp
-        src/Renderer/Program/NRE_Program.hpp
-        src/Renderer/Material/NRE_MaterialManager.hpp
-        src/Renderer/SSAO/NRE_SSAO.hpp
-        src/Renderer/SSAO/NRE_SSAO.tpp
-        src/Renderer/Deferred/NRE_DeferredRenderer.hpp
-        src/Utility/Interfaces/Allocable/NRE_Allocable.hpp
-        src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
-        src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
-        src/Model/Mesh/NRE_Mesh.hpp
-        src/Model/Mesh/NRE_Mesh.tpp
-        src/Model/Model/NRE_Model.hpp
-        src/Model/Model/NRE_Model.tpp
-        src/Model/Model/Instanced/NRE_InstancedModel.hpp
-        src/Model/Model/Instanced/NRE_InstancedModel.tpp
-        src/Model/TypedMesh/NRE_TypedMesh.hpp
-        src/Model/TypedMesh/NRE_TypedMesh.tpp
         src/Model/CullableMesh/NRE_CullableMesh.hpp
         src/Model/CullableMesh/NRE_CullableMesh.tpp
+        src/Model/Mesh/NRE_Mesh.hpp
+        src/Model/Mesh/NRE_Mesh.tpp
+        src/Model/Model/Instanced/NRE_InstancedModel.hpp
+        src/Model/Model/Instanced/NRE_InstancedModel.tpp
+        src/Model/Model/NRE_Model.hpp
+        src/Model/Model/NRE_Model.tpp
+        src/Model/TypedMesh/NRE_TypedMesh.hpp
+        src/Model/TypedMesh/NRE_TypedMesh.tpp
         src/Physics/Sphere/NRE_Sphere.hpp
         src/Physics/Sphere/NRE_Sphere.tpp
         src/Physics/Sphere/Mesh/NRE_SphereMesh.hpp
@@ -193,13 +211,56 @@ set(COMPILE_LIST
         src/Physics/Rectangle/NRE_Rectangle.hpp
         src/Physics/Rectangle/NRE_Rectangle.tpp
         src/Physics/Rectangle/Mesh/NRE_RectangleMesh.hpp
+        src/Renderer/Deferred/NRE_DeferredRenderer.hpp
+        src/Renderer/Deferred/NRE_DeferredRenderer.tpp
+        src/Renderer/Material/NRE_MaterialManager.hpp
+        src/Renderer/Material/NRE_MaterialManager.tpp
+        src/Renderer/Program/Core/GBuffer/Model/NRE_Model.hpp
+        src/Renderer/Program/Core/GBuffer/Terrain/NRE_Terrain.hpp
+        src/Renderer/Program/Core/GBuffer/Water/NRE_Water.hpp
+        src/Renderer/Program/Core/IBL/BRDF/NRE_BRDF.hpp
+        src/Renderer/Program/Core/IBL/Irradiance/NRE_Irradiance.hpp
+        src/Renderer/Program/Core/IBL/Prefilter/NRE_Prefilter.hpp
+        src/Renderer/Program/Core/PBR/NRE_PBR.hpp
+        src/Renderer/Program/Core/SkyBox/Capture/NRE_Capture.hpp
+        src/Renderer/Program/Core/SkyBox/SkyBox/NRE_SkyBox.hpp
+        src/Renderer/Program/Core/Shadow/Shadow/NRE_Shadow.hpp
+        src/Renderer/Program/Core/SSAO/NRE_SSAOEffect.hpp
+        src/Renderer/Program/Manager/NRE_ProgramManager.hpp
+        src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp
+        src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.tpp
+        src/Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp
+        src/Renderer/Program/Shader/Geometry/NRE_GeometryShader.tpp
+        src/Renderer/Program/Shader/Vertex/NRE_VertexShader.hpp
+        src/Renderer/Program/Shader/Vertex/NRE_VertexShader.tpp
+        src/Renderer/Program/Shader/NRE_Shader.cpp
+        src/Renderer/Program/Shader/NRE_Shader.hpp
+        src/Renderer/Program/Shader/NRE_Shader.tpp
+        src/Renderer/Program/Uniforms/NRE_Uniforms.hpp
+        src/Renderer/Program/Uniforms/NRE_Uniforms.tpp
+        src/Renderer/Program/NRE_AbstractProgram.hpp
+        src/Renderer/Program/NRE_Program.cpp
+        src/Renderer/Program/NRE_Program.hpp
+        src/Renderer/Program/NRE_Program.tpp
+        src/Renderer/SSAO/NRE_SSAO.hpp
+        src/Renderer/SSAO/NRE_SSAO.tpp
+        src/Utility/Interfaces/Allocable/NRE_Allocable.hpp
+        src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
+        src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
         src/World/Chunk/NRE_Chunk.hpp
+        src/World/Chunk/NRE_Chunk.tpp
+        src/World/Chunk/NRE_WaterChunk.hpp
+        src/World/Chunk/NRE_WaterChunk.tpp
         src/World/Factory/NRE_ChunkFactory.hpp
+        src/World/Factory/NRE_ChunkFactory.tpp
         src/World/Mesh/NRE_ChunkMesh.hpp
+        src/World/Mesh/NRE_WaterChunkMesh.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.cpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
+        src/World/Polygonizer/NRE_ChunkPolygonizer.tpp
         src/World/NRE_World.cpp
-        src/World/NRE_World.hpp)
+        src/World/NRE_World.hpp
+        src/World/NRE_World.tpp)
 
 set(EXEC_LIST
         ${COMPILE_LIST}

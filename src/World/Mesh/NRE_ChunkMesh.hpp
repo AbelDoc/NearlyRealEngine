@@ -35,7 +35,7 @@
                      * @return  the created buffer
                      */
                     static GL::AbstractVBO* create(World::Chunk const& o) {
-                        GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
+                        GL::IBO<GL::TerrainVertex>* buffer = new GL::IBO<GL::TerrainVertex>(GL_STATIC_DRAW);
                         World::ChunkPolygonizer::polygonize(o, *buffer, 0, World::ChunkPolygonizer::LEVELS[0]);
                         return buffer;
                     }

@@ -18,7 +18,7 @@
 
     const vec2 noiseOffset = vec2(1280.0 / 4.0, 720.0 / 4.0);
 
-    out vec4 fragData;
+    out vec3 fragData;
 
     vec4 WorldPosFromDepth(vec2 tc) {
         float z = texture(texDepth, tc).x * 2.0 - 1.0;
@@ -57,9 +57,9 @@
             }
 
             occlusion = 1 - (occlusion / float(MAX_KERNEL_SIZE));
-            fragData = vec4(pow(occlusion, 2.0));
+            fragData = vec3(0, 0, pow(occlusion, 2.0));
         } else {
-            fragData = vec4(0.0, 0.0, 0.0, 0.0);
+            fragData = vec3(0);
         }
 
     }

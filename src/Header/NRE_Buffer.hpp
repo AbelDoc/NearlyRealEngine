@@ -13,10 +13,11 @@
     #include "../GL/VBO/NRE_AbstractVBO.hpp"
 
     #include "../GL/VBO/Layout/NRE_Layout.hpp"
-    #include "../GL/VBO/Layout/Primitive/NRE_PrimitiveVertex.hpp"
     #include "../GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp"
     #include "../GL/VBO/Layout/Point/NRE_PointVertex.hpp"
-    #include "../GL/VBO/Layout/Material/NRE_MaterialVertex.hpp"
+    #include "../GL/VBO/Layout/Terrain/NRE_TerrainVertex.hpp"
+    #include "../GL/VBO/Layout/Water/NRE_WaterVertex.hpp"
+    #include "../GL/VBO/Layout/Model/NRE_ModelVertex.hpp"
 
     #include "../GL/VBO/NRE_VBO.hpp"
     #include "../GL/VBO/IBO/NRE_IBO.hpp"

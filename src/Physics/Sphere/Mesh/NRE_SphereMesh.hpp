@@ -36,22 +36,23 @@
                  * @return  the created buffer
                  */
                 static GL::AbstractVBO* create(Physics::Sphere const& o) {
-                    using namespace NRE::Math;
+                    using namespace Math;
+                    using namespace GL;
                     
-                    GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
+                    IBO<ModelVertex>* buffer = new IBO<ModelVertex>(GL_STATIC_DRAW);
                     float rings = 50;
                     float sectors = 50;
                     
                     float x, y, z, xy, u, v;
                     
-                    float ringStep = static_cast <float> (Math::PI) / rings;
-                    float sectorStep = 2.0f * static_cast <float> (Math::PI) / sectors;
+                    float ringStep = static_cast <float> (PI) / rings;
+                    float sectorStep = 2.0f * static_cast <float> (PI) / sectors;
     
                     float sectorAngle, ringAngle;
                     float lengthInv = 1.0f / o.getRadius();
 
                     for (int r = 0; r <= static_cast <int> (rings); r++) {
-                        ringAngle = static_cast <float> (Math::PI) / 2.0f - static_cast <float> (r) * ringStep;
+                        ringAngle = static_cast <float> (PI) / 2.0f - static_cast <float> (r) * ringStep;
                         xy = o.getRadius() * std::cos(ringAngle);
                         z  = o.getRadius() * std::sin(ringAngle);
                         
@@ -61,15 +62,15 @@
                             x = xy * std::cos(sectorAngle);
                             y = xy * std::sin(sectorAngle);
                             
-                            Math::Vector3D<float> vertex(x, y, z);
-                            Math::Vector3D<float> normal(vertex * lengthInv);
-                            Math::Vector3D<float> tangent(Vector3D<float>(0, 1, 0) ^ normal);
+                            Vector3D<float> vertex(x, y, z);
+                            Vector3D<float> normal(vertex * lengthInv);
+                            Vector3D<float> tangent(Vector3D<float>(0, 1, 0) ^ normal);
 
                             u = static_cast <float> (s) / sectors;
                             v = static_cast <float> (r) / rings;
                             
-                            Math::Vector2D<float> uv(u, v);
-                            buffer->addData(vertex, normal, tangent, uv, Math::Vector3D<int>(3, 3, 3));
+                            Vector2D<float> uv(u, v);
+                            buffer->addData(vertex, normal, tangent, uv, 3);
                         }
                     }
     

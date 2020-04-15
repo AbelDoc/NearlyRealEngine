@@ -13,7 +13,7 @@
     #include "../Mesh/NRE_Mesh.hpp"
 
     #include "../../GL/VBO/IBO/NRE_IBO.hpp"
-    #include "../../GL/VBO/Layout/Material/NRE_MaterialVertex.hpp"
+    #include "../../GL/VBO/Layout/Model/NRE_ModelVertex.hpp"
 
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wfloat-equal"

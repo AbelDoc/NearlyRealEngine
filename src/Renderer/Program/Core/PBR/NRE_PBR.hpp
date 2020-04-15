@@ -57,17 +57,12 @@
                         void addUniforms() override {
                             addUniform("texDepth");
                             addUniform("texShadow");
+                            addUniform("texColor");
                             addUniform("texNormal");
-                            addUniform("texTangent");
-                            addUniform("texMaterials");
+                            addUniform("texMaterial");
                             addUniform("irradianceMap");
                             addUniform("prefilterMap");
                             addUniform("brdfLUT");
-                            addUniform("texAlbedos");
-                            addUniform("texNormals");
-                            addUniform("texRoughness");
-                            addUniform("texMetallics");
-                            addUniform("texDisplacements");
                             for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
                                 Utility::String base("lights[");
                                 base << i;
@@ -88,15 +83,10 @@
                             use1I("prefilterMap", 1);
                             use1I("brdfLUT", 2);
                             use1I("texDepth", 3);
-                            use1I("texNormal", 4);
-                            use1I("texTangent", 5);
-                            use1I("texMaterials", 6);
-                            use1I("texAlbedos", 7);
-                            use1I("texNormals", 8);
-                            use1I("texRoughness", 9);
-                            use1I("texMetallics", 10);
-                            use1I("texDisplacements", 11);
-                            use1I("texShadow", 12);
+                            use1I("texColor", 4);
+                            use1I("texNormal", 5);
+                            use1I("texMaterial", 6);
+                            use1I("texShadow", 7);
                         }
                         /**
                          * Send the inverse projection matrix to the shader

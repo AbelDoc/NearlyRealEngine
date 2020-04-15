@@ -10,8 +10,10 @@
      #pragma once
 
     #include <Header/NRE_ECS.hpp>
-    
-    #include "../Component/Renderable/NRE_Renderable.hpp"
+
+    #include "../Component/Renderable/NRE_Terrain.hpp"
+    #include "../Component/Renderable/NRE_Water.hpp"
+    #include "../Component/Renderable/NRE_Model.hpp"
     
     #include "../../Header/NRE_Shader.hpp"
     #include "../../Header/NRE_Renderer.hpp"
@@ -60,8 +62,15 @@
                             auto shader = ProgramManager::get<Shadow>();
                             shader->bind();
                                 shader->sendMatrix(lightCamera->getProjection() * lightCamera->getView());
-                                Singleton<EntityManager>::get().each<Renderable>([this](Entity, Renderable& r) {
-                                    r.model->draw();
+                                Singleton<EntityManager>::get().each<ECS::Terrain>([this](Entity, ECS::Terrain& t) {
+                                    t.mesh->draw();
+                                });
+                                Singleton<EntityManager>::get().each<ECS::Water>([this](Entity, ECS::Water& w) {
+                                    w.mesh->draw();
+                                });
+                                Singleton<EntityManager>::get().each<ECS::Model>([this, &shader](Entity, ECS::Model& m) {
+                                    shader->sendMatrix(lightCamera->getProjection() * lightCamera->getView() * m.model);
+                                    m.mesh->draw();
                                 });
                             shader->unbind();
                         }

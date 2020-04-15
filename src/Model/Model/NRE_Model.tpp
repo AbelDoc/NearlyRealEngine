@@ -63,10 +63,9 @@
             }
     
             inline Mesh* Model::processMesh(aiMesh* mesh) {
-                GL::IBO<GL::MaterialVertex>* buffer = new GL::IBO<GL::MaterialVertex>(GL_STATIC_DRAW);
+                GL::IBO<GL::ModelVertex>* buffer = new GL::IBO<GL::ModelVertex>(GL_STATIC_DRAW);
     
                 buffer->reserve(mesh->mNumVertices);
-                Math::Vector3D<int> materials(4, 4, 4);
                 for (int i = 0; i < static_cast <int> (mesh->mNumVertices); i++) {
                     Math::Vector3D<float> vector(mesh->mVertices[i].x,  mesh->mVertices[i].y, mesh->mVertices[i].z);
                     Math::Vector3D<float> normal(mesh->mNormals[i].x,   mesh->mNormals[i].y,  mesh->mNormals[i].z);
@@ -76,9 +75,9 @@
                         uv.setX(mesh->mTextureCoords[0][i].x);
                         uv.setY(mesh->mTextureCoords[0][i].y);
                     } else {
-                        uv.setCoord(-1, -1);
+                        uv.setCoord(0, 0);
                     }
-                    buffer->addData(vector, normal, tangent, uv, materials);
+                    buffer->addData(vector, normal, tangent, uv, 4);
                 }
         
                 for (int i = 0; i < static_cast <int> (mesh->mNumFaces); i++) {

@@ -14,13 +14,10 @@
     #include "../../Header/NRE_Shader.hpp"
     #include "../../Header/NRE_GLUtils.hpp"
     #include "../../Header/NRE_Renderer.hpp"
+    #include "../../Header/NRE_Physics.hpp"
     
-    #include "NRE_FlockSystem.hpp"
     #include "NRE_GBufferSystem.hpp"
-    #include "NRE_WaterSystem.hpp"
-    #include "NRE_InstancedGBufferSystem.hpp"
     #include "NRE_ShadowSystem.hpp"
-    #include "NRE_InstancedShadowSystem.hpp"
 
      /**
      * @namespace NRE
@@ -42,11 +39,11 @@
                     Renderer::DeferredRenderer renderer;       /**< The deferred renderer object */
                     Camera::Camera const& camera;              /**< The application's camera */
                     Camera::OrthographicCamera light;          /**< The light's camera */
-                    Model::RectangleMesh screen;               /**< The screen mesh */
+                    NRE::Model::RectangleMesh screen;               /**< The screen mesh */
                     Renderer::SSAO ssao;                       /**< The ssao object */
                     GL::SkyBox skyBox;                         /**< The skybox */
 
-            public:    // Methods
+                public:    // Methods
                     //## Constructor ##//
                         /**
                          * Construct the deferred system
@@ -57,11 +54,8 @@
                         DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), light(0, Math::Vector3D<float>(-64, 0, 0), Math::Vector2D<float>(256), Math::Vector2D<float>(0.1, 300.0f), 0 * Math::degree, -20 * Math::degree), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
                             GL::setViewport(screenSize);
     
-                            Utility::Singleton<SystemManager>::get().add<WaterSystem>(camera);
                             Utility::Singleton<SystemManager>::get().add<GBufferSystem>(camera);
-                            Utility::Singleton<SystemManager>::get().add<InstancedGBufferSystem>(camera);
                             Utility::Singleton<SystemManager>::get().add<ShadowSystem>();
-                            Utility::Singleton<SystemManager>::get().add<InstancedShadowSystem>();
                         }
                         
                     //## Methods ##//
@@ -76,11 +70,14 @@
                             
                             auto pbr = ProgramManager::get<PBR>();
                             auto ssaoEffect = ProgramManager::get<SSAOEffect>();
+                            auto terrain = ProgramManager::get<Renderer::Terrain>();
+                            auto model = ProgramManager::get<Renderer::Model>();
     
                             pbr->bind();
                                 pbr->sendTexture();
                                 pbr->sendInvProjection(invProjection);
                             pbr->unbind();
+                            
                             ssaoEffect->bind();
                                 ssaoEffect->sendKernel(ssao);
                                 ssaoEffect->sendTexture();
@@ -88,8 +85,15 @@
                                 ssaoEffect->sendInvProjection(invProjection);
                             ssaoEffect->unbind();
     
+                            terrain->bind();
+                                terrain->sendTexture();
+                            terrain->unbind();
+    
+                            model->bind();
+                                model->sendTexture();
+                            model->unbind();
+    
                             SystemManager::get<ShadowSystem>()->setLight(light);
-                            SystemManager::get<InstancedShadowSystem>()->setLight(light);
                         }
                         /**
                          * Perform the GBuffer pass
@@ -116,8 +120,6 @@
                                 setDepthFunction(GL_LESS);
 
                                 SystemManager::get<GBufferSystem>()->update();
-                                SystemManager::get<InstancedGBufferSystem>()->update();
-                                SystemManager::get<WaterSystem>()->update();
                             renderer.unbind();
                         }
                         /**
@@ -129,19 +131,19 @@
                             
                             renderer.bind();
                                 setDepthMask(false);
-                                setColorMask(false, false, false, true);
+                                setColorMask(false, false, true, false);
                     
                                 setDrawTargets(GL_COLOR_ATTACHMENT2);
                     
                                 ProgramManager::get<SSAOEffect>()->bind();
                                     bindTexture(renderer.getDepthBuffer(),  0);
-                                    bindTexture(renderer.getColorBuffer(0), 1);
+                                    bindTexture(renderer.getColorBuffer(1), 1);
                                     bindTexture(ssao.getNoise(), 2);
                         
                                     screen.draw();
                                     
                                     unbindTexture(ssao.getNoise(), 2);
-                                    unbindTexture(renderer.getColorBuffer(0), 1);
+                                    unbindTexture(renderer.getColorBuffer(1), 1);
                                     unbindTexture(renderer.getDepthBuffer(),  0);
                                 ProgramManager::get<SSAOEffect>()->unbind();
     
@@ -160,7 +162,6 @@
                                 glDisable(GL_CULL_FACE);
     
                                     SystemManager::get<ShadowSystem>()->update();
-                                    SystemManager::get<InstancedShadowSystem>()->update();
                                 glEnable(GL_CULL_FACE);
                                 GL::setViewport(renderer.getSize());
                             renderer.getShadowBuffer().unbind();
@@ -189,21 +190,11 @@
                                 bindTexture(renderer.getColorBuffer(0), 4);
                                 bindTexture(renderer.getColorBuffer(1), 5);
                                 bindTexture(renderer.getColorBuffer(2), 6);
-                                bindTexture(Singleton<MaterialManager>::get().getAlbedos(), 7);
-                                bindTexture(Singleton<MaterialManager>::get().getNormals(), 8);
-                                bindTexture(Singleton<MaterialManager>::get().getRoughness(), 9);
-                                bindTexture(Singleton<MaterialManager>::get().getMetallics(), 10);
-                                bindTexture(Singleton<MaterialManager>::get().getDisplacements(), 11);
-                                bindTexture(renderer.getShadowMap(), 12);
+                                bindTexture(renderer.getShadowMap(), 7);
                                 
                                     screen.draw();
     
-                                unbindTexture(renderer.getShadowMap(), 12);
-                                unbindTexture(Singleton<MaterialManager>::get().getDisplacements(), 11);
-                                unbindTexture(Singleton<MaterialManager>::get().getMetallics(), 10);
-                                unbindTexture(Singleton<MaterialManager>::get().getRoughness(), 9);
-                                unbindTexture(Singleton<MaterialManager>::get().getNormals(), 8);
-                                unbindTexture(Singleton<MaterialManager>::get().getAlbedos(), 7);
+                                unbindTexture(renderer.getShadowMap(), 7);
                                 unbindTexture(renderer.getColorBuffer(2), 6);
                                 unbindTexture(renderer.getColorBuffer(1), 5);
                                 unbindTexture(renderer.getColorBuffer(0), 4);
@@ -220,7 +211,7 @@
                         void update() override {
                             gBufferPass();
                             SSAOPass();
-                            //shadowPass();
+                            shadowPass();
                             PBRPass();
                         }
                         /**

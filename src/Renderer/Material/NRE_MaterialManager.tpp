@@ -10,14 +10,13 @@
     namespace NRE {
         namespace Renderer {
 
-            inline MaterialManager::MaterialManager() : materials(5) {
+            inline MaterialManager::MaterialManager() : materials(4) {
                 Utility::String resolution;
                 resolution << materials.MAX_RESOLUTION;
                 textures.emplaceBack("Data/Material/Mat_1/x" + resolution);
                 textures.emplaceBack("Data/Material/Mat_2/x" + resolution);
                 textures.emplaceBack("Data/Material/Mat_3/x" + resolution);
                 textures.emplaceBack("Data/Material/Mat_4/x" + resolution);
-                textures.emplaceBack("Data/Material/Mat_5/x" + resolution);
                 
                 int i = 0;
                 for (GL::Material& m : textures) {

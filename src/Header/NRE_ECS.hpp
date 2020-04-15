@@ -10,13 +10,11 @@
     #pragma once
     
     #include "../ECS/Component/Light/NRE_Light.hpp"
-    #include "../ECS/Component/Renderable/NRE_WaterSurface.hpp"
-    #include "../ECS/Component/Renderable/NRE_Renderable.hpp"
-    #include "../ECS/Component/Renderable/NRE_InstancedRenderable.hpp"
+    #include "../ECS/Component/Renderable/NRE_Terrain.hpp"
+    #include "../ECS/Component/Renderable/NRE_Water.hpp"
+    #include "../ECS/Component/Renderable/NRE_Model.hpp"
     
-    #include "../ECS/System/NRE_FlockSystem.hpp"
     #include "../ECS/System/NRE_DeferredSystem.hpp"
-    #include "../ECS/System/NRE_DebugDeferredSystem.hpp"
     #include "../ECS/System/NRE_GBufferSystem.hpp"
-    #include "../ECS/System/NRE_InstancedGBufferSystem.hpp"
+    #include "../ECS/System/NRE_ShadowSystem.hpp"
 

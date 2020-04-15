@@ -112,7 +112,7 @@
                         MaterialArray& operator =(MaterialArray && a) = default;
                         
                 public :    // Static
-                    static int constexpr MAX_RESOLUTION = 2048;
+                    static int constexpr MAX_RESOLUTION = 256;
             };
         }
     }

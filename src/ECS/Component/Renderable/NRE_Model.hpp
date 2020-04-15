@@ -1,17 +1,18 @@
 
     /**
-     * @file NRE_Renderable.hpp
-     * @brief Declaration of Engine's ECS's Object : Renderable
+     * @file NRE_Model.hpp
+     * @brief Declaration of Engine's ECS's Object : Model
      * @author Louis ABEL
-     * @date 08/01/2020
+     * @date 15/04/2020
      * @copyright CC-BY-NC-SA
      */
 
-     #pragma once
+    #pragma once
 
     #include <memory>
+    
+    #include "../../../Model/Model/NRE_Model.hpp"
 
-    #include "NRE_Model.hpp"
 
      /**
      * @namespace NRE
@@ -25,20 +26,21 @@
         namespace ECS {
 
             /**
-             * @class Renderable
+             * @class Model
              * @brief Manage a single drawable object
              */
-            class Renderable {
+            class Model {
                 public:    //Fields
-                    const Model::Model* model;    /**< The rendered model */
+                    const NRE::Model::Model* mesh;    /**< The rendered model */
+                    Math::Matrix4x4<float> model;     /**< The model matrix */
 
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Construct a renderable from a model
-                         * @param m the model to take the ownership
+                         * @param m the model
                          */
-                        Renderable(const Model::Model* m) : model(m) {
+                        Model(const NRE::Model::Model* m) : mesh(m), model(Math::Matrix4x4<float>::IDENTITY) {
                         }
             };
         }

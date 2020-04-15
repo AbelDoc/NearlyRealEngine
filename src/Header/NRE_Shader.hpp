@@ -14,20 +14,14 @@
     #include "../Renderer/Program/Shader/Vertex/NRE_VertexShader.hpp"
     #include "../Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp"
     #include "../Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp"
-
-    #include "../Renderer/Program/Core/Primitive/2D/NRE_Primitive2D.hpp"
-    #include "../Renderer/Program/Core/Primitive/3D/NRE_Primitive3D.hpp"
-    #include "../Renderer/Program/Core/Primitive/Instanced3D/NRE_InstancedPrimitive3D.hpp"
     
-    #include "../Renderer/Program/Core/Water/NRE_Water.hpp"
-    #include "../Renderer/Program/Core/GBuffer/GBuffer/NRE_GBuffer.hpp"
-    #include "../Renderer/Program/Core/GBuffer/InstancedGBuffer/NRE_InstancedGBuffer.hpp"
+    #include "../Renderer/Program/Core/GBuffer/Model/NRE_Model.hpp"
+    #include "../Renderer/Program/Core/GBuffer/Terrain/NRE_Terrain.hpp"
+    #include "../Renderer/Program/Core/GBuffer/Water/NRE_Water.hpp"
 
     #include "../Renderer/Program/Core/Shadow/Shadow/NRE_Shadow.hpp"
-    #include "../Renderer/Program/Core/Shadow/InstancedShadow/NRE_InstancedShadow.hpp"
     
     #include "../Renderer/Program/Core/PBR/NRE_PBR.hpp"
-    #include "../Renderer/Program/Core/Phong/NRE_Phong.hpp"
     
     #include "../Renderer/Program/Core/SSAO/NRE_SSAOEffect.hpp"
     
@@ -37,7 +31,5 @@
     
     #include "../Renderer/Program/Core/SkyBox/Capture/NRE_Capture.hpp"
     #include "../Renderer/Program/Core/SkyBox/SkyBox/NRE_SkyBox.hpp"
-
-    #include "../Renderer/Program/Core/Debug/Normal/NRE_DebugNormal.hpp"
 
     #include "../Renderer/Program/Manager/NRE_ProgramManager.hpp"
