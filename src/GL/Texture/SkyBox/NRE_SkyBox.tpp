@@ -39,9 +39,9 @@
             }
     
             inline void SkyBox::allocate() {
-                map.allocate(0, Surface(Math::Vector2D<GLsizei>(SIZE, SIZE), GL_RGB, GL_RGB16));
-                irradiance.allocate(0, Surface(Math::Vector2D<GLsizei>(32, 32), GL_RGB, GL_RGB16));
-                prefilter.allocate(0, Surface(Math::Vector2D<GLsizei>(256, 256), GL_RGB, GL_RGB16));
+                map.allocate(0, Surface(Math::Vector2D<GLsizei>(SIZE, SIZE), GL_RGB,  GL_RGB16F));
+                irradiance.allocate(0, Surface(Math::Vector2D<GLsizei>(32, 32), GL_RGB, GL_RGB16F));
+                prefilter.allocate(0, Surface(Math::Vector2D<GLsizei>(256, 256), GL_RGB, GL_RGB16F));
                 map.bind();
                     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // enable pre-filter mipmap sampling (combatting visible dots artifact)
                     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

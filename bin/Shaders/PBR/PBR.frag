@@ -220,7 +220,12 @@
 
             vec3 color = (ambient + Lo * (1.0 - shadow));
 
-            out_Color = vec4(color, 1.0);
+            float exposure = 5.0;
+            float gamma = 2.2;
+            vec3 mapped = vec3(1.0) - exp(-color * exposure);
+            mapped = pow(mapped, vec3(1.0 / gamma));
+
+            out_Color = vec4(mapped, 1.0);
         } else {
             out_Color = vec4(texture(texTangent, uv).rgb, 0.0);
         }

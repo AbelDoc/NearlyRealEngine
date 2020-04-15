@@ -71,7 +71,11 @@
                     });
                     
                     Entity l1 = Singleton<EntityManager>::get().create();
-                    l1.assign<Light>(Vector3D<float>(0, 20, 0), Vector3D<float>(900, 800, 600));
+                    Entity l2 = Singleton<EntityManager>::get().create();
+                    Entity l3 = Singleton<EntityManager>::get().create();
+                    l1.assign<Light>(Vector3D<float>(0, 0, 5), Vector3D<float>(10, 0, 0));
+                    l2.assign<Light>(Vector3D<float>(0, 0, -5), Vector3D<float>(0, 10, 0));
+                    l3.assign<Light>(Vector3D<float>(0, -20, 0), Vector3D<float>(200, 200, 200));
                     
                     Entity s = Singleton<EntityManager>::get().create();
                     s.assign<Renderable>(&ship);
