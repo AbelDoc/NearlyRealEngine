@@ -42,10 +42,12 @@
             World::World world;
             Vector<ChunkMesh*> chunks;
             Vector<WaterChunkMesh*> waters;
+            
+            bool attach;
         
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), shipRoll(0_deg), shipPosition(-10, 5, 10) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), shipRoll(0_deg), shipPosition(-10, 5, 10), attach(true) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
                     /*glEnable(GL_CULL_FACE);
@@ -58,21 +60,52 @@
                     NRE::System::System::get().showCursor(false);
                     addHandler<KeyEvent>([&](KeyEvent& event) {
                         if (event.isCode(KeyCode::Z)) {
-                            shipPosition += camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
+                            if (attach) {
+                                shipPosition += camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
+                            } else {
+                                camera.moveFront();
+                            }
                         } else if (event.isCode(KeyCode::S)) {
-                            shipPosition -= camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
+                            if (attach) {
+                                shipPosition -= camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
+                            } else {
+                                camera.moveBack();
+                            }
                         } else if (event.isCode(KeyCode::Q)) {
-                            shipPosition -= camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
+                            if (attach) {
+                                shipPosition -= camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
+                            } else {
+                                camera.moveLeft();
+                            }
                         } else if (event.isCode(KeyCode::D)) {
-                            shipPosition += camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
+                            if (attach) {
+                                shipPosition += camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
+                            } else {
+                                camera.moveRight();
+                            }
                         } else if (event.isCode(KeyCode::LEFT_SHIFT)) {
-                            shipPosition -= camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                            if (attach) {
+                                shipPosition -= camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                            } else {
+                                camera.moveDown();
+                            }
                         } else if (event.isCode(KeyCode::SPACE)) {
-                            shipPosition += camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                            if (attach) {
+                                shipPosition += camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                            } else {
+                                camera.moveUp();
+                            }
                         } else if (event.isCode(KeyCode::A)) {
-                            shipRoll -= 5.0f * Math::degree;
+                            if (attach) {
+                                shipRoll -= 5.0f * Math::degree;
+                            }
                         } else if (event.isCode(KeyCode::E)) {
-                            shipRoll += 5.0f * Math::degree;
+                            if (attach) {
+                                shipRoll += 5.0f * Math::degree;
+                            }
+                        } else if (event.isCode(KeyCode::T)) {
+                            attach = !attach;
+                            return true;
                         }
                         return false;
                     });
@@ -106,12 +139,14 @@
                 }
                 void update() override {
                     camera.update();
-                    camera.setEye(shipPosition - 20 * camera.getForward() + 5 * camera.getUp());
-                    shipModel->setIdentity();
-                    shipModel->translate(shipPosition);
-                    shipModel->rotate(camera.getYaw(), Vector3D<float>(0, -1, 0));
-                    shipModel->rotate(camera.getPitch(), Vector3D<float>(0, 0, 1));
-                    shipModel->rotate(shipRoll, Vector3D<float>(1, 0, 0));
+                    if (attach) {
+                        camera.setEye(shipPosition - 20 * camera.getForward() + 5 * camera.getUp());
+                        shipModel->setIdentity();
+                        shipModel->translate(shipPosition);
+                        shipModel->rotate(camera.getYaw(), Vector3D<float>(0, -1, 0));
+                        shipModel->rotate(camera.getPitch(), Vector3D<float>(0, 0, 1));
+                        shipModel->rotate(shipRoll, Vector3D<float>(1, 0, 0));
+                    }
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();
