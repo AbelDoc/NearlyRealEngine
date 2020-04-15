@@ -38,9 +38,25 @@
             inline Math::Matrix4x4<float> const& Camera::getProjection() const {
                 return projection;
             }
+            
+            inline Math::Angle Camera::getYaw() const {
+                return yaw;
+            }
+    
+            inline Math::Angle Camera::getPitch() const {
+                return pitch;
+            }
 
             inline void Camera::setEye(Math::Point3D<float> const& e) {
                 eye = e;
+            }
+            
+            inline void Camera::setYaw(Math::Angle y) {
+                yaw = y;
+            }
+            
+            inline void Camera::setPitch(Math::Angle p) {
+                pitch = p;
             }
             
             inline void Camera::updateView() {

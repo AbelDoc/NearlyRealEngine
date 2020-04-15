@@ -34,17 +34,22 @@
             PerspectiveCamera camera;
         
             Model::Model ship;
+            float shipSpeed;
+            Angle shipRoll;
+            Vector3D<float> shipPosition;
+            Matrix4x4<float>* shipModel;
+            
             World::World world;
             Vector<ChunkMesh*> chunks;
             Vector<WaterChunkMesh*> waters;
         
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj") {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), shipRoll(0_deg), shipPosition(-10, 5, 10) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-                    glEnable(GL_CULL_FACE);
-                        glCullFace(GL_BACK);
+                    /*glEnable(GL_CULL_FACE);
+                        glCullFace(GL_BACK);*/
                 }
 
             //## Methods ##//
@@ -53,17 +58,21 @@
                     NRE::System::System::get().showCursor(false);
                     addHandler<KeyEvent>([&](KeyEvent& event) {
                         if (event.isCode(KeyCode::Z)) {
-                            camera.moveFront();
+                            shipPosition += camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
                         } else if (event.isCode(KeyCode::S)) {
-                            camera.moveBack();
+                            shipPosition -= camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
                         } else if (event.isCode(KeyCode::Q)) {
-                            camera.moveLeft();
+                            shipPosition -= camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
                         } else if (event.isCode(KeyCode::D)) {
-                            camera.moveRight();
+                            shipPosition += camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
                         } else if (event.isCode(KeyCode::LEFT_SHIFT)) {
-                            camera.moveDown();
+                            shipPosition -= camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
                         } else if (event.isCode(KeyCode::SPACE)) {
-                            camera.moveUp();
+                            shipPosition += camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                        } else if (event.isCode(KeyCode::A)) {
+                            shipRoll -= 5.0f * Math::degree;
+                        } else if (event.isCode(KeyCode::E)) {
+                            shipRoll += 5.0f * Math::degree;
                         }
                         return false;
                     });
@@ -86,20 +95,23 @@
                     Entity l1 = Singleton<EntityManager>::get().create();
                     Entity l2 = Singleton<EntityManager>::get().create();
                     Entity l3 = Singleton<EntityManager>::get().create();
-                    l1.assign<Light>(Vector3D<float>(-10, 10, 15), Vector3D<float>(10, 0, 0));
-                    l2.assign<Light>(Vector3D<float>(-10, 10, 5), Vector3D<float>(0, 10, 0));
                     l3.assign<Light>(Vector3D<float>(-10, 10, 0), Vector3D<float>(200, 200, 200));
                     
                     Entity s = Singleton<EntityManager>::get().create();
                     s.assign<NRE::ECS::Model>(&ship);
-                    s.getComponent<NRE::ECS::Model>()->model.translate(Vector3D<float>(-10, 5, 10));
-                    s.getComponent<NRE::ECS::Model>()->model.rotate(90_deg, Vector3D<float>(0, 1, 0));
+                    shipModel = &s.getComponent<NRE::ECS::Model>()->model;
     
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
                     Singleton<SystemManager>::get().configure();
                 }
                 void update() override {
                     camera.update();
+                    camera.setEye(shipPosition - 20 * camera.getForward() + 5 * camera.getUp());
+                    shipModel->setIdentity();
+                    shipModel->translate(shipPosition);
+                    shipModel->rotate(camera.getYaw(), Vector3D<float>(0, -1, 0));
+                    shipModel->rotate(camera.getPitch(), Vector3D<float>(0, 0, 1));
+                    shipModel->rotate(shipRoll, Vector3D<float>(1, 0, 0));
                 }
                 void render() override {
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();

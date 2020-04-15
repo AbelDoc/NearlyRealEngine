@@ -101,6 +101,14 @@
                          * @return the camera's projection view
                          */
                         Math::Matrix4x4<float> const& getProjection() const;
+                        /**
+                         * @return the camera's yaw angle
+                         */
+                        Math::Angle getYaw() const;
+                        /**
+                         * @return the camera's pitch angle
+                         */
+                        Math::Angle getPitch() const;
     
                     //## Setter ##//
                         /**
@@ -108,6 +116,16 @@
                          * @param e the new eye position
                          */
                         void setEye(Math::Point3D<float> const& e);
+                        /**
+                         * Set the yaw angle
+                         * @param y the new angle
+                         */
+                        void setYaw(Math::Angle y);
+                        /**
+                         * Set the pitch angle
+                         * @param p the new angle
+                         */
+                        void setPitch(Math::Angle p);
 
                     //## Methods ##//
                         /**
