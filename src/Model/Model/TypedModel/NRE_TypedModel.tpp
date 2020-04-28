@@ -11,12 +11,22 @@
         namespace Model {
     
             template <class T>
-            inline TypedModel<T>::TypedModel(T const& o) : Model(ModelFactory<T>::create(o)) {
+            inline TypedModel<T>::TypedModel(const T* o) : Model(ModelFactory<T>::create(*o)), target(o) {
             }
     
             template <class T>
             template <class ... Args>
-            inline TypedModel<T>::TypedModel(Args && ... args) : Model(ModelFactory<T>::create(T(std::forward<Args>(args)...))) {
+            inline TypedModel<T>::TypedModel(Args && ... args) : Model(ModelFactory<T>::create(T(std::forward<Args>(args)...))), target(nullptr) {
+            }
+    
+            template <class T>
+            inline const T* TypedModel<T>::getTarget() const {
+                return target;
+            }
+    
+            template <class T>
+            inline void TypedModel<T>::setTarget(const T* t) {
+                target = t;
             }
     
         }

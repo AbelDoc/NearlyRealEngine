@@ -88,6 +88,20 @@
                          * @return the corresponding mesh
                          */
                         Mesh const& get(std::size_t index) const;
+                        /**
+                         * Query a mesh from the model
+                         * @param index the mesh's index
+                         * @return the corresponding casted mesh
+                         */
+                        template <class T>
+                        T& get(std::size_t index);
+                        /**
+                         * Query a mesh from the model
+                         * @param index the mesh's index
+                         * @return the corresponding casted mesh
+                         */
+                        template <class T>
+                        T const& get(std::size_t index) const;
     
                     //## Methods ##//
                         /**

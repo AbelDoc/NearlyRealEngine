@@ -25,7 +25,6 @@
             template <class T, class K = Math::Frustum, class Data = void*>
             class CullableModel : public TypedModel<T> {
                 private :   // Fields
-                    T& target;
                     const K* boundObject;
                     Data cacheData;
     
@@ -40,14 +39,14 @@
                          * @param o     the object to create the model
                          * @param bound the object to test if the model is visible
                          */
-                        CullableModel(T& o, const K* bound = nullptr);
+                        CullableModel(const T* o, const K* bound = nullptr);
         
                     //## Move Constructor ##//
                         /**
                          * Move m into this
                          * @param m the cullable model to move
                          */
-                        CullableModel(CullableModel && m);
+                        CullableModel(CullableModel && m) = default;
         
                     //## Deconstructor ##//
                         /**
@@ -78,7 +77,7 @@
                          * @param m cullable model to move into this
                          * @return  the reference of himself
                          */
-                        CullableModel& operator =(CullableModel && m);
+                        CullableModel& operator =(CullableModel && m) = default;
             };
         }
     }

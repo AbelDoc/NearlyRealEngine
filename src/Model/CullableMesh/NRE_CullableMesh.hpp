@@ -25,9 +25,8 @@
             template <class T, class K = Math::Frustum, class Data = void*>
             class CullableMesh : public TypedMesh<T> {
                 private :   // Fields
-                    T& target;
-                    const K* boundObject;
-                    Data cacheData;
+                    const K* boundObject;   /**< The object used to test the mesh's visibility */
+                    Data cacheData;         /**< A cached data used for visibilty test computation */
                 
                 public :    // Methods
                     //## Constructor ##//
@@ -36,18 +35,24 @@
                          */
                         CullableMesh() = delete;
                         /**
+                         * Construct a mesh from the mesh buffer, used for special cullable mesh construction
+                         * @param buffer the mesh buffer
+                         * @param bound  the object to test if the mesh is visible
+                         */
+                        CullableMesh(GL::AbstractVBO* buffer, const K* bound = nullptr);
+                        /**
                          * Construct the mesh with the target object
                          * @param o     the object to create the mesh
                          * @param bound the object to test if the mesh is visible
                          */
-                        CullableMesh(T& o, const K* bound = nullptr);
+                        CullableMesh(const T* o, const K* bound = nullptr);
     
                     //## Move Constructor ##//
                         /**
                          * Move m into this
                          * @param m the cullable mesh to move
                          */
-                        CullableMesh(CullableMesh && m);
+                        CullableMesh(CullableMesh && m) = default;
     
                     //## Deconstructor ##//
                         /**
@@ -78,7 +83,7 @@
                          * @param m cullable mesh to move into this
                          * @return  the reference of himself
                          */
-                        CullableMesh& operator =(CullableMesh && m);
+                        CullableMesh& operator =(CullableMesh && m) = default;
             };
             
         }

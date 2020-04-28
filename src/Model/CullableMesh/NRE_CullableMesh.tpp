@@ -9,13 +9,13 @@
     
     namespace NRE {
         namespace Model {
-            
+    
             template <class T, class K, class Data>
-            inline CullableMesh<T, K, Data>::CullableMesh(T& o, const K* bound) : TypedMesh<T>(o), target(o), boundObject(bound) {
+            inline CullableMesh<T, K, Data>::CullableMesh(GL::AbstractVBO* buffer, const K* bound) : TypedMesh<T>(buffer), boundObject(bound) {
             }
             
             template <class T, class K, class Data>
-            inline CullableMesh<T, K, Data>::CullableMesh(CullableMesh && m) : TypedMesh<T>(std::move(static_cast <TypedMesh<T> &&> (m))), target(m.target), boundObject(m.boundObject), cacheData(std::move(m.cacheData)) {
+            inline CullableMesh<T, K, Data>::CullableMesh(const T* o, const K* bound) : TypedMesh<T>(o), boundObject(bound) {
             }
             
             template <class T, class K, class Data>
@@ -26,17 +26,6 @@
             template <class T, class K, class Data>
             inline bool CullableMesh<T, K, Data>::canBeDrawn() const {
                 return Mesh::canBeDrawn() && inBound();
-            }
-    
-            template <class T, class K, class Data>
-            inline CullableMesh<T, K, Data>& CullableMesh<T, K, Data>::operator=(CullableMesh && m) {
-                if (this != &m) {
-                    TypedMesh<T>::operator=(std::move(m));
-                    target = m.target;
-                    boundObject = m.boundObject;
-                    cacheData = std::move(m.cacheData);
-                }
-                return *this;
             }
             
         }

@@ -20,6 +20,16 @@
             inline Mesh const& Model::get(std::size_t index) const {
                 return *(meshes[index]);
             }
+    
+            template <class T>
+            inline T& Model::get(std::size_t index) {
+                return *(static_cast <T*> (meshes[index].get()));
+            }
+    
+            template <class T>
+            inline T const& Model::get(std::size_t index) const {
+                return *(static_cast <const T*> (meshes[index].get()));
+            }
             
             inline Model::Model(IO::File const& path) {
                 if (!path.exist()) {

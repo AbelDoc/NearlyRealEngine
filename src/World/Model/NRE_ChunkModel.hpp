@@ -22,6 +22,8 @@
          * @brief Engine's Model module
          */
         namespace Model {
+    
+            typedef CullableMesh<World::Chunk, Math::Frustum, void*> ChunkMesh;
             
             /**
              * @class ModelFactory
@@ -72,19 +74,22 @@
                             layout.normal.normalize();
                             layout.position.setY(5);
                         }
+                        auto* terrain = new ChunkMesh(terrainBuffer);
+                        auto* water   = new ChunkMesh(waterBuffer);
                         
-                        meshes.emplaceBack(new Mesh(terrainBuffer));
-                        meshes.emplaceBack(new Mesh(waterBuffer));
+                        terrain->setTarget(&o);
+                        water->setTarget(&o);
+                        
+                        meshes.emplaceBack(terrain);
+                        meshes.emplaceBack(water);
                         return meshes;
                     }
             };
-    
-            typedef CullableModel<World::Chunk, Math::Frustum, void*> ChunkModel;
         
             template <>
-            inline bool ChunkModel::inBound() const {
+            inline bool ChunkMesh::inBound() const {
                 for (int i = 0; i < Math::FACE_NUM; i++) {
-                    Math::Vector3D<float> p = target.getPosition();
+                    Math::Vector3D<float> p = getTarget()->getPosition();
                     Math::Vector3D<float> const& normal = boundObject->getPlane(i).getNormal();
                     if (normal.getX() >= 0) {
                         p.setX(p.getX() + World::Chunk::SIZE_X);
@@ -101,5 +106,7 @@
                 }
                 return true;
             }
+            
+            typedef TypedModel<World::Chunk> ChunkModel;
         }
     }

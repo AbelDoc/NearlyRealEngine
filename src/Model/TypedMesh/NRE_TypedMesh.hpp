@@ -31,6 +31,9 @@
              */
             template <class T>
             class TypedMesh : public Mesh {
+                private : // Fields
+                    const T* target;      /**< The typed object */
+                    
                 public :    // Methods
                     //## Constructor ##//
                         /**
@@ -38,13 +41,18 @@
                          */
                         TypedMesh() = delete;
                         /**
-                         * Construct a mesh from the object to render
-                         * @param o the object to construct the mesh
+                         * Construct a mesh from the mesh buffer, used for special cullable mesh construction
+                         * @param buffer the mesh buffer
                          */
-                        TypedMesh(T const& o);
+                        TypedMesh(GL::AbstractVBO* buffer);
                         /**
                          * Construct a mesh from the object to render
-                         * @param args the parameters to construct the mesh objets
+                         * @param o the typed object used to construct the mesh
+                         */
+                        TypedMesh(const T* o);
+                        /**
+                         * Construct a mesh from the object to render
+                         * @param args the parameters to construct the mesh, doesn't keep the target in memory
                          */
                         template <class ... Args>
                         TypedMesh(Args && ... args);
@@ -61,6 +69,19 @@
                          * TypedMesh Deconstructor
                          */
                         ~TypedMesh() = default;
+    
+                    //## Getter ##//
+                        /**
+                         * @return the mesh's typed object
+                         */
+                        const T* getTarget() const;
+    
+                    //## Setter ##//
+                        /**
+                         * Set the mesh's typed object
+                         * @param t the new object
+                         */
+                        void setTarget(const T* t);
                     
                     //## Assignment Operator ##//
                         /**

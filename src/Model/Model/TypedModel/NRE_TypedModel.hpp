@@ -30,6 +30,9 @@
              */
             template <class T>
             class TypedModel : public Model {
+                private : // Fields
+                    const T* target;      /**< The typed object */
+    
                 public :    // Methods
                     //## Constructor ##//
                     /**
@@ -40,7 +43,7 @@
                      * Construct a model from the object to render
                      * @param o the object to construct the model
                      */
-                    TypedModel(T const& o);
+                    TypedModel(const T* o);
                     /**
                      * Construct a model from the object to render
                      * @param args the parameters to construct the model objets
@@ -61,6 +64,19 @@
                      */
                     ~TypedModel() = default;
     
+                //## Getter ##//
+                    /**
+                     * @return the model's typed object
+                     */
+                    const T* getTarget() const;
+    
+                //## Setter ##//
+                    /**
+                     * Set the model's typed object
+                     * @param t the new object
+                     */
+                    void setTarget(const T* t);
+        
                 //## Assignment Operator ##//
                     /**
                      * Move assignment of m into this

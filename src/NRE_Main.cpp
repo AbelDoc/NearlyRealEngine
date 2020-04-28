@@ -115,11 +115,15 @@
                     });
     
                     chunks.reserve(World::World::NB_CHUNKS);
-                    for (Chunk& c : world) {
+                    for (Chunk const& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
-                        chunks.emplaceBack(c, &camera.getFrustum());
-                        r.assign<ECS::Terrain>(chunks.getLast().get(0));
-                        r.assign<ECS::Water>(chunks.getLast().get(1));
+                        chunks.emplaceBack(&c);
+                        auto& terrain = chunks.getLast().get<ChunkMesh>(0);
+                        auto& water = chunks.getLast().get<ChunkMesh>(1);
+                        terrain.setBoundObject(&camera.getFrustum());
+                        water.setBoundObject(&camera.getFrustum());
+                        r.assign<ECS::Terrain>(terrain);
+                        r.assign<ECS::Water>(water);
                     }
                     
                     Entity l1 = Singleton<EntityManager>::get().create();
