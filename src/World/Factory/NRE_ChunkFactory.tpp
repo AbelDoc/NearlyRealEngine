@@ -10,20 +10,7 @@
      namespace NRE {
          namespace World {
 
-             inline void ChunkFactory::createSphere(Chunk& target) {
-                 std::size_t index = 0;
-                 for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
-                     for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
-                         for (std::size_t x = 0; x <= Chunk::SIZE_X; ++x) {
-                             target[index++] = static_cast <float> (Math::Vector3D<int>(static_cast <int> (x - Chunk::SIZE_X / 2) + target.getPosition().getX(),
-                                                                                        static_cast <int> (y - Chunk::SIZE_Y / 2) + target.getPosition().getY(),
-                                                                                        static_cast <int> (z - Chunk::SIZE_Z / 2) + target.getPosition().getZ()).normSquared());
-                         }
-                     }
-                 }
-             }
-
-             inline void ChunkFactory::createTerrain(Chunk& target, WaterChunk& water) {
+             inline void ChunkFactory::createTerrain(Chunk& target) {
                  FastNoise generator(16'09'2019);
 
                  for (std::size_t z = 0; z <= Chunk::SIZE_Z; ++z) {
@@ -43,9 +30,9 @@
                          for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                              float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY());
                              std::size_t index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
-                             target[index] = (ny - e) + 0.0001f;
+                             target.getTerrainVoxels()[index] = (ny - e) + 0.0001f;
                              if (e < 5) {
-                                 water[index] = ny - 0.0001f;
+                                 target.getWaterVoxels()[index] = ny - 0.0001f;
                              }
                          }
                      }

@@ -95,12 +95,12 @@
                          * Add a mesh in the model
                          * @param mesh the mesh to add
                          */
-                        virtual void addMesh(std::unique_ptr<Mesh> && mesh) override;
+                        virtual void add(std::unique_ptr<Mesh> && mesh) override;
                         /**
                          * Add a mesh in the model and take it's ownership
                          * @param mesh the mesh to add
                          */
-                        virtual void addMesh(Mesh* mesh) override;
+                        virtual void add(Mesh* mesh) override;
                         /**
                          * Draw the model
                          * @param mode     the drawing mode

@@ -13,16 +13,14 @@
      namespace NRE {
          namespace World {
 
-             World::World() : chunks(new Chunk[NB_CHUNKS]), waters(new WaterChunk[NB_CHUNKS]) {
+             World::World() : chunks(new Chunk[NB_CHUNKS]) {
                  std::size_t index = 0;
                  for (int y = 0; y < SIZE_Y; y++) {
                      for (int z = -H_SIZE_Z; z <= H_SIZE_Z; z++) {
                          for (int x = -H_SIZE_X; x <= H_SIZE_X; x++) {
-                             WaterChunk& water = waters[index];
                              Chunk& chunk = chunks[index++];
-                             water.setParent(&chunk);
                              chunk.setPosition({static_cast <int> (Chunk::SIZE_X) * x, static_cast <int> (Chunk::SIZE_Y) * y, static_cast <int> (Chunk::SIZE_Z) * z});
-                             ChunkFactory::createTerrain(chunk, water);
+                             ChunkFactory::createTerrain(chunk);
                          }
                      }
                  }

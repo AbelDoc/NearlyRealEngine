@@ -83,14 +83,14 @@
                          * Draw the mesh
                          * @param mode the drawing mode
                          */
-                        virtual void draw(GL::DrawMode mode = GL_TRIANGLES) const;
+                        void draw(GL::DrawMode mode = GL_TRIANGLES) const;
                         /**
                          * Draw the mesh as an instanced one
                          * @param drawData th draw extra data
                          * @param instance the number of instances
                          * @param mode     the drawing mode
                          */
-                        virtual void drawInstanced(int instance, GL::DrawMode mode = GL_TRIANGLES) const;
+                        void drawInstanced(int instance, GL::DrawMode mode = GL_TRIANGLES) const;
                         
                     //## Assignment Operator ##//
                         /**

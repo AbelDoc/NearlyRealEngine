@@ -1,20 +1,20 @@
     
     /**
-     * @file NRE_CullableMesh.hpp
-     * @brief Declaration of Engine's Model's Object : CullableMesh
+     * @file NRE_CullableModel.hpp
+     * @brief Declaration of Engine's Model's Object : CullableModel
      * @author Louis ABEL
-     * @date 25/10/2019
+     * @date 28/04/2020
      * @copyright CC-BY-NC-SA
      */
     
     #pragma once
     
-    #include "../Mesh/NRE_Mesh.hpp"
+    #include "../Model/NRE_Model.hpp"
     
     /**
-    * @namespace NRE
-    * @brief The NearlyRealEngine's global namespace
-    */
+     * @namespace NRE
+     * @brief The NearlyRealEngine's global namespace
+     */
     namespace NRE {
         /**
          * @namespace Model
@@ -23,65 +23,64 @@
         namespace Model {
         
             template <class T, class K = Math::Frustum, class Data = void*>
-            class CullableMesh : public TypedMesh<T> {
+            class CullableModel : public TypedModel<T> {
                 private :   // Fields
                     T& target;
                     const K* boundObject;
                     Data cacheData;
-                
+    
                 public :    // Methods
                     //## Constructor ##//
                         /**
                          * No default constructor
                          */
-                        CullableMesh() = delete;
+                        CullableModel() = delete;
                         /**
-                         * Construct the mesh with the target object
-                         * @param o     the object to create the mesh
-                         * @param bound the object to test if the mesh is visible
+                         * Construct the model with the target object
+                         * @param o     the object to create the model
+                         * @param bound the object to test if the model is visible
                          */
-                        CullableMesh(T& o, const K* bound = nullptr);
-    
+                        CullableModel(T& o, const K* bound = nullptr);
+        
                     //## Move Constructor ##//
                         /**
                          * Move m into this
-                         * @param m the cullable mesh to move
+                         * @param m the cullable model to move
                          */
-                        CullableMesh(CullableMesh && m);
-    
+                        CullableModel(CullableModel && m);
+        
                     //## Deconstructor ##//
                         /**
-                         * CullableMesh Deconstructor
+                         * CullableModel Deconstructor
                          */
-                        ~CullableMesh() = default;
-    
+                        ~CullableModel() = default;
+            
                     //## Setter ##//
                         /**
-                         * Set the cullable mesh's bound object
+                         * Set the cullable model's bound object
                          * @param bound the new bound object
                          */
                         void setBoundObject(const K* bound);
-                    
+        
                     //## Methods ##//
                         /**
                          * @return if target is in bound
                          */
                         bool inBound() const;
                         /**
-                         * @return if the mesh can be drawn
+                         * @return if the model can be drawn
                          */
                         bool canBeDrawn() const override;
-    
+        
                     //## Assignment Operator ##//
                         /**
                          * Move assignment of m into this
-                         * @param m cullable mesh to move into this
+                         * @param m cullable model to move into this
                          * @return  the reference of himself
                          */
-                        CullableMesh& operator =(CullableMesh && m);
+                        CullableModel& operator =(CullableModel && m);
             };
-            
         }
     }
 
-    #include "NRE_CullableMesh.tpp"
+    #include "NRE_CullableModel.tpp"

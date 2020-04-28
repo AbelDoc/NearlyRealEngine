@@ -10,6 +10,17 @@
     namespace NRE {
         namespace Model {
             
+            inline Model::Model(Utility::Vector<std::unique_ptr<Mesh>> && ms) : meshes(std::move(ms)) {
+            }
+            
+            inline Mesh& Model::get(std::size_t index) {
+                return *(meshes[index]);
+            }
+    
+            inline Mesh const& Model::get(std::size_t index) const {
+                return *(meshes[index]);
+            }
+            
             inline Model::Model(IO::File const& path) {
                 if (!path.exist()) {
                     throw (Exception::FileNotExistingException(path.getPath()));
@@ -21,18 +32,18 @@
                     throw (Exception::AssimpException(importer.GetErrorString()));
                 }
     
-                constructModel(scene->mRootNode, scene);
+                constructNode(scene->mRootNode, scene);
             }
             
             inline void Model::reserve(std::size_t capacity) {
                 meshes.reserve(capacity);
             }
     
-            inline void Model::addMesh(std::unique_ptr<Mesh> && mesh) {
+            inline void Model::add(std::unique_ptr<Mesh> && mesh) {
                 meshes.pushBack(std::move(mesh));
             }
     
-            inline void Model::addMesh(Mesh* mesh) {
+            inline void Model::add(Mesh* mesh) {
                 meshes.emplaceBack(mesh);
             }
             
@@ -51,14 +62,14 @@
                 }
             }
     
-            inline void Model::constructModel(aiNode *node, const aiScene* scene) {
+            inline void Model::constructNode(aiNode *node, const aiScene* scene) {
                 for (int i = 0; i < static_cast <int> (node->mNumMeshes); i++) {
                     aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-                    addMesh(processMesh(mesh));
+                    add(processMesh(mesh));
                 }
         
                 for (unsigned int i = 0; i < node->mNumChildren; i++) {
-                    constructModel(node->mChildren[i], scene);
+                    constructNode(node->mChildren[i], scene);
                 }
             }
     

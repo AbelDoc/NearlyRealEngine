@@ -29,7 +29,7 @@
              * @brief Manage the transformation of points cloud into a rendering mesh
              */
             class ChunkPolygonizer {
-                private :   // Structure
+                public :   // Structure
                     /**
                      * @struct IndexedData
                      * @brief Store indexed data from the model
@@ -39,7 +39,6 @@
                         std::uint32_t index;
                         float         nbAdd;
                     };
-
 
                 private :   // Static
                     static constexpr std::uint16_t edgeTable[256] = {
@@ -343,22 +342,16 @@
                 public :    // Static
                     /**
                      * Polygonize a chunk using the marching cubes algorithm
-                     * @param target    the chunk to polygonize
-                     * @param ibo       the indexed buffer to fill
-                     * @param threshold the polygonize threshold
-                     * @param level     the polygonization lod level
-                     * @param linear    use the linear interpolation
+                     * @param target       the voxels to polygonize
+                     * @param position     the chunk's position
+                     * @param ibo          the indexed buffer to fill
+                     * @param threshold    the polygonize threshold
+                     * @param level        the polygonization lod level
+                     * @param indexed      a map filled with mesh vertices
+                     * @param interpolator use the linear interpolation
                      */
-                    static void polygonize(Chunk const& target, GL::IBO<GL::TerrainVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
-                    /**
-                     * Polygonize a chunk water using the marching cubes algorithm
-                     * @param target    the chunk to polygonize
-                     * @param ibo       the indexed buffer to fill
-                     * @param threshold the polygonize threshold
-                     * @param level     the polygonization lod level
-                     * @param linear    use the linear interpolation
-                     */
-                    static void polygonize(WaterChunk const& target, GL::IBO<GL::WaterVertex>& ibo, float threshold, LODLevel level, Interpolator interpolator = interpolateLinearVertex);
+                    template <class Layout>
+                    static void polygonize(Chunk::VoxelsContainer const& target, Math::Point3D<int> const& position, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Utility::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, Interpolator interpolator = interpolateLinearVertex);
                     /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold

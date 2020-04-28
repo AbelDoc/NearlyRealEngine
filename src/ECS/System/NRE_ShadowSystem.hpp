@@ -63,10 +63,10 @@
                             shader->bind();
                                 shader->sendMatrix(lightCamera->getProjection() * lightCamera->getView());
                                 Singleton<EntityManager>::get().each<ECS::Terrain>([this](Entity, ECS::Terrain& t) {
-                                    t.mesh->draw();
+                                    t.mesh.draw();
                                 });
                                 Singleton<EntityManager>::get().each<ECS::Water>([this](Entity, ECS::Water& w) {
-                                    w.mesh->draw();
+                                    w.mesh.draw();
                                 });
                                 Singleton<EntityManager>::get().each<ECS::Model>([this, &shader](Entity, ECS::Model& m) {
                                     shader->sendMatrix(lightCamera->getProjection() * lightCamera->getView() * m.model);

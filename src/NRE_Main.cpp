@@ -40,8 +40,7 @@
             Matrix4x4<float>* shipModel;
             
             World::World world;
-            Vector<ChunkMesh*> chunks;
-            Vector<WaterChunkMesh*> waters;
+            Vector<ChunkModel> chunks;
             
             bool attach;
         
@@ -116,13 +115,11 @@
                     });
     
                     chunks.reserve(World::World::NB_CHUNKS);
-                    waters.reserve(World::World::NB_CHUNKS);
-                    for (WaterChunk& c : world) {
+                    for (Chunk& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
-                        chunks.emplaceBack(new ChunkMesh(c.getParent(), camera.getFrustum()));
-                        waters.emplaceBack(new WaterChunkMesh(c, camera.getFrustum()));
-                        r.assign<ECS::Terrain>(chunks.getLast());
-                        r.assign<ECS::Water>(waters.getLast());
+                        chunks.emplaceBack(c, &camera.getFrustum());
+                        r.assign<ECS::Terrain>(chunks.getLast().get(0));
+                        r.assign<ECS::Water>(chunks.getLast().get(1));
                     }
                     
                     Entity l1 = Singleton<EntityManager>::get().create();
@@ -152,12 +149,6 @@
                     Singleton<SystemManager>::get().getSystem<DeferredSystem>()->update();
                 }
                 void destroy() override {
-                    for (ChunkMesh* mesh : chunks) {
-                        delete mesh;
-                    }
-                    for (WaterChunkMesh* mesh : waters) {
-                        delete mesh;
-                    }
                 }
     };
 

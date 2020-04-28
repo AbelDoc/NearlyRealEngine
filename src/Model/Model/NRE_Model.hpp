@@ -52,6 +52,11 @@
                          */
                         Model() = default;
                         /**
+                         * Construct a model from a collections of meshes
+                         * @param ms the collections of meshes
+                         */
+                        Model(Utility::Vector<std::unique_ptr<Mesh>> && ms);
+                        /**
                          * Load an object model
                          * @param path the object's path
                          */
@@ -70,6 +75,20 @@
                          */
                         virtual ~Model() = default;
     
+                    //## Getter ##//
+                        /**
+                         * Query a mesh from the model
+                         * @param index the mesh's index
+                         * @return the corresponding mesh
+                         */
+                        Mesh& get(std::size_t index);
+                        /**
+                         * Query a mesh from the model
+                         * @param index the mesh's index
+                         * @return the corresponding mesh
+                         */
+                        Mesh const& get(std::size_t index) const;
+    
                     //## Methods ##//
                         /**
                          * Reserve a number of mesh
@@ -84,15 +103,15 @@
                          * Add a mesh in the model
                          * @param mesh the mesh to add
                          */
-                        virtual void addMesh(std::unique_ptr<Mesh> && mesh);
+                        virtual void add(std::unique_ptr<Mesh> && mesh);
                         /**
                          * Add a mesh in the model and take it's ownership
                          * @param mesh the mesh to add
                          */
-                        virtual void addMesh(Mesh* mesh);
+                        virtual void add(Mesh* mesh);
                         /**
                          * Draw the model
-                         * @param mode     the drawing mode
+                         * @param mode the drawing mode
                          * @return if the mesh has been drawn
                          */
                         virtual void draw(GL::DrawMode mode = GL_TRIANGLES) const;
@@ -111,7 +130,7 @@
                      * @param node  the current assimp's node
                      * @param scene the assimp's scene
                      */
-                    void constructModel(aiNode *node, const aiScene *scene);
+                    void constructNode(aiNode *node, const aiScene *scene);
                     /**
                      * Process an assimp's mesh and turn it into a nre's mesh
                      * @param  mesh the assimp's mesh

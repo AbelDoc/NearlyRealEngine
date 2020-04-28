@@ -12,6 +12,7 @@ include_directories(C:/Users/abell/Documents/GitHub/NRE-Math/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-System/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-IO/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-ECS/src)
+include_directories(C:/Users/abell/Documents/GitHub/NRE-Data/src)
 include_directories(C:/lib/Assimp-3.1.1/include)
 include_directories(C:/lib/Glew/include)
 include_directories(C:/lib/STB)
@@ -98,7 +99,7 @@ include_directories(src/Physics/Sphere)
 include_directories(src/Physics/Sphere/Mesh)
 include_directories(src/World)
 include_directories(src/World/Chunk)
-include_directories(src/World/Mesh)
+include_directories(src/World/Model)
 include_directories(src/World/Factory)
 include_directories(src/World/Polygonizer)
 
@@ -198,6 +199,10 @@ set(COMPILE_LIST
         src/Model/Mesh/NRE_Mesh.tpp
         src/Model/Model/Instanced/NRE_InstancedModel.hpp
         src/Model/Model/Instanced/NRE_InstancedModel.tpp
+        src/Model/Model/TypedModel/NRE_TypedModel.hpp
+        src/Model/Model/TypedModel/NRE_TypedModel.tpp
+        src/Model/Model/CullableModel/NRE_CullableModel.hpp
+        src/Model/Model/CullableModel/NRE_CullableModel.tpp
         src/Model/Model/NRE_Model.hpp
         src/Model/Model/NRE_Model.tpp
         src/Model/TypedMesh/NRE_TypedMesh.hpp
@@ -249,13 +254,9 @@ set(COMPILE_LIST
         src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Chunk/NRE_Chunk.tpp
-        src/World/Chunk/NRE_WaterChunk.hpp
-        src/World/Chunk/NRE_WaterChunk.tpp
         src/World/Factory/NRE_ChunkFactory.hpp
         src/World/Factory/NRE_ChunkFactory.tpp
-        src/World/Mesh/NRE_ChunkMesh.hpp
-        src/World/Mesh/NRE_WaterChunkMesh.hpp
-        src/World/Polygonizer/NRE_ChunkPolygonizer.cpp
+        src/World/Model/NRE_ChunkModel.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.tpp
         src/World/NRE_World.cpp

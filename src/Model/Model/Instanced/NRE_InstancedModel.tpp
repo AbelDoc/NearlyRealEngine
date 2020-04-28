@@ -47,14 +47,14 @@
             }
     
             template <class InstanceLayout>
-            inline void InstancedModel<InstanceLayout>::addMesh(std::unique_ptr<Mesh> && mesh) {
-                Model::addMesh(std::move(mesh));
+            inline void InstancedModel<InstanceLayout>::add(std::unique_ptr<Mesh> && mesh) {
+                Model::add(std::move(mesh));
                 meshes.getLast()->access(&models);
             }
     
             template <class InstanceLayout>
-            inline void InstancedModel<InstanceLayout>::addMesh(Mesh* mesh) {
-                Model::addMesh(mesh);
+            inline void InstancedModel<InstanceLayout>::add(Mesh* mesh) {
+                Model::add(mesh);
                 meshes.getLast()->access(&models);
             }
     

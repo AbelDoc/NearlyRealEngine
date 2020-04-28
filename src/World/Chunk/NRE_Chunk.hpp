@@ -45,7 +45,8 @@
                     typedef VoxelsContainer::ConstIterator    ConstIterator;
 
                 private :   // Fields
-                    VoxelsContainer voxels;             /**< The chunk's cells */
+                    VoxelsContainer terrain;            /**< The chunk's terrain voxels */
+                    VoxelsContainer water;              /**< The chunk's waters voxels */
                     Math::Point3D<int> position;        /**< The chunk's position */
 
                 public :    // Methods
@@ -75,6 +76,22 @@
                          * @return the chunk's position
                          */
                         Math::Point3D<int> const& getPosition() const;
+                        /**
+                         * @return the terrain's voxels container
+                         */
+                        VoxelsContainer& getTerrainVoxels();
+                        /**
+                         * @return the terrain's voxels container
+                         */
+                        VoxelsContainer const& getTerrainVoxels() const;
+                        /**
+                         * @return the water's voxels container
+                         */
+                        VoxelsContainer& getWaterVoxels();
+                        /**
+                         * @return the water's voxels container
+                         */
+                        VoxelsContainer const& getWaterVoxels() const;
 
                     //## Setter ##//
                         /**
@@ -82,48 +99,6 @@
                          * @param p the new position
                          */
                         void setPosition(Math::Point3D<int> const& p);
-
-                    //## Iterator Access ##//
-                        /**
-                         * @return an iterator on the first element
-                         */
-                        Iterator begin();
-                        /**
-                         * @return a const iterator on the first element
-                         */
-                        ConstIterator begin() const;
-                        /**
-                         * @return a const iterator on the first element
-                         */
-                        ConstIterator cbegin() const;
-                        /**
-                         * @return an iterator on the end of the container
-                         */
-                        Iterator end();
-                        /**
-                         * @return a const iterator on the end of the container
-                         */
-                        ConstIterator end() const;
-                        /**
-                         * @return a const iterator on the end of the container
-                         */
-                        ConstIterator cend() const;
-
-                    //## Access Operator ##//
-                        /**
-                         * Return a reference on a chunk's object
-                         * @warning No range check performed
-                         * @param   index the object's index
-                         * @return        the object's reference
-                         */
-                        float& operator [](std::size_t index);
-                        /**
-                         * Return a const reference on a chunk's object
-                         * @warning No range check performed
-                         * @param   index the object's index
-                         * @return        the object's reference
-                         */
-                         float const& operator [](std::size_t index) const;
 
                     //## Assignment Operator ##//
                         /**

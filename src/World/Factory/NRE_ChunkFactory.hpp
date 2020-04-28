@@ -42,16 +42,10 @@
             class ChunkFactory {
                 public :    // Static
                     /**
-                     * Create a cloud of voxels (which isovalue represent the distance from the center) and then store the resulting cells into a given chunk
-                     * @param target     the target chunk
-                     */
-                    static void createSphere(Chunk& target);
-                    /**
                      * Create a cloud of voxels (which isovalue represent the terrain height) and then store the resulting cells into a given chunk
                      * @param target the target chunk
-                     * @param water  the corresponding water mesh
                      */
-                    static void createTerrain(Chunk& target, WaterChunk& water);
+                    static void createTerrain(Chunk& target);
             };
 
         }

@@ -46,6 +46,23 @@
                          */
                         WaterVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n): position(pos), normal(n) {
                         }
+    
+                    //## Getter ##//
+                        /**
+                         * @return the vertex's normal
+                         */
+                        Math::Vector4D<float> const& getNormal() const {
+                            return normal;
+                        }
+        
+                    //## Setter ##//
+                        /**
+                         * Set the vertex's normal
+                         * @param n the new normal
+                         */
+                        void setNormal(Math::Vector4D<float> const& n) {
+                            normal = n;
+                        }
 
                     //## Deconstructor ##//
                         /**

@@ -12,4 +12,6 @@
     #include "../Model/CullableMesh/NRE_CullableMesh.hpp"
     
     #include "../Model/Model/NRE_Model.hpp"
+    #include "../Model/Model/TypedModel/NRE_TypedModel.hpp"
+    #include "../Model/Model/CullableModel/NRE_CullableModel.hpp"
     #include "../Model/Model/Instanced/NRE_InstancedModel.hpp"

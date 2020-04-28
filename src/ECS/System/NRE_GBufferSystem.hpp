@@ -67,8 +67,8 @@
                                 bindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
                                 bindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
                                 Singleton<EntityManager>::get().each<ECS::Terrain>([this](Entity, ECS::Terrain& t) {
-                                    if (t.mesh->canBeDrawn()) {
-                                        t.mesh->draw();
+                                    if (t.mesh.canBeDrawn()) {
+                                        t.mesh.draw();
                                     }
                                 });
                                 unbindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
@@ -80,8 +80,8 @@
                                 water->sendMatrix(VP);
                                 water->sendTime(time);
                                 Singleton<EntityManager>::get().each<ECS::Water>([this](Entity, ECS::Water& w) {
-                                    if (w.mesh->canBeDrawn()) {
-                                        w.mesh->draw();
+                                    if (w.mesh.canBeDrawn()) {
+                                        w.mesh.draw();
                                     }
                                 });
                             water->unbind();

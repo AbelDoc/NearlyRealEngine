@@ -16,45 +16,29 @@
              inline Math::Point3D<int> const& Chunk::getPosition() const {
                  return position;
              }
+    
+             inline typename Chunk::VoxelsContainer& Chunk::getTerrainVoxels() {
+                 return terrain;
+             }
+             
+             inline typename Chunk::VoxelsContainer const& Chunk::getTerrainVoxels() const {
+                 return terrain;
+             }
+    
+             inline typename Chunk::VoxelsContainer& Chunk::getWaterVoxels() {
+                 return water;
+             }
+    
+             inline typename Chunk::VoxelsContainer const& Chunk::getWaterVoxels() const {
+                 return water;
+             }
 
              inline void Chunk::setPosition(Math::Point3D<int> const& p) {
                  position = p;
              }
 
-             inline typename Chunk::Iterator Chunk::begin() {
-                 return voxels.begin();
-             }
-
-             inline typename Chunk::ConstIterator Chunk::begin() const {
-                 return voxels.begin();
-             }
-
-             inline typename Chunk::ConstIterator Chunk::cbegin() const {
-                 return voxels.cbegin();
-             }
-
-             inline typename Chunk::Iterator Chunk::end() {
-                 return voxels.end();
-             }
-
-             inline typename Chunk::ConstIterator Chunk::end() const {
-                 return voxels.end();
-             }
-
-             inline typename Chunk::ConstIterator Chunk::cend() const {
-                 return voxels.cend();
-             }
-
-             inline float& Chunk::operator [](std::size_t index) {
-                 return voxels[index];
-             }
-
-             inline float const& Chunk::operator [](std::size_t index) const {
-                 return voxels[index];
-             }
-
              inline Utility::String Chunk::toString() const {
-                 return voxels.toString();
+                 return "Position : " + position.toString() + "\nTerrain : " + terrain.toString() + "\nWater : " + water.toString();
              }
          }
      }

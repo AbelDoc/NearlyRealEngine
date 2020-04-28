@@ -47,6 +47,23 @@
                          */
                         TerrainVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n) : positionAndMatX(pos), normalAndMatY(n) {
                         }
+    
+                    //## Getter ##//
+                        /**
+                         * @return the vertex's normal
+                         */
+                        Math::Vector4D<float> const& getNormal() const {
+                            return normalAndMatY;
+                        }
+    
+                    //## Setter ##//
+                        /**
+                         * Set the vertex's normal
+                         * @param n the new normal
+                         */
+                        void setNormal(Math::Vector4D<float> const& n) {
+                            normalAndMatY = n;
+                        }
 
                     //## Deconstructor ##//
                         /**

@@ -11,7 +11,7 @@
 
     #include <memory>
     
-    #include "../../../World/Mesh/NRE_ChunkMesh.hpp"
+    #include "../../../World/Model/NRE_ChunkModel.hpp"
 
     /**
      * @namespace NRE
@@ -30,7 +30,7 @@
              */
             class Terrain {
                 public:    // Fields
-                    const Model::ChunkMesh* mesh;    /**< The rendered mesh */
+                    Model::Mesh const& mesh;    /**< The rendered mesh */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -38,7 +38,7 @@
                          * Construct a renderable from a mesh
                          * @param m the mesh
                          */
-                        Terrain(const Model::ChunkMesh* m) : mesh(m) {
+                        Terrain(Model::Mesh const& m) : mesh(m) {
                         }
             };
         }

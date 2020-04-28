@@ -24,7 +24,11 @@
         namespace Model {
             
             template<class> class MeshFactory;
-            
+    
+            /**
+             * @class TypedMesh
+             * @brief Manage the creation of mesh from a given object, simplifying the process
+             */
             template <class T>
             class TypedMesh : public Mesh {
                 public :    // Methods
