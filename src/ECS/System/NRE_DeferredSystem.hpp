@@ -71,7 +71,6 @@
                             auto pbr = ProgramManager::get<PBR>();
                             auto ssaoEffect = ProgramManager::get<SSAOEffect>();
                             auto terrain = ProgramManager::get<Renderer::Terrain>();
-                            auto model = ProgramManager::get<Renderer::Model>();
     
                             pbr->bind();
                                 pbr->sendTexture();
@@ -88,10 +87,6 @@
                             terrain->bind();
                                 terrain->sendTexture();
                             terrain->unbind();
-    
-                            model->bind();
-                                model->sendTexture();
-                            model->unbind();
     
                             SystemManager::get<ShadowSystem>()->setLight(light);
                         }

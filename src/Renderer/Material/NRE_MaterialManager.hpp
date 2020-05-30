@@ -11,8 +11,9 @@
     
     #include <Header/NRE_Utility.hpp>
     #include <Header/NRE_Math.hpp>
-    
-    #include "../../Header/NRE_Texture.hpp"
+
+    #include "../../GL/Texture/Material/NRE_Material.hpp"
+    #include "../../GL/Texture/Material/Array/NRE_MaterialArray.hpp"
     
     /**
     * @namespace NRE
@@ -31,13 +32,23 @@
              */
             class MaterialManager : Utility::Singleton<MaterialManager> {
                 friend class Utility::Singleton<MaterialManager>;
+                public :    // Iterator
+                    /**< Shortcut to hide Iterator implementation */
+                    typedef typename Utility::Vector<GL::Material>::Iterator         Iterator;
+                    /**< Shortcut to hide ConstIterator implementation */
+                    typedef typename Utility::Vector<GL::Material>::ConstIterator    ConstIterator;
                 
                 private:    //Fields
                     Utility::Vector<GL::Material> textures; /**< The materials textures */
                     GL::MaterialArray materials;            /**< The materials array */
+                    int currentLayer;                       /**< The materials array current layer */
                 
                 public:    // Methods
                     //## Getter ##//
+                        /**
+                         * @return the number of stored materials
+                         */
+                        std::size_t getNbMaterials() const;
                         /**
                          * @return the albedo texture array
                          */
@@ -54,11 +65,40 @@
                          * @return the metallic texture array
                          */
                         GL::Texture2DArray const& getMetallics() const;
+    
+                    //## Iterator Access ##//
                         /**
-                         * @return the displacement texture array
+                         * @return an iterator on the first material
                          */
-                        GL::Texture2DArray const& getDisplacements() const;
-                
+                        Iterator begin();
+                        /**
+                         * @return a const iterator on the first material
+                         */
+                        ConstIterator begin() const;
+                        /**
+                         * @return a const iterator on the first material
+                         */
+                        ConstIterator cbegin() const;
+                        /**
+                         * @return an iterator on the end of the container
+                         */
+                        Iterator end();
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator end() const;
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator cend() const;
+    
+                    //## Methods ##//
+                        /**
+                         * Add a material to the manager
+                         * @param m the material to add
+                         */
+                        void add(GL::Material && m);
+                    
                 private:   // Methods
                     //## Constructor ##//
                         /**
@@ -66,7 +106,7 @@
                          */
                         MaterialManager();
                         
-                        //## Deconstructor ##//
+                    //## Deconstructor ##//
                         /**
                          * MaterialManager Deconstructor
                          */

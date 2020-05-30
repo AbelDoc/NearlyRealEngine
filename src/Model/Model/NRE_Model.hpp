@@ -15,6 +15,8 @@
     #include "../../GL/VBO/IBO/NRE_IBO.hpp"
     #include "../../GL/VBO/Layout/Model/NRE_ModelVertex.hpp"
 
+    #include "../../Renderer/Material/NRE_MaterialManager.hpp"
+
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wfloat-equal"
     #pragma GCC diagnostic ignored "-Wconversion"
@@ -23,6 +25,7 @@
         #include <assimp/Importer.hpp>
         #include <assimp/scene.h>
         #include <assimp/postprocess.h>
+        #include <assimp/pbrmaterial.h>
     
     #pragma GCC diagnostic pop
 
@@ -141,16 +144,18 @@
                 private :   // Methods
                     /**
                      * Construct a model from an assimp loaded model
-                     * @param node  the current assimp's node
-                     * @param scene the assimp's scene
+                     * @param node        the current assimp's node
+                     * @param scene       the assimp's scene
+                     * @param indexOffset the offset for materials index
                      */
-                    void constructNode(aiNode *node, const aiScene *scene);
+                    void constructNode(aiNode *node, const aiScene *scene, std::size_t indexOffset);
                     /**
                      * Process an assimp's mesh and turn it into a nre's mesh
-                     * @param  mesh the assimp's mesh
-                     * @return      the converted mesh
+                     * @param mesh        the assimp's mesh
+                     * @param indexOffset the offset for materials index
+                     * @return the converted mesh
                      */
-                    Mesh* processMesh(aiMesh *mesh);
+                    Mesh* processMesh(aiMesh *mesh, std::size_t indexOffset);
             };
     
         }

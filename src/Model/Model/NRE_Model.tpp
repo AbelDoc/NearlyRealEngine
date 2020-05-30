@@ -36,13 +36,29 @@
                     throw (Exception::FileNotExistingException(path.getPath()));
                 }
                 Assimp::Importer importer;
-                const aiScene* scene = importer.ReadFile(path.getPath().getData(), aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+                const aiScene* scene = importer.ReadFile(path.getPath().getData(), aiProcess_Triangulate);
     
                 if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
                     throw (Exception::AssimpException(importer.GetErrorString()));
                 }
+                
+                std::size_t indexOffset = Utility::Singleton<Renderer::MaterialManager>::get().getNbMaterials();
+                
+                if (scene->HasMaterials()) {
+                    for (unsigned int i = 1; i < scene->mNumMaterials; ++i) {
+                        aiMaterial* material = scene->mMaterials[i];
+                        aiString name;
+                        aiColor3D albedo, metallic, roughness;
+                        material->Get(AI_MATKEY_NAME, name);
+                        material->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
+                        material->Get(AI_MATKEY_COLOR_AMBIENT, metallic);
+                        material->Get(AI_MATKEY_COLOR_SPECULAR, roughness);
+                        std::cout << name.C_Str() << std::endl;
+                        Utility::Singleton<Renderer::MaterialManager>::get().add(GL::Material(Math::Vector3D<float>(albedo.r, albedo.g, albedo.b), roughness.r, metallic.r));
+                    }
+                }
     
-                constructNode(scene->mRootNode, scene);
+                constructNode(scene->mRootNode, scene, indexOffset);
             }
             
             inline void Model::reserve(std::size_t capacity) {
@@ -72,33 +88,26 @@
                 }
             }
     
-            inline void Model::constructNode(aiNode *node, const aiScene* scene) {
+            inline void Model::constructNode(aiNode *node, const aiScene* scene, std::size_t indexOffset) {
                 for (int i = 0; i < static_cast <int> (node->mNumMeshes); i++) {
                     aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-                    add(processMesh(mesh));
+                    add(processMesh(mesh, indexOffset));
                 }
         
                 for (unsigned int i = 0; i < node->mNumChildren; i++) {
-                    constructNode(node->mChildren[i], scene);
+                    constructNode(node->mChildren[i], scene, indexOffset);
                 }
             }
     
-            inline Mesh* Model::processMesh(aiMesh* mesh) {
+            inline Mesh* Model::processMesh(aiMesh* mesh, std::size_t indexOffset) {
                 GL::IBO<GL::ModelVertex>* buffer = new GL::IBO<GL::ModelVertex>(GL_STATIC_DRAW);
     
+                std::cout << mesh->mMaterialIndex << "->" << static_cast <int> (indexOffset) + mesh->mMaterialIndex - 1 << std::endl;
                 buffer->reserve(mesh->mNumVertices);
                 for (int i = 0; i < static_cast <int> (mesh->mNumVertices); i++) {
                     Math::Vector3D<float> vector(mesh->mVertices[i].x,  mesh->mVertices[i].y, mesh->mVertices[i].z);
                     Math::Vector3D<float> normal(mesh->mNormals[i].x,   mesh->mNormals[i].y,  mesh->mNormals[i].z);
-                    Math::Vector3D<float> tangent(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
-                    Math::Vector2D<float> uv;
-                    if (mesh->mTextureCoords[0]) {
-                        uv.setX(mesh->mTextureCoords[0][i].x);
-                        uv.setY(mesh->mTextureCoords[0][i].y);
-                    } else {
-                        uv.setCoord(0, 0);
-                    }
-                    buffer->addData(vector, normal, tangent, uv, 4);
+                    buffer->addData(vector, normal, static_cast <int> (indexOffset) + mesh->mMaterialIndex - 1);
                 }
         
                 for (int i = 0; i < static_cast <int> (mesh->mNumFaces); i++) {

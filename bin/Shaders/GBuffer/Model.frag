@@ -1,26 +1,23 @@
 
     #version 450
 
-    in vec2 uv;
-    in vec3 vertex;
-    in mat3 TBN;
-    invariant in float material;
+    #define MAX_MAT 100
 
-    uniform sampler2DArray texAlbedos;
-    uniform sampler2DArray texNormals;
-    uniform sampler2DArray texRoughness;
-    uniform sampler2DArray texMetallics;
+    uniform int numMats;
+    uniform struct Material {
+        vec3 albedo;
+        float roughness;
+        float metallic;
+    } materials[MAX_MAT];
+
+    in vec3 vertex;
+    in vec3 normal;
+    flat in int material;
 
     out vec3 [3] fragData;
 
     void main() {
-        vec3 uv3 = vec3(uv, material);
-        vec3 normal = normalize(TBN * (texture(texNormals, uv3).xyz * 2.0 - 1.0));
-        float roughness = texture(texRoughness, uv3).r;
-        float metallic = texture(texMetallics, uv3).r;
-        vec3 color = texture(texAlbedos, uv3).xyz;
-
-        fragData[0] = color;
+        fragData[0] = materials[material].albedo;
         fragData[1] = normal;
-        fragData[2] = vec3(roughness, metallic, 0);
+        fragData[2] = vec3(materials[material].roughness, materials[material].metallic, 0);
     }

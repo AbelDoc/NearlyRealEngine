@@ -10,19 +10,11 @@
     namespace NRE {
         namespace Renderer {
 
-            inline MaterialManager::MaterialManager() : materials(4) {
-                Utility::String resolution;
-                resolution << materials.MAX_RESOLUTION;
-                textures.emplaceBack("Data/Material/Mat_1/x" + resolution);
-                textures.emplaceBack("Data/Material/Mat_2/x" + resolution);
-                textures.emplaceBack("Data/Material/Mat_3/x" + resolution);
-                textures.emplaceBack("Data/Material/Mat_4/x" + resolution);
-                
-                int i = 0;
-                for (GL::Material& m : textures) {
-                    materials.sendMaterial(m, i++);
-                    m.deallocate();
-                }
+            inline MaterialManager::MaterialManager() : materials(20), currentLayer(0) {
+            }
+            
+            inline std::size_t MaterialManager::getNbMaterials() const {
+                return textures.getSize();
             }
 
             inline GL::Texture2DArray const& MaterialManager::getAlbedos() const {
@@ -41,10 +33,36 @@
                 return materials.getMetallics();
             }
     
-            inline GL::Texture2DArray const& MaterialManager::getDisplacements() const {
-                return materials.getDisplacements();
+            inline typename MaterialManager::Iterator MaterialManager::begin() {
+                return textures.begin();
             }
-
-
+    
+            inline typename MaterialManager::ConstIterator MaterialManager::begin() const {
+                return textures.begin();
+            }
+    
+            inline typename MaterialManager::ConstIterator MaterialManager::cbegin() const {
+                return textures.cbegin();
+            }
+    
+            inline typename MaterialManager::Iterator MaterialManager::end() {
+                return textures.end();
+            }
+    
+            inline typename MaterialManager::ConstIterator MaterialManager::end() const {
+                return textures.end();
+            }
+    
+            inline typename MaterialManager::ConstIterator MaterialManager::cend() const {
+                return textures.cend();
+            }
+            
+            inline void MaterialManager::add(GL::Material && m) {
+                assert(textures.getCapacity() != static_cast <std::size_t> (currentLayer));
+                materials.sendMaterial(m, currentLayer++);
+                m.deallocate();
+                textures.emplaceBack(std::move(m));
+            }
+    
         }
     }

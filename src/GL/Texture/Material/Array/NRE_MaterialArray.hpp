@@ -36,7 +36,6 @@
                     Texture2DArray normals;         /**< The material's normal texture array */
                     Texture2DArray roughness;       /**< The material's roughness texture array */
                     Texture2DArray metallics;       /**< The material's metallic texture array */
-                    Texture2DArray displacements;   /**< The material's displacement texture array */
                     int nbMaterials;                /**< The number of materials */
 
                 public:    // Methods
@@ -81,10 +80,6 @@
                          * @return the metallic texture array
                          */
                         GL::Texture2DArray const& getMetallics() const;
-                        /**
-                         * @return the displacement texture array
-                         */
-                        GL::Texture2DArray const& getDisplacements() const;
                         /**
                          * @return the number of materials
                          */

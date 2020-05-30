@@ -24,6 +24,7 @@
     using namespace NRE::Physics;
     using namespace NRE::IO;
     using namespace NRE::World;
+    using namespace NRE::Data;
     
     class DevApplication : public Application {
         public :    // Static
@@ -46,11 +47,11 @@
         
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(90.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), shipRoll(0_deg), shipPosition(-10, 5, 10), attach(true) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(10.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), shipRoll(0_deg), shipPosition(-10, 5, 10), attach(true) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-                    /*glEnable(GL_CULL_FACE);
-                        glCullFace(GL_BACK);*/
+                    glEnable(GL_CULL_FACE);
+                        glCullFace(GL_BACK);
                 }
 
             //## Methods ##//
@@ -114,7 +115,7 @@
                         return true;
                     });
     
-                    chunks.reserve(World::World::NB_CHUNKS);
+                    /*chunks.reserve(World::World::NB_CHUNKS);
                     for (Chunk const& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
                         chunks.emplaceBack(&c);
@@ -124,12 +125,10 @@
                         water.setBoundObject(&camera.getFrustum());
                         r.assign<ECS::Terrain>(terrain);
                         r.assign<ECS::Water>(water);
-                    }
+                    }*/
                     
-                    Entity l1 = Singleton<EntityManager>::get().create();
-                    Entity l2 = Singleton<EntityManager>::get().create();
-                    Entity l3 = Singleton<EntityManager>::get().create();
-                    l3.assign<Light>(Vector3D<float>(-10, 10, 0), Vector3D<float>(200, 200, 200));
+                    Entity l = Singleton<EntityManager>::get().create();
+                    l.assign<Light>(Vector3D<float>(-10, 10, 0), Vector3D<float>(200, 200, 200));
                     
                     Entity s = Singleton<EntityManager>::get().create();
                     s.assign<NRE::ECS::Model>(&ship);

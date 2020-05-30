@@ -19,7 +19,7 @@
     
     #include "NRE_GLUtils.hpp"
 
-    #include "NRE_Mesh.hpp"
+    #include "NRE_Model.hpp"
     
     #include "NRE_Physics.hpp"
 
@@ -29,3 +29,5 @@
     #include <Header/NRE_ECS.hpp>
     
     #include "NRE_ECS.hpp"
+
+    #include <Header/NRE_Data.hpp>

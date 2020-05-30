@@ -54,6 +54,7 @@
                         void update() override {
                             using namespace Renderer;
                             using namespace Utility;
+                            using namespace GL;
                             time += Time::Clock::TIMESTEP;
                             
                             auto terrain = ProgramManager::get<Renderer::Terrain>();
@@ -86,20 +87,22 @@
                                 });
                             water->unbind();
                             model->bind();
-                                bindTexture(Singleton<MaterialManager>::get().getAlbedos(), 0);
-                                bindTexture(Singleton<MaterialManager>::get().getNormals(), 1);
-                                bindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
-                                bindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
+                                int nb = 0;
+                                for (Material& m : Singleton<MaterialManager>::get()) {
+                                    String base("materials[");
+                                    base << nb;
+                                    model->use3FV(base + "].albedo", 1, m.getAlbedo().value());
+                                    model->use1F(base + "].roughness", m.getRoughness());
+                                    model->use1F(base + "].metallic", m.getMetallic());
+                                    nb++;
+                                }
+                                model->use1I("numMats", static_cast <int> (nb));
                                 Singleton<EntityManager>::get().each<ECS::Model>([this, &model](Entity, ECS::Model& m) {
                                     if (m.mesh->canBeDrawn()) {
                                         model->sendMatrix(camera.getProjection()  * camera.getView() * m.model);
                                         m.mesh->draw();
                                     }
                                 });
-                                unbindTexture(Singleton<MaterialManager>::get().getMetallics(), 3);
-                                unbindTexture(Singleton<MaterialManager>::get().getRoughness(), 2);
-                                unbindTexture(Singleton<MaterialManager>::get().getNormals(), 1);
-                                unbindTexture(Singleton<MaterialManager>::get().getAlbedos(), 0);
                             model->unbind();
                         }
 

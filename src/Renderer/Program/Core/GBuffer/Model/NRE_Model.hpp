@@ -49,19 +49,14 @@
                          */
                         void addUniforms() override {
                             addUniform("MVP");
-                            addUniform("texAlbedos");
-                            addUniform("texNormals");
-                            addUniform("texRoughness");
-                            addUniform("texMetallics");
-                        }
-                        /**
-                         * Send textures binding point to the shader
-                         */
-                        void sendTexture() const {
-                            use1I("texAlbedos", 0);
-                            use1I("texNormals", 1);
-                            use1I("texRoughness", 2);
-                            use1I("texMetallics", 3);
+                            addUniform("numMats");
+                            for (unsigned int i = 0; i < MAX_MATERIALS; i++) {
+                                Utility::String base("materials[");
+                                base << i;
+                                addUniform(base + "].albedo");
+                                addUniform(base + "].roughness");
+                                addUniform(base + "].metallic");
+                            }
                         }
                         /**
                          * Send a matrix to the shader
@@ -70,6 +65,9 @@
                         void sendMatrix(Math::Matrix4x4<float> const& m) const {
                             useMat4("MVP", 1, &m);
                         }
+
+                public:     // Static
+                    constexpr static const GLuint MAX_MATERIALS = 100;  /**< The maximum number of materials in a scene */
             };
         }
     }

@@ -30,9 +30,8 @@
              */
             class ModelVertex : public Utility::Stringable<ModelVertex> {
                 public:    //Fields
-                    Math::Vector4D<float> positionAndU;     /**< Packed vertex's position and u coord */
-                    Math::Vector4D<float> normalAndV;       /**< Packed vertex's normal and v coord */
-                    Math::Vector4D<float> tangentAndMat;    /**< Packed vertex's tangent and model */
+                    Math::Vector4D<float> position;         /**< Packed vertex's position */
+                    Math::Vector4D<float> normalAndMat;     /**< Packed vertex's normal */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -44,11 +43,9 @@
                          * Construct a model vertex
                          * @param pos the vertex's position
                          * @param n   the vertex's normal
-                         * @param t   the vertex's tangent
-                         * @param uv  the vertex's uv
                          * @param m   the vertex's material id
                          */
-                        ModelVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, Math::Vector3D<float> const& t, Math::Vector2D<float> const& uv, int m) : positionAndU(pos, uv.getX()), normalAndV(n, uv.getY()), tangentAndMat(t, m) {
+                        ModelVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, int m) : position(pos), normalAndMat(n, m) {
                         }
 
                     //## Deconstructor ##//
@@ -64,7 +61,6 @@
                         static void access() {
                             Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(ModelVertex), 0);
                             Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(ModelVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
-                            Layout::enableAttribute(5, 4, GL_FLOAT, sizeof(ModelVertex), (void*)(2 * sizeof(Math::Vector4D<float>)));
                         }
 
                     //## Stream Operator ##//
@@ -73,7 +69,7 @@
                          * @return the converted model vertex layout
                          */
                         Utility::String toString() const {
-                            return positionAndU.toString() + " - " + normalAndV.toString() + " - " + tangentAndMat.toString();
+                            return position.toString() + " - " + normalAndMat.toString();
                         }
 
             };

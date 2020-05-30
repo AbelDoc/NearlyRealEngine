@@ -28,11 +28,13 @@
              */
             class Material : public Utility::Uncopyable<Material> {
                 private:    //Fields
-                    Surface albedo;         /**< The material's albedo */
-                    Surface normal;         /**< The material's normal */
-                    Surface roughness;      /**< The material's roughness */
-                    Surface metallic;       /**< The material's metallic */
-                    Surface displacement;   /**< The material's displacement */
+                    Math::Vector3D<float> albedo;   /**< The material's albedo */
+                    float roughness;                /**< The material's roughness */
+                    float metallic;                 /**< The material's metallic */
+                    Surface* albedoMap;             /**< The material's albedo map */
+                    Surface* normalMap;             /**< The material's normal map */
+                    Surface* roughnessMap;          /**< The material's roughness map */
+                    Surface* metallicMap;           /**< The material's metallic map */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -41,49 +43,86 @@
                          */
                         Material() = delete;
                         /**
-                         * Construct a material from it's name
-                         * @param path the material file's path
+                         * Construct a material from it's path and values
+                         * @param color    the material's albedo
+                         * @param r        the material's roughness factor
+                         * @param m        the material's metallic factor
+                         * @param colorMap the material's albedo map's path
+                         * @param nMap     the material's normal map's path
+                         * @param rMap     the material's roughness map's path
+                         * @param mMap     the material's metallic map's path
                          */
-                        Material(IO::File const& path);
+                        Material(Math::Vector3D<float> const& color, float r, float m, IO::File const& colorMap, IO::File const& nMap, IO::File const& rMap, IO::File const& mMap);
+                        /**
+                         * Construct a material from its values
+                         * @param color the material's albedo
+                         * @param r     the material's roughness factor
+                         * @param m     the material's metallic factor
+                         */
+                        Material(Math::Vector3D<float> const& color, float r, float m);
 
                     //## Move-Constructor ##//
                         /**
                          * Move m into this
                          * @param m the material to move
                          */
-                        Material(Material && m) = default;
+                        Material(Material && m);
 
                     //## Deconstructor ##//
                         /**
                          * Material Deconstructor
                          */
-                        ~Material() = default;
+                        ~Material();
 
                     //## Getter ##//
                         /**
                          * @return the material's albedo
                          */
-                        Surface& getAlbedo();
-                        /**
-                         * @return the material's normal
-                         */
-                        Surface& getNormal();
+                        Math::Vector3D<float> const& getAlbedo() const;
                         /**
                          * @return the material's roughness
                          */
-                        Surface& getRoughness();
+                        float getRoughness() const;
                         /**
                          * @return the material's metallic
                          */
-                        Surface& getMetallic();
+                        float getMetallic() const;
                         /**
-                         * @return the material's displacement
+                         * @return if the material has an albedo map
                          */
-                        Surface& getDisplacement();
+                        bool hasAlbedoMap() const;
+                        /**
+                         * @return if the material has a normal map
+                         */
+                        bool hasNormalMap() const;
+                        /**
+                         * @return if the material has a roughness map
+                         */
+                        bool hasRoughnessMap() const;
+                        /**
+                         * @return if the material has a metallic map
+                         */
+                        bool hasMetallicMap() const;
+                        /**
+                         * @return the material's albedo map
+                         */
+                        Surface* getAlbedoMap();
+                        /**
+                         * @return the material's normal map
+                         */
+                        Surface* getNormalMap();
+                        /**
+                         * @return the material's roughness map
+                         */
+                        Surface* getRoughnessMap();
+                        /**
+                         * @return the material's metallic map
+                         */
+                        Surface* getMetallicMap();
 
                     //## Methods ##//
                         /**
-                         * Deallocate all surfaces
+                         * Deallocate all surfaces if necessary
                          */
                         void deallocate();
 
@@ -91,10 +130,19 @@
                         /**
                          * Move assignment of m into this
                          * @param m the material to move into this
-                         * @return      the reference of himself
+                         * @return  the reference of himself
                          */
-                        Material& operator =(Material && m) = default;
-
+                        Material& operator =(Material && m);
+                        
+                private :   // Methods
+                    /**
+                     * Load all material's maps
+                     * @param colorMap the material's albedo map's path
+                     * @param nMap     the material's normal map's path
+                     * @param rMap     the material's roughness map's path
+                     * @param mMap     the material's metallic map's path
+                     */
+                    void loadMaps(IO::File const& colorMap, IO::File const& nMap, IO::File const& rMap, IO::File const& mMap);
             };
         }
     }

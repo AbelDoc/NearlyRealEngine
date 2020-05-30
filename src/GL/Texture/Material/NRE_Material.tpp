@@ -10,41 +10,116 @@
     namespace NRE {
         namespace GL {
 
-            inline Material::Material(IO::File const& path) : albedo(path.getPath() + "/Albedo.png"),
-                                                       normal(path.getPath() + "/Normal.png"),
-                                                    roughness(path.getPath() + "/Roughness.png"),
-                                                     metallic(path.getPath() + "/Metallic.png"),
-                                                 displacement(path.getPath() + "/Displacement.png") {
-    
-                
+            inline Material::Material(Math::Vector3D<float> const& color, float r, float m, IO::File const& colorMap, IO::File const& nMap, IO::File const& rMap, IO::File const& mMap) : albedo(color), roughness(r), metallic(m), albedoMap(nullptr), normalMap(nullptr), roughnessMap(nullptr), metallicMap(nullptr) {
+                loadMaps(colorMap, nMap, rMap, mMap);
             }
     
-            inline Surface& Material::getAlbedo() {
+            inline Material::Material(Math::Vector3D<float> const& color, float r, float m) : albedo(color), roughness(r), metallic(m), albedoMap(nullptr), normalMap(nullptr), roughnessMap(nullptr), metallicMap(nullptr) {
+            }
+            
+            inline Material::Material(Material && m) : albedo(m.albedo), roughness(m.roughness), metallic(m.metallic), albedoMap(m.albedoMap), normalMap(m.normalMap), roughnessMap(m.roughnessMap), metallicMap(m.metallicMap) {
+                m.albedoMap = nullptr;
+                m.normalMap = nullptr;
+                m.roughnessMap = nullptr;
+                m.metallicMap = nullptr;
+            }
+            
+            inline Material::~Material() {
+                delete albedoMap;
+                delete normalMap;
+                delete roughnessMap;
+                delete metallicMap;
+            }
+            
+            inline Math::Vector3D<float> const& Material::getAlbedo() const {
                 return albedo;
             }
     
-            inline Surface& Material::getNormal() {
-                return normal;
-            }
-    
-            inline Surface& Material::getRoughness() {
+            inline float Material::getRoughness() const {
                 return roughness;
             }
     
-            inline Surface& Material::getMetallic() {
+            inline float Material::getMetallic() const {
                 return metallic;
             }
+            
+            inline bool Material::hasAlbedoMap() const {
+                return albedoMap != nullptr;
+            }
     
-            inline Surface& Material::getDisplacement() {
-                return displacement;
+            inline bool Material::hasNormalMap() const {
+                return normalMap != nullptr;
+            }
+    
+            inline bool Material::hasRoughnessMap() const {
+                return roughnessMap != nullptr;
+            }
+    
+            inline bool Material::hasMetallicMap() const {
+                return metallicMap != nullptr;
+            }
+    
+            inline Surface* Material::getAlbedoMap() {
+                return albedoMap;
+            }
+    
+            inline Surface* Material::getNormalMap() {
+                return normalMap;
+            }
+    
+            inline Surface* Material::getRoughnessMap() {
+                return roughnessMap;
+            }
+    
+            inline Surface* Material::getMetallicMap() {
+                return metallicMap;
             }
     
             inline void Material::deallocate() {
-                albedo.deallocate();
-                normal.deallocate();
-                metallic.deallocate();
-                roughness.deallocate();
-                displacement.deallocate();
+                if (albedoMap) {
+                    albedoMap->deallocate();
+                }
+                if (normalMap) {
+                    normalMap->deallocate();
+                }
+                if (metallicMap) {
+                    metallicMap->deallocate();
+                }
+                if (roughnessMap) {
+                    roughnessMap->deallocate();
+                }
+            }
+            
+            inline Material& Material::operator =(Material && m) {
+                if (this != &m) {
+                    albedo = m.albedo;
+                    roughness = m.roughness;
+                    metallic = m.metallic;
+                    albedoMap = m.albedoMap;
+                    normalMap = m.normalMap;
+                    roughnessMap = m.roughnessMap;
+                    metallicMap = m.metallicMap;
+                    m.albedoMap = nullptr;
+                    m.normalMap = nullptr;
+                    m.roughnessMap = nullptr;
+                    m.metallicMap = nullptr;
+                }
+                return *this;
+            }
+            
+            inline void Material::loadMaps(IO::File const& colorMap, IO::File const& nMap, IO::File const& rMap, IO::File const& mMap) {
+                if (colorMap.exist()) {
+                    albedoMap = new Surface(colorMap);
+                }
+                if (nMap.exist()) {
+                    normalMap = new Surface(nMap);
+                }
+                if (rMap.exist()) {
+                    roughnessMap = new Surface(rMap);
+                }
+                if (mMap.exist()) {
+                    metallicMap = new Surface(mMap);
+                }
             }
 
         }

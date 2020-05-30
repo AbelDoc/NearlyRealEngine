@@ -43,7 +43,7 @@
                         float rings = 50;
                         float sectors = 50;
                         
-                        float x, y, z, xy, u, v;
+                        float x, y, z, xy;
                         
                         float ringStep = static_cast <float> (PI) / rings;
                         float sectorStep = 2.0f * static_cast <float> (PI) / sectors;
@@ -64,13 +64,8 @@
                                 
                                 Vector3D<float> vertex(x, y, z);
                                 Vector3D<float> normal(vertex * lengthInv);
-                                Vector3D<float> tangent(Vector3D<float>(0, 1, 0) ^ normal);
-    
-                                u = static_cast <float> (s) / sectors;
-                                v = static_cast <float> (r) / rings;
                                 
-                                Vector2D<float> uv(u, v);
-                                buffer->addData(vertex, normal, tangent, uv, 3);
+                                buffer->addData(vertex, normal, 3);
                             }
                         }
         
