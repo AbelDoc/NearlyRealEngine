@@ -30,9 +30,8 @@
              */
             class TerrainVertex : public Utility::Stringable<TerrainVertex> {
                 public:    //Fields
-                    Math::Vector4D<float> positionAndMatX;  /**< Packed vertex's position and terrain x */
-                    Math::Vector4D<float> normalAndMatY;    /**< Packed vertex's normal and terrain y */
-                    Math::Vector4D<float> tangentAndMatZ;   /**< Packed vertex's tangent and terrain z */
+                    Math::Vector4D<float> position;  /**< Packed vertex's position and terrain x */
+                    Math::Vector4D<float> normal;    /**< Packed vertex's normal and terrain y */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -45,7 +44,7 @@
                          * @param pos the vertex's position
                          * @param n   the vertex's normal
                          */
-                        TerrainVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n) : positionAndMatX(pos), normalAndMatY(n) {
+                        TerrainVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n) : position(pos), normal(n) {
                         }
     
                     //## Getter ##//
@@ -53,7 +52,7 @@
                          * @return the vertex's normal
                          */
                         Math::Vector4D<float> const& getNormal() const {
-                            return normalAndMatY;
+                            return normal;
                         }
     
                     //## Setter ##//
@@ -62,7 +61,7 @@
                          * @param n the new normal
                          */
                         void setNormal(Math::Vector4D<float> const& n) {
-                            normalAndMatY = n;
+                            normal = n;
                         }
 
                     //## Deconstructor ##//
@@ -78,7 +77,6 @@
                         static void access() {
                             Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(TerrainVertex), 0);
                             Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(TerrainVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
-                            Layout::enableAttribute(5, 4, GL_FLOAT, sizeof(TerrainVertex), (void*)(2 * sizeof(Math::Vector4D<float>)));
                         }
 
                     //## Stream Operator ##//
@@ -87,7 +85,7 @@
                          * @return the converted terrain vertex layout
                          */
                         Utility::String toString() const {
-                            return positionAndMatX.toString() + " - " + normalAndMatY.toString() + " - " + tangentAndMatZ.toString();
+                            return position.toString() + " - " + normal.toString();
                         }
 
             };

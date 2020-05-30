@@ -57,15 +57,8 @@
     
                         for (auto& it : terrainIndexed) {
                             TerrainVertex& layout = terrainBuffer->getData(it.second.vIndex);
-                            layout.normalAndMatY /= it.second.nbAdd;
-                            layout.normalAndMatY.normalize();
-        
-                            auto n = Vector3D<float>(layout.normalAndMatY);
-                            auto t = Vector3D<float>(0, 1, 0) ^ n;
-        
-                            layout.positionAndMatX.setW(2);
-                            layout.normalAndMatY.setW(1);
-                            layout.tangentAndMatZ = Vector4D<float>(t, 2);
+                            layout.normal /= it.second.nbAdd;
+                            layout.normal.normalize();
                         }
     
                         for (auto& it : waterIndexed) {

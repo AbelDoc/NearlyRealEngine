@@ -70,7 +70,6 @@
                             
                             auto pbr = ProgramManager::get<PBR>();
                             auto ssaoEffect = ProgramManager::get<SSAOEffect>();
-                            auto terrain = ProgramManager::get<Renderer::Terrain>();
     
                             pbr->bind();
                                 pbr->sendTexture();
@@ -83,10 +82,6 @@
                                 ssaoEffect->sendProjection(camera.getProjection());
                                 ssaoEffect->sendInvProjection(invProjection);
                             ssaoEffect->unbind();
-    
-                            terrain->bind();
-                                terrain->sendTexture();
-                            terrain->unbind();
     
                             SystemManager::get<ShadowSystem>()->setLight(light);
                         }
@@ -206,7 +201,7 @@
                         void update() override {
                             gBufferPass();
                             SSAOPass();
-                            //shadowPass();
+                            shadowPass();
                             PBRPass();
                         }
                         /**

@@ -36,8 +36,15 @@
         
             Model::Model ship;
             float shipSpeed;
-            Angle shipRoll;
-            Vector3D<float> shipPosition;
+            
+            Angle yaw;
+            Angle pitch;
+            Angle roll;
+            Point3D<float> position;
+            Vector3D<float> forward;
+            Vector3D<float> right;
+            Vector3D<float> up;
+            
             Matrix4x4<float>* shipModel;
             
             World::World world;
@@ -47,7 +54,7 @@
         
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(10.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), shipRoll(0_deg), shipPosition(-10, 5, 10), attach(true) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(10.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)), ship("Data/Model/Ship/Ship.obj"), shipSpeed(10.0f), yaw(0_deg), pitch(0_deg), roll(0_deg), position(-10, 5, 10), attach(true) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
                     glEnable(GL_CULL_FACE);
@@ -61,47 +68,37 @@
                     addHandler<KeyEvent>([&](KeyEvent& event) {
                         if (event.isCode(KeyCode::Z)) {
                             if (attach) {
-                                shipPosition += camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
+                                position += camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
                             } else {
                                 camera.moveFront();
                             }
                         } else if (event.isCode(KeyCode::S)) {
-                            if (attach) {
-                                shipPosition -= camera.getForward() * shipSpeed * Time::Clock::TIMESTEP;
-                            } else {
+                            if (!attach) {
                                 camera.moveBack();
                             }
                         } else if (event.isCode(KeyCode::Q)) {
                             if (attach) {
-                                shipPosition -= camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
+                                yaw -= shipSpeed * Time::Clock::TIMESTEP * Math::degree;
                             } else {
                                 camera.moveLeft();
                             }
                         } else if (event.isCode(KeyCode::D)) {
                             if (attach) {
-                                shipPosition += camera.getRight() * shipSpeed * Time::Clock::TIMESTEP;
+                                yaw += shipSpeed * Time::Clock::TIMESTEP * Math::degree;
                             } else {
                                 camera.moveRight();
                             }
                         } else if (event.isCode(KeyCode::LEFT_SHIFT)) {
                             if (attach) {
-                                shipPosition -= camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                                position -= camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
                             } else {
                                 camera.moveDown();
                             }
                         } else if (event.isCode(KeyCode::SPACE)) {
                             if (attach) {
-                                shipPosition += camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
+                                position += camera.getUp() * shipSpeed * Time::Clock::TIMESTEP;
                             } else {
                                 camera.moveUp();
-                            }
-                        } else if (event.isCode(KeyCode::A)) {
-                            if (attach) {
-                                shipRoll -= 5.0f * Math::degree;
-                            }
-                        } else if (event.isCode(KeyCode::E)) {
-                            if (attach) {
-                                shipRoll += 5.0f * Math::degree;
                             }
                         } else if (event.isCode(KeyCode::T)) {
                             attach = !attach;
@@ -111,11 +108,16 @@
                     });
 
                     addHandler<MotionEvent>([&](MotionEvent& event) {
-                        camera.turn(event.getMotion());
+                        if (attach) {
+                            roll  += static_cast <float> (event.getMotion().getX()) * Math::degree * 0.1f;
+                            pitch -= static_cast <float> (event.getMotion().getY()) * Math::degree * 0.1f;
+                        } else {
+                            camera.turn(event.getMotion());
+                        }
                         return true;
                     });
     
-                    /*chunks.reserve(World::World::NB_CHUNKS);
+                    chunks.reserve(World::World::NB_CHUNKS);
                     for (Chunk const& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
                         chunks.emplaceBack(&c);
@@ -125,7 +127,7 @@
                         water.setBoundObject(&camera.getFrustum());
                         r.assign<ECS::Terrain>(terrain);
                         r.assign<ECS::Water>(water);
-                    }*/
+                    }
                     
                     Entity l = Singleton<EntityManager>::get().create();
                     l.assign<Light>(Vector3D<float>(-10, 10, 0), Vector3D<float>(200, 200, 200));
@@ -138,14 +140,27 @@
                     Singleton<SystemManager>::get().configure();
                 }
                 void update() override {
-                    camera.update();
                     if (attach) {
-                        camera.setEye(shipPosition - 20 * camera.getForward() + 5 * camera.getUp());
+                        float tmp = static_cast <float> (cos(pitch));
+                        forward.setX(tmp * static_cast <float> (cos(yaw)));
+                        forward.setY(      static_cast <float> (sin(pitch)));
+                        forward.setZ(tmp * static_cast <float> (sin(yaw)));
+                        forward.normalize();
+    
+                        right = forward ^ Vector3D<float>(0, 1, 0);
+                        right.normalize();
+    
+                        up = right ^ forward;
+                        
+                        camera.setEye(position - 20 * forward + 5 * up);
+                        camera.setPitch(pitch);
+                        camera.setYaw(yaw);
+                        camera.update();
                         shipModel->setIdentity();
-                        shipModel->translate(shipPosition);
-                        shipModel->rotate(camera.getYaw(), Vector3D<float>(0, -1, 0));
-                        shipModel->rotate(camera.getPitch(), Vector3D<float>(0, 0, 1));
-                        shipModel->rotate(shipRoll, Vector3D<float>(1, 0, 0));
+                        shipModel->translate(position);
+                        shipModel->rotate(roll, forward);
+                    } else {
+                        camera.update();
                     }
                 }
                 void render() override {

@@ -47,13 +47,10 @@
                 if (scene->HasMaterials()) {
                     for (unsigned int i = 1; i < scene->mNumMaterials; ++i) {
                         aiMaterial* material = scene->mMaterials[i];
-                        aiString name;
                         aiColor3D albedo, metallic, roughness;
-                        material->Get(AI_MATKEY_NAME, name);
                         material->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
                         material->Get(AI_MATKEY_COLOR_AMBIENT, metallic);
                         material->Get(AI_MATKEY_COLOR_SPECULAR, roughness);
-                        std::cout << name.C_Str() << std::endl;
                         Utility::Singleton<Renderer::MaterialManager>::get().add(GL::Material(Math::Vector3D<float>(albedo.r, albedo.g, albedo.b), roughness.r, metallic.r));
                     }
                 }
@@ -102,7 +99,6 @@
             inline Mesh* Model::processMesh(aiMesh* mesh, std::size_t indexOffset) {
                 GL::IBO<GL::ModelVertex>* buffer = new GL::IBO<GL::ModelVertex>(GL_STATIC_DRAW);
     
-                std::cout << mesh->mMaterialIndex << "->" << static_cast <int> (indexOffset) + mesh->mMaterialIndex - 1 << std::endl;
                 buffer->reserve(mesh->mNumVertices);
                 for (int i = 0; i < static_cast <int> (mesh->mNumVertices); i++) {
                     Math::Vector3D<float> vector(mesh->mVertices[i].x,  mesh->mVertices[i].y, mesh->mVertices[i].z);
