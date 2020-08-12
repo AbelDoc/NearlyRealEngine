@@ -65,7 +65,7 @@
                             WaterVertex& layout = waterBuffer->getData(it.second.vIndex);
                             layout.normal /= it.second.nbAdd;
                             layout.normal.normalize();
-                            layout.position.setY(5);
+                            layout.position.setY(10);
                         }
                         auto* terrain = new ChunkMesh(terrainBuffer);
                         auto* water   = new ChunkMesh(waterBuffer);

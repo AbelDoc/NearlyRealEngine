@@ -20,6 +20,7 @@
                          for (int x = -H_SIZE_X; x <= H_SIZE_X; x++) {
                              Chunk& chunk = chunks[index++];
                              chunk.setPosition({static_cast <int> (Chunk::SIZE_X) * x, static_cast <int> (Chunk::SIZE_Y) * y, static_cast <int> (Chunk::SIZE_Z) * z});
+                             assignNeighbors(chunk, x, y, z);
                              ChunkFactory::createTerrain(chunk);
                          }
                      }

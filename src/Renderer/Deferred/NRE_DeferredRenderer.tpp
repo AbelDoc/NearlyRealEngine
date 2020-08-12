@@ -11,13 +11,11 @@
         namespace Renderer {
     
             inline DeferredRenderer::DeferredRenderer(Math::Vector2D<unsigned int> const& screenSize) : gBuffer(screenSize), shadowMap(Math::Vector2D<unsigned int>(512)) {
-                gBuffer.createColorBuffer<GL::Texture2D>(3, GL::Surface(gBuffer.getSize(), GL_RGB, GL_RGB16F), GL_FLOAT, false);
-                gBuffer.createDepthBuffer<GL::Texture2D>(GL_DEPTH_ATTACHMENT, GL::Surface(gBuffer.getSize(), GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT32F), GL_FLOAT, false);
+                gBuffer.createColorBuffer<GL::Texture2D>(4, GL::Surface(gBuffer.getSize(), GL_RGB, GL_RGB16F), GL_FLOAT, false);
+                gBuffer.createDepthBuffer<GL::RenderBuffer>(GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, screenSize.getW(), screenSize.getH());
                 shadowMap.createDepthBuffer<GL::Texture2D>(GL_DEPTH_ATTACHMENT, GL::Surface(shadowMap.getSize(), GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT), GL_FLOAT, false);
                 shadowMap.getDepthBuffer()->bind();
                     float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
                     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
                     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);

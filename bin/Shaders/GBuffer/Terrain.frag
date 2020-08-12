@@ -10,14 +10,15 @@
         float metallic;
     } materials[MAX_MAT];
 
-    in vec3 vertex;
+    in vec3 worldPos;
     in vec3 normal;
     flat in int material;
 
-    out vec3 [3] fragData;
+    out vec3 [4] fragData;
 
     void main() {
-        fragData[0] = materials[material].albedo;
-        fragData[1] = normal;
-        fragData[2] = vec3(materials[material].roughness, materials[material].metallic, 0);
+        fragData[0] = worldPos;
+        fragData[1] = materials[material].albedo;
+        fragData[2] = normalize(normal);
+        fragData[3] = vec3(materials[material].roughness, materials[material].metallic, 0);
     }

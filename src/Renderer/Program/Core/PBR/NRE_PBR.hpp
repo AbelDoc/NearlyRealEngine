@@ -55,7 +55,7 @@
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("texDepth");
+                            addUniform("texPos");
                             addUniform("texShadow");
                             addUniform("texColor");
                             addUniform("texNormal");
@@ -70,8 +70,7 @@
                                 addUniform(base + "].intensities");
                             }
                             addUniform("cameraV");
-                            addUniform("invModelview");
-                            addUniform("invProjection");
+                            addUniform("invView");
                             addUniform("lightSpace");
                             addUniform("numLights");
                         }
@@ -82,18 +81,11 @@
                             use1I("irradianceMap", 0);
                             use1I("prefilterMap", 1);
                             use1I("brdfLUT", 2);
-                            use1I("texDepth", 3);
+                            use1I("texPos", 3);
                             use1I("texColor", 4);
                             use1I("texNormal", 5);
                             use1I("texMaterial", 6);
                             use1I("texShadow", 7);
-                        }
-                        /**
-                         * Send the inverse projection matrix to the shader
-                         * @param m the inverse projection matrix
-                         */
-                        void sendInvProjection(Math::Matrix4x4<float> const& m) const {
-                            useMat4("invProjection", 1, &m);
                         }
                         /**
                          * Send the light space matrix to the shader
@@ -107,10 +99,10 @@
                          * @param c the camera
                          */
                         void sendCamera(Camera::Camera const& c) const {
-                            Math::Matrix4x4<float> invModelview = c.getView();
-                            invModelview.inverse();
+                            Math::Matrix4x4<float> invView = c.getView();
+                            invView.inverse();
                             use3FV("cameraV", 1, c.getEye().value());
-                            useMat4("invModelview", 1, &invModelview);
+                            useMat4("invView", 1, &invView);
                         }
 
                 public:     // Static

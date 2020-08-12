@@ -41,6 +41,22 @@
                     };
 
                 private :   // Static
+                    static constexpr Math::Vector3D<std::size_t> vertexOffset[8] = {
+                        {0, 0, 0}, {0, 0, 1}, {1, 0, 1}, {1, 0, 0},
+                        {0, 1, 0}, {0, 1, 1}, {1, 1, 1}, {1, 1, 0}
+                    };
+                    static constexpr std::size_t edgeConnection[12][2] = {
+                        {0, 1}, {1, 2}, {2, 3}, {3, 0},
+                        {4, 5}, {5, 6}, {6, 7}, {7, 4},
+                        {0, 4}, {1, 5}, {2, 6}, {3, 7}
+                    };
+                    static constexpr std::size_t winding[15] = {
+                        0 , 2 , 1,
+                        3 , 5 , 4,
+                        6 , 8 , 7,
+                        9 , 11, 10,
+                        12, 14, 13
+                    };
                     static constexpr std::uint16_t edgeTable[256] = {
                         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
                         0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,

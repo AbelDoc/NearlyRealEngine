@@ -56,59 +56,36 @@
                             using namespace Utility;
                             using namespace GL;
                             time += Time::Clock::TIMESTEP;
-                            
+    
                             auto terrain = ProgramManager::get<Renderer::Terrain>();
                             auto water = ProgramManager::get<Renderer::Water>();
                             auto model = ProgramManager::get<Renderer::Model>();
-                            auto VP = camera.getProjection()  * camera.getView();
-                            terrain->bind(); {
-                                terrain->sendMatrix(VP);
-                                int nb = 0;
-                                for (Material& m : Singleton<MaterialManager>::get()) {
-                                    String base("materials[");
-                                    base << nb;
-                                    terrain->use3FV(base + "].albedo", 1, m.getAlbedo().value());
-                                    terrain->use1F(base + "].roughness", m.getRoughness());
-                                    terrain->use1F(base + "].metallic", m.getMetallic());
-                                    nb++;
-                                }
-                                model->use1I("numMats", static_cast <int> (nb));
+                            
+                            terrain->bind();
+                                terrain->sendView(camera.getView());
                                 Singleton<EntityManager>::get().each<ECS::Terrain>([this](Entity, ECS::Terrain& t) {
                                     if (t.mesh.canBeDrawn()) {
                                         t.mesh.draw();
                                     }
                                 });
-                            }
                             terrain->unbind();
-                            water->bind(); {
-                                water->sendMatrix(VP);
+                            water->bind();
+                                water->sendView(camera.getView());
                                 water->sendTime(time);
                                 Singleton<EntityManager>::get().each<ECS::Water>([this](Entity, ECS::Water& w) {
                                     if (w.mesh.canBeDrawn()) {
                                         w.mesh.draw();
                                     }
                                 });
-                            }
                             water->unbind();
                             model->bind();
-                            {
-                                int nb = 0;
-                                for (Material& m : Singleton<MaterialManager>::get()) {
-                                    String base("materials[");
-                                    base << nb;
-                                    model->use3FV(base + "].albedo", 1, m.getAlbedo().value());
-                                    model->use1F(base + "].roughness", m.getRoughness());
-                                    model->use1F(base + "].metallic", m.getMetallic());
-                                    nb++;
-                                }
-                                model->use1I("numMats", static_cast <int> (nb));
+                                model->sendView(camera.getView());
                                 Singleton<EntityManager>::get().each<ECS::Model>([this, &model](Entity, ECS::Model& m) {
                                     if (m.mesh->canBeDrawn()) {
-                                        model->sendMatrix(camera.getProjection() * camera.getView() * m.model);
+                                        model->sendModel(m.model);
                                         m.mesh->draw();
                                     }
                                 });
-                            }
                             model->unbind();
                         }
 

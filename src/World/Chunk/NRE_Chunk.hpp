@@ -1,4 +1,5 @@
-/**
+    
+    /**
      * @file NRE_Chunk.hpp
      * @brief Declaration of Engine's World's Object : Chunk
      * @author Louis ABEL
@@ -8,8 +9,7 @@
 
     #pragma once
 
-    #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include "../Voxel/NRE_VoxelsContainer.hpp"
 
     /**
      * @namespace NRE
@@ -31,18 +31,9 @@
                     static constexpr std::size_t SIZE_X     = 16;
                     static constexpr std::size_t SIZE_Y     = 16;
                     static constexpr std::size_t SIZE_Z     = 16;
-                    static constexpr std::size_t VOLUME     = SIZE_X * SIZE_Y * SIZE_Z;
-
-                    static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;
-                    static constexpr std::size_t VOXELS_LAYER_AREA  = VOXELS_LAYER_WIDTH * (SIZE_Z + 1);
-                    static constexpr std::size_t VOXELS_VOLUME      = VOXELS_LAYER_AREA  * (SIZE_Y + 1);
 
                 public :    // Iterator
-                    typedef Utility::Array<float, VOXELS_VOLUME> VoxelsContainer;
-                    /**< Shortcut to hide Iterator implementation */
-                    typedef VoxelsContainer::Iterator         Iterator;
-                    /**< Shortcut to hide ConstIterator implementation */
-                    typedef VoxelsContainer::ConstIterator    ConstIterator;
+                    typedef VoxelsContainer<SIZE_X, SIZE_Y, SIZE_Z> VoxelsContainer;
 
                 private :   // Fields
                     VoxelsContainer terrain;            /**< The chunk's terrain voxels */
@@ -99,6 +90,12 @@
                          * @param p the new position
                          */
                         void setPosition(Math::Point3D<int> const& p);
+                        /**
+                         * Set a neighbor
+                         * @param n     the new neighbor
+                         * @param index the neighbor index
+                         */
+                        void setNeighbor(Chunk const& n, std::size_t index);
 
                     //## Assignment Operator ##//
                         /**

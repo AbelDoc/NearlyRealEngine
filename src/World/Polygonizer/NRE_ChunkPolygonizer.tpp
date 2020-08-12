@@ -16,153 +16,50 @@
                 using namespace Math;
                 
                 Point3D<float> vertices[12];
-        
-                std::size_t width = Chunk::VOXELS_LAYER_WIDTH * level;
-                std::size_t area = Chunk::VOXELS_LAYER_AREA * level;
-        
-                std::size_t index = 0;
-                std::size_t topLayerIndex;
+                Vector4D<float> normals[12];
+                Point3D<float> points[8];
+                Vector3D<float> gradients[8];
+                float values[8];
         
                 for (std::size_t y = 0; y < Chunk::SIZE_Y; y += level) {
                     for (std::size_t z = 0; z < Chunk::SIZE_Z; z += level) {
                         for (std::size_t x = 0; x < Chunk::SIZE_X; x += level) {
-                            index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
                             std::uint8_t corners = 0b00000000;
-                            topLayerIndex = index + area;
-                            float v0 = target[index];
-                            float v1 = target[index + width];
-                            float v2 = target[index + width + level];
-                            float v3 = target[index + level];
-                            float v4 = target[topLayerIndex];
-                            float v5 = target[topLayerIndex + width];
-                            float v6 = target[topLayerIndex + width + level];
-                            float v7 = target[topLayerIndex + level];
+                            for (std::size_t i = 0; i < 8; i++) {
+                                values[i] = target.getVoxel(x + vertexOffset[i].getX(), y + vertexOffset[i].getY(), z + vertexOffset[i].getZ());
+                                Point3D<float> localPts = Point3D<float>(x, y, z) + vertexOffset[i] * level;
+                                points[i] = position + localPts;
+                                gradients[i] = target.getGradient(localPts);
+                                if (values[i] < threshold) {
+                                    corners |= static_cast <std::uint8_t> (1 << i);
+                                }
+                            }
                     
-                            float xF = static_cast <float> (x);
-                            float yF = static_cast <float> (y);
-                            float zF = static_cast <float> (z);
-                            float levelF = static_cast <float> (level);
-                    
-                            if (v0 < threshold) {
-                                corners |= 0b00000001;
-                            }
-                            if (v1 < threshold) {
-                                corners |= 0b00000010;
-                            }
-                            if (v2 < threshold) {
-                                corners |= 0b00000100;
-                            }
-                            if (v3 < threshold) {
-                                corners |= 0b00001000;
-                            }
-                            if (v4 < threshold) {
-                                corners |= 0b00010000;
-                            }
-                            if (v5 < threshold) {
-                                corners |= 0b00100000;
-                            }
-                            if (v6 < threshold) {
-                                corners |= 0b01000000;
-                            }
-                            if (v7 < threshold) {
-                                corners |= 0b10000000;
-                            }
                             if (edgeTable[corners] != 0) {
-                                Point3D<float> p0 = Point3D<float>(xF, yF, zF) + position;
-                                Point3D<float> p1 = Point3D<float>(xF, yF, zF + levelF) + position;
-                                Point3D<float> p2 = Point3D<float>(xF + levelF, yF, zF + levelF) + position;
-                                Point3D<float> p3 = Point3D<float>(xF + levelF, yF, zF) + position;
-                                Point3D<float> p4 = Point3D<float>(xF, yF + levelF, zF) + position;
-                                Point3D<float> p5 = Point3D<float>(xF, yF + levelF, zF + levelF) + position;
-                                Point3D<float> p6 = Point3D<float>(xF + levelF, yF + levelF, zF + levelF) + position;
-                                Point3D<float> p7 = Point3D<float>(xF + levelF, yF + levelF, zF) + position;
-                        
-                                if (edgeTable[corners] & 1) {
-                                    vertices[0] = interpolator(threshold, p0, p1, v0, v1);
-                                }
-                                if (edgeTable[corners] & 2) {
-                                    vertices[1] = interpolator(threshold, p1, p2, v1, v2);
-                                }
-                                if (edgeTable[corners] & 4) {
-                                    vertices[2] = interpolator(threshold, p2, p3, v2, v3);
-                                }
-                                if (edgeTable[corners] & 8) {
-                                    vertices[3] = interpolator(threshold, p3, p0, v3, v0);
-                                }
-                                if (edgeTable[corners] & 16) {
-                                    vertices[4] = interpolator(threshold, p4, p5, v4, v5);
-                                }
-                                if (edgeTable[corners] & 32) {
-                                    vertices[5] = interpolator(threshold, p5, p6, v5, v6);
-                                }
-                                if (edgeTable[corners] & 64) {
-                                    vertices[6] = interpolator(threshold, p6, p7, v6, v7);
-                                }
-                                if (edgeTable[corners] & 128) {
-                                    vertices[7] = interpolator(threshold, p7, p4, v7, v4);
-                                }
-                                if (edgeTable[corners] & 256) {
-                                    vertices[8] = interpolator(threshold, p0, p4, v0, v4);
-                                }
-                                if (edgeTable[corners] & 512) {
-                                    vertices[9] = interpolator(threshold, p1, p5, v1, v5);
-                                }
-                                if (edgeTable[corners] & 1024) {
-                                    vertices[10] = interpolator(threshold, p2, p6, v2, v6);
-                                }
-                                if (edgeTable[corners] & 2048) {
-                                    vertices[11] = interpolator(threshold, p3, p7, v3, v7);
-                                }
-                                for (int i = 0; triTable[corners][i] != 0xFF; i += 3) {
-                                    std::uint8_t p0Index = triTable[corners][i];
-                                    std::uint8_t p1Index = triTable[corners][i + 2];
-                                    std::uint8_t p2Index = triTable[corners][i + 1];
-                            
-                                    Point3D<float> vertex0 = vertices[p0Index];
-                                    Point3D<float> vertex1 = vertices[p1Index];
-                                    Point3D<float> vertex2 = vertices[p2Index];
-                            
-                                    Vector4D<float> normal((vertex1 - vertex0) ^ (vertex2 - vertex0), 0.0);
-                            
-                                    auto it0 = indexed.find(vertex0);
-                                    if (it0 != indexed.end()) {
-                                        Layout& layout = ibo.getData(it0->second.vIndex);
-                                        layout.setNormal(normal + layout.getNormal());
-                                        it0->second.nbAdd++;
-                                        ibo.addIndex(it0->second.index);
-                                    } else {
-                                        std::uint32_t newIndex = ibo.getNextIndex();
-                                
-                                        indexed[vertex0] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex0, normal);
-                                        ibo.addIndex(newIndex);
+                                for (std::size_t i = 0; i < 12; i++) {
+                                    if (edgeTable[corners] & (1 << i)) {
+                                        std::size_t c0 = edgeConnection[i][0];
+                                        std::size_t c1 = edgeConnection[i][1];
+                                        vertices[i] = interpolator(threshold, points[c0], points[c1], values[c0], values[c1]);
+                                        normals[i] = interpolator(threshold, gradients[c0], gradients[c1], values[c0], values[c1]);
                                     }
+                                }
+                                for (int i = 0; triTable[corners][i] != 0xFF; i++) {
+                                    std::size_t triIndex = triTable[corners][winding[i]];
+                                    Point3D<float> vertex = vertices[triIndex];
+                                    Vector4D<float> normal = normals[triIndex];
                             
-                                    auto it1 = indexed.find(vertex1);
-                                    if (it1 != indexed.end()) {
-                                        Layout& layout = ibo.getData(it1->second.vIndex);
+                                    auto it = indexed.find(vertex);
+                                    if (it != indexed.end()) {
+                                        Layout& layout = ibo.getData(it->second.vIndex);
                                         layout.setNormal(normal + layout.getNormal());
-                                        it1->second.nbAdd++;
-                                        ibo.addIndex(it1->second.index);
+                                        it->second.nbAdd++;
+                                        ibo.addIndex(it->second.index);
                                     } else {
                                         std::uint32_t newIndex = ibo.getNextIndex();
                                 
-                                        indexed[vertex1] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex1, normal);
-                                        ibo.addIndex(newIndex);
-                                    }
-                            
-                                    auto it2 = indexed.find(vertex2);
-                                    if (it2 != indexed.end()) {
-                                        Layout& layout = ibo.getData(it2->second.vIndex);
-                                        layout.setNormal(normal + layout.getNormal());
-                                        it2->second.nbAdd++;
-                                        ibo.addIndex(it2->second.index);
-                                    } else {
-                                        std::uint32_t newIndex = ibo.getNextIndex();
-                                
-                                        indexed[vertex2] = {ibo.getDataCount(), newIndex, 1};
-                                        ibo.addData(vertex2, normal);
+                                        indexed[vertex] = {ibo.getDataCount(), newIndex, 1};
+                                        ibo.addData(vertex, normal);
                                         ibo.addIndex(newIndex);
                                     }
                                 }

@@ -29,9 +29,9 @@
                          e *= Chunk::SIZE_Y * World::SIZE_Y;
                          for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                              float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY());
-                             std::size_t index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
+                             std::size_t index = y * Chunk::VoxelsContainer::VOXELS_LAYER_AREA + z * Chunk::VoxelsContainer::VOXELS_LAYER_WIDTH + x;
                              target.getTerrainVoxels()[index] = (ny - e) + 0.0001f;
-                             if (e < 5) {
+                             if (e < 10) {
                                  target.getWaterVoxels()[index] = ny - 0.0001f;
                              }
                          }

@@ -52,13 +52,12 @@
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("texDepth");
+                            addUniform("texPos");
                             addUniform("texNormal");
                             addUniform("texNoise");
                             addUniform("projection");
-                            addUniform("invProjection");
+                            addUniform("normalMat");
                             addUniform("gKernel");
-                            addUniform("gSampleRad");
                         }
                         /**
                          * Send the ssao kernel
@@ -66,13 +65,12 @@
                          */
                         void sendKernel(SSAO const& ssao) const {
                             use3FV("gKernel", SSAO::KERNEL_SIZE, ssao.getKernel()[0].value());
-                            use1F("gSampleRad", 0.5);
                         }
                         /**
                          * Send textures binding point to the shader
                          */
                         void sendTexture() const {
-                            use1I("texDepth", 0);
+                            use1I("texPos", 0);
                             use1I("texNormal", 1);
                             use1I("texNoise", 2);
                         }
@@ -84,11 +82,11 @@
                             useMat4("projection", 1, &m);
                         }
                         /**
-                         * Send the inverse projection matrix to the shader
-                         * @param m the inverse projection matrix
+                         * Send the normal matrix to the shader
+                         * @param m the normal matrix
                          */
-                        void sendInvProjection(Math::Matrix4x4<float> const& m) const {
-                            useMat4("invProjection", 1, &m);
+                        void sendNormalMatrix(Math::Matrix3x3<float> const& m) const {
+                            useMat3("normalMat", 1, &m);
                         }
             };
         }

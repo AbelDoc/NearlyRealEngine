@@ -39,7 +39,7 @@
                     Renderer::DeferredRenderer renderer;       /**< The deferred renderer object */
                     Camera::Camera const& camera;              /**< The application's camera */
                     Camera::OrthographicCamera light;          /**< The light's camera */
-                    NRE::Model::RectangleMesh screen;               /**< The screen mesh */
+                    NRE::Model::RectangleMesh screen;          /**< The screen mesh */
                     Renderer::SSAO ssao;                       /**< The ssao object */
                     GL::SkyBox skyBox;                         /**< The skybox */
 
@@ -51,7 +51,7 @@
                          * @param screenSize the window screen size
                          * @param mapPath    the application's skybox
                          */
-                        DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), light(0, Math::Vector3D<float>(-64, 0, 0), Math::Vector2D<float>(256), Math::Vector2D<float>(0.1, 300.0f), 0 * Math::degree, -20 * Math::degree), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
+                        DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), light(0, Math::Vector3D<float>(-8, 16, 0), Math::Vector2D<float>(256), Math::Vector2D<float>(0.1, 300.0f), 0 * Math::degree, -20 * Math::degree), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
                             GL::setViewport(screenSize);
     
                             Utility::Singleton<SystemManager>::get().add<GBufferSystem>(camera);
@@ -63,26 +63,60 @@
                          * Configure the system, called once before any rendering or update
                          */
                         void configure() override {
+                            using namespace GL;
+                            using namespace Utility;
                             using namespace Renderer;
-                            
-                            Math::Matrix4x4<float> invProjection = camera.getProjection();
-                            invProjection.inverse();
-                            
+    
                             auto pbr = ProgramManager::get<PBR>();
                             auto ssaoEffect = ProgramManager::get<SSAOEffect>();
+                            auto terrain = ProgramManager::get<Renderer::Terrain>();
+                            auto model = ProgramManager::get<Renderer::Model>();
+                            auto water = ProgramManager::get<Renderer::Water>();
+                            
+                            int nb;
     
                             pbr->bind();
                                 pbr->sendTexture();
-                                pbr->sendInvProjection(invProjection);
                             pbr->unbind();
                             
                             ssaoEffect->bind();
                                 ssaoEffect->sendKernel(ssao);
                                 ssaoEffect->sendTexture();
                                 ssaoEffect->sendProjection(camera.getProjection());
-                                ssaoEffect->sendInvProjection(invProjection);
                             ssaoEffect->unbind();
+                            
+                            terrain->bind();
+                                nb = 0;
+                                for (Material& m : Singleton<MaterialManager>::get()) {
+                                    String base("materials[");
+                                    base << nb;
+                                    terrain->use3FV(base + "].albedo", 1, m.getAlbedo().value());
+                                    terrain->use1F(base + "].roughness", m.getRoughness());
+                                    terrain->use1F(base + "].metallic", m.getMetallic());
+                                    nb++;
+                                }
+                                terrain->use1I("numMats", static_cast <int> (nb));
+                                terrain->sendProjection(camera.getProjection());
+                            terrain->unbind();
     
+                            water->bind();
+                                water->sendProjection(camera.getProjection());
+                            water->unbind();
+    
+                            model->bind();
+                                nb = 0;
+                                for (Material& m : Singleton<MaterialManager>::get()) {
+                                    String base("materials[");
+                                    base << nb;
+                                    model->use3FV(base + "].albedo", 1, m.getAlbedo().value());
+                                    model->use1F(base + "].roughness", m.getRoughness());
+                                    model->use1F(base + "].metallic", m.getMetallic());
+                                    nb++;
+                                }
+                                model->use1I("numMats", static_cast <int> (nb));
+                                model->sendProjection(camera.getProjection());
+                            model->unbind();
+                                
                             SystemManager::get<ShadowSystem>()->setLight(light);
                         }
                         /**
@@ -94,8 +128,8 @@
                             using namespace GL;
                             
                             renderer.bind();
+                                setDrawTargets(GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3);
                                 clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                                setDrawTargets(GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2);
                                 
                                 auto shader = ProgramManager::get<Renderer::SkyBox>();
 
@@ -123,18 +157,20 @@
                                 setDepthMask(false);
                                 setColorMask(false, false, true, false);
                     
-                                setDrawTargets(GL_COLOR_ATTACHMENT2);
+                                setDrawTargets(GL_COLOR_ATTACHMENT3);
                     
                                 ProgramManager::get<SSAOEffect>()->bind();
-                                    bindTexture(renderer.getDepthBuffer(),  0);
-                                    bindTexture(renderer.getColorBuffer(1), 1);
+                                    bindTexture(renderer.getColorBuffer(0),  0);
+                                    bindTexture(renderer.getColorBuffer(2), 1);
                                     bindTexture(ssao.getNoise(), 2);
-                        
+    
+    
+                                    ProgramManager::get<SSAOEffect>()->sendNormalMatrix(Math::Matrix3x3<float>(camera.getView()).inverse().transpose());
                                     screen.draw();
                                     
                                     unbindTexture(ssao.getNoise(), 2);
-                                    unbindTexture(renderer.getColorBuffer(1), 1);
-                                    unbindTexture(renderer.getDepthBuffer(),  0);
+                                    unbindTexture(renderer.getColorBuffer(2), 1);
+                                    unbindTexture(renderer.getColorBuffer(0),  0);
                                 ProgramManager::get<SSAOEffect>()->unbind();
     
                                 setColorMask(true, true, true, true);
@@ -176,19 +212,19 @@
                                 bindTexture(skyBox.getIrradiance(), 0);
                                 bindTexture(skyBox.getPrefilter(), 1);
                                 bindTexture(skyBox.getBRDFLUT(), 2);
-                                bindTexture(renderer.getDepthBuffer(), 3);
-                                bindTexture(renderer.getColorBuffer(0), 4);
-                                bindTexture(renderer.getColorBuffer(1), 5);
-                                bindTexture(renderer.getColorBuffer(2), 6);
+                                bindTexture(renderer.getColorBuffer(0), 3);
+                                bindTexture(renderer.getColorBuffer(1), 4);
+                                bindTexture(renderer.getColorBuffer(2), 5);
+                                bindTexture(renderer.getColorBuffer(3), 6);
                                 bindTexture(renderer.getShadowMap(), 7);
                                 
                                     screen.draw();
     
                                 unbindTexture(renderer.getShadowMap(), 7);
-                                unbindTexture(renderer.getColorBuffer(2), 6);
-                                unbindTexture(renderer.getColorBuffer(1), 5);
-                                unbindTexture(renderer.getColorBuffer(0), 4);
-                                unbindTexture(renderer.getDepthBuffer(), 3);
+                                unbindTexture(renderer.getColorBuffer(3), 6);
+                                unbindTexture(renderer.getColorBuffer(2), 5);
+                                unbindTexture(renderer.getColorBuffer(1), 4);
+                                unbindTexture(renderer.getColorBuffer(0), 3);
                                 unbindTexture(skyBox.getBRDFLUT(), 2);
                                 unbindTexture(skyBox.getPrefilter(), 1);
                                 unbindTexture(skyBox.getIrradiance(), 0);
@@ -201,7 +237,7 @@
                         void update() override {
                             gBufferPass();
                             SSAOPass();
-                            shadowPass();
+                            //shadowPass();
                             PBRPass();
                         }
                         /**

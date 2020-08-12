@@ -48,15 +48,23 @@
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("MVP");
+                            addUniform("view");
+                            addUniform("projection");
                             addUniform("time");
                         }
                         /**
-                         * Send a matrix to the shader
+                         * Send the projection matrix to the shader
                          * @param m the matrix
                          */
-                        void sendMatrix(Math::Matrix4x4<float> const& m) const {
-                            useMat4("MVP", 1, &m);
+                        void sendProjection(Math::Matrix4x4<float> const& m) const {
+                            useMat4("projection", 1, &m);
+                        }
+                        /**
+                         * Send the view matrix to the shader
+                         * @param m the matrix
+                         */
+                        void sendView(Math::Matrix4x4<float> const& m) const {
+                            useMat4("view", 1, &m);
                         }
                         /**
                          * Send the time to the shader

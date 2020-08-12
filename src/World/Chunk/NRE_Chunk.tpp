@@ -36,6 +36,11 @@
              inline void Chunk::setPosition(Math::Point3D<int> const& p) {
                  position = p;
              }
+             
+             inline void Chunk::setNeighbor(Chunk const& n, std::size_t index) {
+                 terrain.setNeighbor(n.terrain, index);
+                 water.setNeighbor(n.water, index);
+             }
 
              inline Utility::String Chunk::toString() const {
                  return "Position : " + position.toString() + "\nTerrain : " + terrain.toString() + "\nWater : " + water.toString();

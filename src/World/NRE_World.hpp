@@ -35,8 +35,10 @@
                 public :    // Static
                     static constexpr int H_SIZE_X = 2;
                     static constexpr int H_SIZE_Z = 2;
-                    static constexpr int   SIZE_Y = 2;
-                    static constexpr std::size_t NB_CHUNKS = ((static_cast <std::size_t> (H_SIZE_X) * 2) + 1) * ((static_cast <std::size_t> (H_SIZE_Z) * 2) + 1) * static_cast <std::size_t> (SIZE_Y);
+                    static constexpr int   SIZE_Y = 5;
+                    static constexpr int   SIZE_X = static_cast <std::size_t> (H_SIZE_X) * 2 + 1;
+                    static constexpr int   SIZE_Z = static_cast <std::size_t> (H_SIZE_Z) * 2 + 1;
+                    static constexpr std::size_t NB_CHUNKS = SIZE_X * SIZE_Z * static_cast <std::size_t> (SIZE_Y);
 
                 private :   // Fields
                     Chunk* chunks;      /**< The world's chunks */
@@ -67,6 +69,48 @@
                          * World Deconstructor
                          */
                         ~World();
+    
+                    //## Getter ##//
+                        /**
+                         * Query a specific chunk
+                         * @param index the chunk's index
+                         * @return the corresponding chunk
+                         */
+                        Chunk const& getChunk(std::size_t index) const;
+                        /**
+                         * Query a specific chunk
+                         * @param x the chunk's x coordinate
+                         * @param y the chunk's y coordinate
+                         * @param z the chunk's z coordinate
+                         * @return the corresponding chunk
+                         */
+                        Chunk const& getChunk(std::size_t x, std::size_t y, std::size_t z) const;
+                        /**
+                         * Query a specific chunk
+                         * @param p the chunk's coordinates
+                         * @return the corresponding chunk
+                         */
+                        Chunk const& getChunk(Math::Point3D<std::size_t> const& p) const;
+                        /**
+                         * Query a specific chunk
+                         * @param index the chunk's index
+                         * @return the corresponding chunk
+                         */
+                        Chunk& getChunk(std::size_t index);
+                        /**
+                         * Query a specific chunk
+                         * @param x the chunk's x coordinate
+                         * @param y the chunk's y coordinate
+                         * @param z the chunk's z coordinate
+                         * @return the corresponding chunk
+                         */
+                        Chunk& getChunk(std::size_t x, std::size_t y, std::size_t z);
+                        /**
+                         * Query a specific chunk
+                         * @param p the chunk's coordinates
+                         * @return the corresponding chunk
+                         */
+                        Chunk& getChunk(Math::Point3D<std::size_t> const& p);
 
                     //## Iterator Access ##//
                         /**
@@ -93,7 +137,7 @@
                          * @return a const iterator on the end of the container
                          */
                         ConstIterator cend() const;
-
+    
                     //## Access Operator ##//
                         /**
                          * Return a reference on a chunk's object
@@ -123,6 +167,9 @@
                          * @return  the reference of himself
                          */
                         World& operator =(World && w);
+                        
+                private :   // Methods
+                    void assignNeighbors(Chunk& chunk, int x, int y, int z);
 
             };
 

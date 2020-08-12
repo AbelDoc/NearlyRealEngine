@@ -11,11 +11,10 @@
 
     in vec2 uv;
 
-    uniform mat4 invModelview;
-    uniform mat4 invProjection;
     uniform mat4 lightSpace;
+    uniform mat4 invView;
 
-    uniform sampler2D texDepth;
+    uniform sampler2D texPos;
     uniform sampler2D texShadow;
     uniform sampler2D texColor;
     uniform sampler2D texNormal;
@@ -29,15 +28,6 @@
     const float PI = 3.14159265359;
 
     out vec4 out_Color;
-
-    vec4 worldPosFromDepth(vec2 tc) {
-        float z = texture(texDepth, tc).x * 2.0 - 1.0;
-
-        vec4 clipSpacePosition = vec4(tc * 2.0 - 1.0, z, 1.0);
-        vec4 viewSpacePosition = invProjection * clipSpacePosition;
-
-        return viewSpacePosition /= viewSpacePosition.w;
-    }
 
     vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness) {
         return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
@@ -88,13 +78,7 @@
                 result += texture(texMaterial, uv + offset).z;
             }
         }
-
         return result / (4.0 * 4.0);
-    }
-
-    float LinearizeDepth(float depth) {
-        float z = depth * 2.0 - 1.0; // Back to NDC
-        return (2.0 * 0.1 * 300.0) / (300.0 + 0.1 - z * (300.0 - 0.1));
     }
 
     float computeShadow(vec4 vertexLightSpace) {
@@ -117,9 +101,8 @@
 
     void main() {
         vec3 N = texture(texNormal, uv).xyz;
-
         if (N != vec3(0.0, 0.0, 0.0)) {
-            vec3 vertex = (invModelview * worldPosFromDepth(uv)).xyz;
+            vec3 vertex = (invView * texture(texPos, uv)).xyz;
             vec3 V = normalize(cameraV - vertex);
             vec3 R = reflect(-V, N);
 
@@ -171,13 +154,12 @@
             vec2 brdf = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
             vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
-            float shadow = computeShadow(lightSpace * vec4(vertex, 1.0));
             float ao = computeBlur(uv);
             vec3 ambient = (kD * diffuse + specular) * ao;
 
-            vec3 color = (ambient + Lo * (1.0 - shadow));
+            vec3 color = ambient + Lo;
 
-            float exposure = 1.0;
+            float exposure = 0.2;
             float gamma = 2.2;
             vec3 mapped = vec3(1.0) - exp(-color * exposure);
             mapped = pow(mapped, vec3(1.0 / gamma));
