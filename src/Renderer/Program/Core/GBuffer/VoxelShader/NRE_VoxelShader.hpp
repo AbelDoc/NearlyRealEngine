@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_Model.hpp
-     * @brief Declaration of Engine's Renderer's Object : Model
+     * @file NRE_VoxelShader.hpp
+     * @brief Declaration of Engine's Renderer's Object : VoxelShader
      * @author Louis ABEL
      * @date 15/04/2020
      * @copyright CC-BY-NC-SA
@@ -23,16 +23,16 @@
         namespace Renderer {
 
             /**
-             * @class Model
-             * @brief Manage a gbuffer shader to draw textured model
+             * @class VoxelShader
+             * @brief Manage a gbuffer shader to draw triplanar terrain
              */
-            class Model : public AbstractProgram<Model> {
+            class VoxelShader : public AbstractProgram<VoxelShader> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        Model() {
+                        VoxelShader() {
                             load();
                         }
 
@@ -41,16 +41,15 @@
                          * Add program's stages
                          */
                         void addStages() override {
-                            addStage<VertexShader>("GBuffer/Model.vert");
-                            addStage<FragmentShader>("GBuffer/Model.frag");
+                            addStage<VertexShader>("GBuffer/Voxel.vert");
+                            addStage<FragmentShader>("GBuffer/Voxel.frag");
                         }
                         /**
                          * Add program's uniforms
                          */
                         void addUniforms() override {
-                            addUniform("model");
-                            addUniform("view");
                             addUniform("projection");
+                            addUniform("view");
                             addUniform("numMats");
                             for (unsigned int i = 0; i < MAX_MATERIALS; i++) {
                                 Utility::String base("materials[");
@@ -74,16 +73,9 @@
                         void sendView(Math::Matrix4x4<float> const& m) const {
                             useMat4("view", 1, &m);
                         }
-                        /**
-                         * Send the model matrix to the shader
-                         * @param m the matrix
-                         */
-                        void sendModel(Math::Matrix4x4<float> const& m) const {
-                            useMat4("model", 1, &m);
-                        }
 
                 public:     // Static
-                    constexpr static const GLuint MAX_MATERIALS = 100;  /**< The maximum number of materials in a scene */
+                    constexpr static const GLuint MAX_MATERIALS = 16;  /**< The maximum number of materials in a scene */
             };
         }
     }

@@ -17,20 +17,12 @@
                  return position;
              }
     
-             inline typename Chunk::VoxelsContainer& Chunk::getTerrainVoxels() {
-                 return terrain;
+             inline typename Chunk::VoxelsContainer& Chunk::getVoxels() {
+                 return voxels;
              }
              
-             inline typename Chunk::VoxelsContainer const& Chunk::getTerrainVoxels() const {
-                 return terrain;
-             }
-    
-             inline typename Chunk::VoxelsContainer& Chunk::getWaterVoxels() {
-                 return water;
-             }
-    
-             inline typename Chunk::VoxelsContainer const& Chunk::getWaterVoxels() const {
-                 return water;
+             inline typename Chunk::VoxelsContainer const& Chunk::getVoxels() const {
+                 return voxels;
              }
 
              inline void Chunk::setPosition(Math::Point3D<int> const& p) {
@@ -38,12 +30,43 @@
              }
              
              inline void Chunk::setNeighbor(Chunk const& n, std::size_t index) {
-                 terrain.setNeighbor(n.terrain, index);
-                 water.setNeighbor(n.water, index);
+                 voxels.setNeighbor(n.voxels, index);
+             }
+    
+             inline typename Chunk::Iterator Chunk::begin() {
+                 return voxels.begin();
+             }
+    
+             inline typename Chunk::ConstIterator Chunk::begin() const {
+                 return voxels.begin();
+             }
+    
+             inline typename Chunk::ConstIterator Chunk::cbegin() const {
+                 return voxels.cbegin();
+             }
+    
+             inline typename Chunk::Iterator Chunk::end() {
+                 return voxels.end();
+             }
+    
+             inline typename Chunk::ConstIterator Chunk::end() const {
+                 return voxels.end();
+             }
+    
+             inline typename Chunk::ConstIterator Chunk::cend() const {
+                 return voxels.cend();
+             }
+    
+             inline Voxel& Chunk::operator [](std::size_t index) {
+                 return voxels[index];
+             }
+    
+             inline Voxel const& Chunk::operator [](std::size_t index) const {
+                 return voxels[index];
              }
 
              inline Utility::String Chunk::toString() const {
-                 return "Position : " + position.toString() + "\nTerrain : " + terrain.toString() + "\nWater : " + water.toString();
+                 return "Position : " + position.toString() + "\nVoxels : " + voxels.toString();
              }
          }
      }

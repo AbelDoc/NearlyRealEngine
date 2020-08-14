@@ -76,12 +76,9 @@
                     for (Chunk const& c : world) {
                         Entity r = Singleton<EntityManager>::get().create();
                         chunks.emplaceBack(&c);
-                        auto& terrain = chunks.getLast().get<ChunkMesh>(0);
-                        auto& water = chunks.getLast().get<ChunkMesh>(1);
-                        terrain.setBoundObject(&camera.getFrustum());
-                        water.setBoundObject(&camera.getFrustum());
-                        r.assign<ECS::Terrain>(terrain);
-                        r.assign<ECS::Water>(water);
+                        auto& voxels = chunks.getLast().get<ChunkMesh>(0);
+                        voxels.setBoundObject(&camera.getFrustum());
+                        r.assign<VoxelRenderable>(voxels);
                     }
                     
                     Entity l = Singleton<EntityManager>::get().create();

@@ -11,9 +11,8 @@
 
      #include <Header/NRE_ECS.hpp>
     
-     #include "../Component/Renderable/NRE_Terrain.hpp"
-     #include "../Component/Renderable/NRE_Water.hpp"
-     #include "../Component/Renderable/NRE_Model.hpp"
+     #include "../Component/Renderable/NRE_VoxelRenderable.hpp"
+     #include "../Component/Renderable/NRE_ModelRenderable.hpp"
     
      #include "../../Header/NRE_Shader.hpp"
      #include "../../Header/NRE_Renderer.hpp"
@@ -57,30 +56,20 @@
                             using namespace GL;
                             time += Time::Clock::TIMESTEP;
     
-                            auto terrain = ProgramManager::get<Renderer::Terrain>();
-                            auto water = ProgramManager::get<Renderer::Water>();
-                            auto model = ProgramManager::get<Renderer::Model>();
-                            
-                            terrain->bind();
-                                terrain->sendView(camera.getView());
-                                Singleton<EntityManager>::get().each<ECS::Terrain>([this](Entity, ECS::Terrain& t) {
+                            auto voxel = ProgramManager::get<VoxelShader>();
+                            auto model = ProgramManager::get<ModelShader>();
+    
+                            voxel->bind();
+                                voxel->sendView(camera.getView());
+                                Singleton<EntityManager>::get().each<VoxelRenderable>([this](Entity, VoxelRenderable& t) {
                                     if (t.mesh.canBeDrawn()) {
                                         t.mesh.draw();
                                     }
                                 });
-                            terrain->unbind();
-                            water->bind();
-                                water->sendView(camera.getView());
-                                water->sendTime(time);
-                                Singleton<EntityManager>::get().each<ECS::Water>([this](Entity, ECS::Water& w) {
-                                    if (w.mesh.canBeDrawn()) {
-                                        w.mesh.draw();
-                                    }
-                                });
-                            water->unbind();
+                            voxel->unbind();
                             model->bind();
                                 model->sendView(camera.getView());
-                                Singleton<EntityManager>::get().each<ECS::Model>([this, &model](Entity, ECS::Model& m) {
+                                Singleton<EntityManager>::get().each<ModelRenderable>([this, &model](Entity, ModelRenderable& m) {
                                     if (m.mesh->canBeDrawn()) {
                                         model->sendModel(m.model);
                                         m.mesh->draw();

@@ -1,7 +1,7 @@
 
     #version 450
 
-    #define MAX_MAT 100
+    #define MAX_MAT 16
 
     uniform int numMats;
     uniform struct Material {

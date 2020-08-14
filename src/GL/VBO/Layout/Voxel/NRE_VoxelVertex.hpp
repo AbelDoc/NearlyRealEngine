@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_TerrainVertex.hpp
-     * @brief Declaration of Engine's GL's Object : TerrainVertex
+     * @file NRE_VoxelVertex.hpp
+     * @brief Declaration of Engine's GL's Object : VoxelVertex
      * @author Louis ABEL
      * @date 15/04/2020
      * @copyright CC-BY-NC-SA
@@ -25,10 +25,10 @@
         namespace GL {
 
             /**
-             * @class TerrainVertex
+             * @class VoxelVertex
              * @brief A vertex layout : Position - Normal - Tangent - Materials
              */
-            class TerrainVertex : public Utility::Stringable<TerrainVertex> {
+            class VoxelVertex : public Utility::Stringable<VoxelVertex> {
                 public:    //Fields
                     Math::Vector4D<float> position;  /**< Packed vertex's position and terrain x */
                     Math::Vector4D<float> normal;    /**< Packed vertex's normal and terrain y */
@@ -38,13 +38,13 @@
                         /**
                          * Default constructor
                          */
-                        TerrainVertex() = default;
+                        VoxelVertex() = default;
                         /**
                          * Construct a terrain vertex
                          * @param pos the vertex's position
                          * @param n   the vertex's normal
                          */
-                        TerrainVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n) : position(pos), normal(n) {
+                        VoxelVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n) : position(pos), normal(n) {
                         }
     
                     //## Getter ##//
@@ -66,17 +66,17 @@
 
                     //## Deconstructor ##//
                         /**
-                         * TerrainVertex Deconstructor
+                         * VoxelVertex Deconstructor
                          */
-                        ~TerrainVertex() = default;
+                        ~VoxelVertex() = default;
 
                     //## Methods ##//
                         /**
                          * Access the terrain vertex for VAO's command's storing
                          */
                         static void access() {
-                            Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(TerrainVertex), 0);
-                            Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(TerrainVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(VoxelVertex), 0);
+                            Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(VoxelVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
                         }
 
                     //## Stream Operator ##//

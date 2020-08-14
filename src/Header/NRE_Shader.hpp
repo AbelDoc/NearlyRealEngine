@@ -15,12 +15,9 @@
     #include "../Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp"
     #include "../Renderer/Program/Shader/Geometry/NRE_GeometryShader.hpp"
     
-    #include "../Renderer/Program/Core/GBuffer/Model/NRE_Model.hpp"
-    #include "../Renderer/Program/Core/GBuffer/Terrain/NRE_Terrain.hpp"
-    #include "../Renderer/Program/Core/GBuffer/Water/NRE_Water.hpp"
+    #include "../Renderer/Program/Core/GBuffer/ModelShader/NRE_ModelShader.hpp"
+    #include "../Renderer/Program/Core/GBuffer/VoxelShader/NRE_VoxelShader.hpp"
 
-    #include "../Renderer/Program/Core/Shadow/Shadow/NRE_Shadow.hpp"
-    
     #include "../Renderer/Program/Core/PBR/NRE_PBR.hpp"
     
     #include "../Renderer/Program/Core/SSAO/NRE_SSAOEffect.hpp"

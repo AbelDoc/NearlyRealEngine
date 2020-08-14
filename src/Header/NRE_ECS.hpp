@@ -10,11 +10,9 @@
     #pragma once
     
     #include "../ECS/Component/Light/NRE_Light.hpp"
-    #include "../ECS/Component/Renderable/NRE_Terrain.hpp"
-    #include "../ECS/Component/Renderable/NRE_Water.hpp"
-    #include "../ECS/Component/Renderable/NRE_Model.hpp"
+    #include "../ECS/Component/Renderable/NRE_VoxelRenderable.hpp"
+    #include "../ECS/Component/Renderable/NRE_ModelRenderable.hpp"
     
     #include "../ECS/System/NRE_DeferredSystem.hpp"
     #include "../ECS/System/NRE_GBufferSystem.hpp"
-    #include "../ECS/System/NRE_ShadowSystem.hpp"
 

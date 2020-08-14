@@ -10,7 +10,7 @@
     namespace NRE {
         namespace Renderer {
 
-            inline MaterialManager::MaterialManager() : materials(20), currentLayer(0) {
+            inline MaterialManager::MaterialManager() : materials(16), currentLayer(0) {
                 add(GL::Material(Math::Vector3D<float>(0.2, 0.8, 0.0), 0.8f, 0.1f));
             }
             

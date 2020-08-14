@@ -9,7 +9,7 @@
 
     #pragma once
 
-    #include "../Voxel/NRE_VoxelsContainer.hpp"
+    #include "../Voxel/Container/NRE_VoxelsContainer.hpp"
 
     /**
      * @namespace NRE
@@ -34,11 +34,14 @@
 
                 public :    // Iterator
                     typedef VoxelsContainer<SIZE_X, SIZE_Y, SIZE_Z> VoxelsContainer;
+                    /**< Shortcut to hide Iterator implementation */
+                    typedef typename VoxelsContainer::Iterator         Iterator;
+                    /**< Shortcut to hide ConstIterator implementation */
+                    typedef typename VoxelsContainer::ConstIterator    ConstIterator;
 
                 private :   // Fields
-                    VoxelsContainer terrain;            /**< The chunk's terrain voxels */
-                    VoxelsContainer water;              /**< The chunk's waters voxels */
-                    Math::Point3D<int> position;        /**< The chunk's position */
+                    VoxelsContainer voxels;            /**< The chunk's voxels */
+                    Math::Point3D<int> position;       /**< The chunk's position */
 
                 public :    // Methods
                     //## Constructor ##//
@@ -70,19 +73,11 @@
                         /**
                          * @return the terrain's voxels container
                          */
-                        VoxelsContainer& getTerrainVoxels();
+                        VoxelsContainer& getVoxels();
                         /**
                          * @return the terrain's voxels container
                          */
-                        VoxelsContainer const& getTerrainVoxels() const;
-                        /**
-                         * @return the water's voxels container
-                         */
-                        VoxelsContainer& getWaterVoxels();
-                        /**
-                         * @return the water's voxels container
-                         */
-                        VoxelsContainer const& getWaterVoxels() const;
+                        VoxelsContainer const& getVoxels() const;
 
                     //## Setter ##//
                         /**
@@ -96,6 +91,48 @@
                          * @param index the neighbor index
                          */
                         void setNeighbor(Chunk const& n, std::size_t index);
+    
+                    //## Iterator Access ##//
+                        /**
+                         * @return an iterator on the first element
+                         */
+                        Iterator begin();
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator begin() const;
+                        /**
+                         * @return a const iterator on the first element
+                         */
+                        ConstIterator cbegin() const;
+                        /**
+                         * @return an iterator on the end of the container
+                         */
+                        Iterator end();
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator end() const;
+                        /**
+                         * @return a const iterator on the end of the container
+                         */
+                        ConstIterator cend() const;
+    
+                    //## Access Operator ##//
+                        /**
+                         * Return a reference on a voxel's object
+                         * @warning No range check performed
+                         * @param   index the object's index
+                         * @return        the object's reference
+                         */
+                        Voxel& operator [](std::size_t index);
+                        /**
+                         * Return a const reference on a voxel's object
+                         * @warning No range check performed
+                         * @param   index the object's index
+                         * @return        the object's reference
+                         */
+                        Voxel const& operator [](std::size_t index) const;
 
                     //## Assignment Operator ##//
                         /**

@@ -26,7 +26,7 @@
                         for (std::size_t x = 0; x < Chunk::SIZE_X; x += level) {
                             std::uint8_t corners = 0b00000000;
                             for (std::size_t i = 0; i < 8; i++) {
-                                values[i] = target.getVoxel(x + vertexOffset[i].getX(), y + vertexOffset[i].getY(), z + vertexOffset[i].getZ());
+                                values[i] = target.getVoxel(x + vertexOffset[i].getX(), y + vertexOffset[i].getY(), z + vertexOffset[i].getZ()).getIsoValue();
                                 Point3D<float> localPts = Point3D<float>(x, y, z) + vertexOffset[i] * level;
                                 points[i] = position + localPts;
                                 gradients[i] = target.getGradient(localPts);

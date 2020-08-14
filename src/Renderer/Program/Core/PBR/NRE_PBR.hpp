@@ -56,7 +56,6 @@
                          */
                         void addUniforms() override {
                             addUniform("texPos");
-                            addUniform("texShadow");
                             addUniform("texColor");
                             addUniform("texNormal");
                             addUniform("texMaterial");
@@ -71,7 +70,6 @@
                             }
                             addUniform("cameraV");
                             addUniform("invView");
-                            addUniform("lightSpace");
                             addUniform("numLights");
                         }
                         /**
@@ -85,14 +83,6 @@
                             use1I("texColor", 4);
                             use1I("texNormal", 5);
                             use1I("texMaterial", 6);
-                            use1I("texShadow", 7);
-                        }
-                        /**
-                         * Send the light space matrix to the shader
-                         * @param m the light space matrix
-                         */
-                        void sendLightSpace(Math::Matrix4x4<float> const& m) const {
-                            useMat4("lightSpace", 1, &m);
                         }
                         /**
                          * Send the camera's position to the camera

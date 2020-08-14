@@ -1,9 +1,9 @@
 
     /**
-     * @file NRE_Water.hpp
-     * @brief Declaration of Engine's Renderer's Object : Water
+     * @file NRE_ModelShader.hpp
+     * @brief Declaration of Engine's Renderer's Object : ModelShader
      * @author Louis ABEL
-     * @date 24/09/2018
+     * @date 15/04/2020
      * @copyright CC-BY-NC-SA
      */
 
@@ -23,16 +23,16 @@
         namespace Renderer {
 
             /**
-             * @class Water
-             * @brief Manage a water shader to draw fluid in a buffer
+             * @class ModelShader
+             * @brief Manage a gbuffer shader to draw textured model
              */
-            class Water : public AbstractProgram<Water> {
+            class ModelShader : public AbstractProgram<ModelShader> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
                          * Default constructor
                          */
-                        Water() {
+                        ModelShader() {
                             load();
                         }
 
@@ -41,16 +41,24 @@
                          * Add program's stages
                          */
                         void addStages() override {
-                            addStage<VertexShader>("GBuffer/Water.vert");
-                            addStage<FragmentShader>("GBuffer/Water.frag");
+                            addStage<VertexShader>("GBuffer/Model.vert");
+                            addStage<FragmentShader>("GBuffer/Model.frag");
                         }
                         /**
                          * Add program's uniforms
                          */
                         void addUniforms() override {
+                            addUniform("model");
                             addUniform("view");
                             addUniform("projection");
-                            addUniform("time");
+                            addUniform("numMats");
+                            for (unsigned int i = 0; i < MAX_MATERIALS; i++) {
+                                Utility::String base("materials[");
+                                base << i;
+                                addUniform(base + "].albedo");
+                                addUniform(base + "].roughness");
+                                addUniform(base + "].metallic");
+                            }
                         }
                         /**
                          * Send the projection matrix to the shader
@@ -67,12 +75,15 @@
                             useMat4("view", 1, &m);
                         }
                         /**
-                         * Send the time to the shader
-                         * @param t the time
+                         * Send the model matrix to the shader
+                         * @param m the matrix
                          */
-                        void sendTime(float t) const {
-                            use1F("time", t);
+                        void sendModel(Math::Matrix4x4<float> const& m) const {
+                            useMat4("model", 1, &m);
                         }
+
+                public:     // Static
+                    constexpr static const GLuint MAX_MATERIALS = 16;  /**< The maximum number of materials in a scene */
             };
         }
     }

@@ -20,9 +20,12 @@ include_directories(C:/lib/STB)
 
 include_directories(src/Camera)
 include_directories(src/Camera/Perspective)
+include_directories(src/Camera/Orthographic)
+include_directories(src/ECS/System)
+include_directories(src/ECS/Component)
+include_directories(src/ECS/Component/Light)
+include_directories(src/ECS/Component/Renderable)
 include_directories(src/Exception)
-include_directories(src/Physics/Cullable)
-include_directories(src/Physics)
 include_directories(src/GL)
 include_directories(src/GL/Buffer)
 include_directories(src/GL/Buffer/Array)
@@ -51,12 +54,26 @@ include_directories(src/GL/VBO/Layout)
 include_directories(src/GL/VBO/Layout/Matrix)
 include_directories(src/GL/VBO/Layout/Model)
 include_directories(src/GL/VBO/Layout/Point)
-include_directories(src/GL/VBO/Layout/Terrain)
-include_directories(src/GL/VBO/Layout/Water)
+include_directories(src/GL/VBO/Layout/Voxel)
 include_directories(src/Header)
-include_directories(src/ECS/System)
-include_directories(src/ECS/Component)
+include_directories(src/lib)
 include_directories(src/lib/FastNoise)
+include_directories(src/Model)
+include_directories(src/Model/Model)
+include_directories(src/Model/Model/Instanced)
+include_directories(src/Model/Model/Instanced)
+include_directories(src/Model/Model/CullableModel)
+include_directories(src/Model/Model/TypedModel)
+include_directories(src/Model/Mesh)
+include_directories(src/Model/TypedMesh)
+include_directories(src/Model/CullableMesh)
+include_directories(src/Physics)
+include_directories(src/Physics/Cube)
+include_directories(src/Physics/Cube/Mesh)
+include_directories(src/Physics/Rectangle)
+include_directories(src/Physics/Rectangle/Mesh)
+include_directories(src/Physics/Sphere)
+include_directories(src/Physics/Sphere/Mesh)
 include_directories(src/Renderer/Program)
 include_directories(src/Renderer/Program/Core)
 include_directories(src/Renderer/Program/Core/SSAO)
@@ -64,16 +81,13 @@ include_directories(src/Renderer/Program/Core/PBR)
 include_directories(src/Renderer/Program/Core/SkyBox)
 include_directories(src/Renderer/Program/Core/SkyBox/Capture)
 include_directories(src/Renderer/Program/Core/SkyBox/SkyBox)
-include_directories(src/Renderer/Program/Core/Shadow)
-include_directories(src/Renderer/Program/Core/Shadow/Shadow)
 include_directories(src/Renderer/Program/Core/IBL)
 include_directories(src/Renderer/Program/Core/IBL/BRDF)
 include_directories(src/Renderer/Program/Core/IBL/Irradiance)
 include_directories(src/Renderer/Program/Core/IBL/Prefilter)
 include_directories(src/Renderer/Program/Core/GBuffer)
-include_directories(src/Renderer/Program/Core/GBuffer/Model)
-include_directories(src/Renderer/Program/Core/GBuffer/Terrain)
-include_directories(src/Renderer/Program/Core/GBuffer/Water)
+include_directories(src/Renderer/Program/Core/GBuffer/ModelShader)
+include_directories(src/Renderer/Program/Core/GBuffer/VoxelShader)
 include_directories(src/Renderer/Program/Manager)
 include_directories(src/Renderer/Program/Shader)
 include_directories(src/Renderer/Program/Shader/Fragment)
@@ -85,24 +99,13 @@ include_directories(src/Utility/Interfaces)
 include_directories(src/Utility/Interfaces/Bindable)
 include_directories(src/Utility/Interfaces/Allocable)
 include_directories(src/Utility/Interfaces/Identifiable)
-include_directories(src/Model)
-include_directories(src/Model/Model)
-include_directories(src/Model/Model/Instanced)
-include_directories(src/Model/Mesh)
-include_directories(src/Model/TypedMesh)
-include_directories(src/Model/CullableMesh)
-include_directories(src/Physics)
-include_directories(src/Physics/Cube)
-include_directories(src/Physics/Cube/Mesh)
-include_directories(src/Physics/Rectangle)
-include_directories(src/Physics/Rectangle/Mesh)
-include_directories(src/Physics/Sphere)
-include_directories(src/Physics/Sphere/Mesh)
 include_directories(src/World)
 include_directories(src/World/Chunk)
 include_directories(src/World/Model)
 include_directories(src/World/Factory)
 include_directories(src/World/Polygonizer)
+include_directories(src/World/Voxel)
+include_directories(src/World/Voxel/Container)
 
 set(COMPILE_LIST
         src/Camera/Perspective/NRE_PerspectiveCamera.hpp
@@ -112,12 +115,10 @@ set(COMPILE_LIST
         src/Camera/NRE_Camera.hpp
         src/Camera/NRE_Camera.tpp
         src/ECS/Component/Light/NRE_Light.hpp
-        src/ECS/Component/Renderable/NRE_Terrain.hpp
-        src/ECS/Component/Renderable/NRE_Model.hpp
-        src/ECS/Component/Renderable/NRE_Water.hpp
+        src/ECS/Component/Renderable/NRE_VoxelRenderable.hpp
+        src/ECS/Component/Renderable/NRE_ModelRenderable.hpp
         src/ECS/System/NRE_DeferredSystem.hpp
         src/ECS/System/NRE_GBufferSystem.hpp
-        src/ECS/System/NRE_ShadowSystem.hpp
         src/Exception/NRE_AssimpException.hpp
         src/Exception/NRE_GLException.hpp
         src/Exception/NRE_ShaderException.hpp
@@ -166,8 +167,7 @@ set(COMPILE_LIST
         src/GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp
         src/GL/VBO/Layout/Model/NRE_ModelVertex.hpp
         src/GL/VBO/Layout/Point/NRE_PointVertex.hpp
-        src/GL/VBO/Layout/Terrain/NRE_TerrainVertex.hpp
-        src/GL/VBO/Layout/Water/NRE_WaterVertex.hpp
+        src/GL/VBO/Layout/Voxel/NRE_VoxelVertex.hpp
         src/GL/VBO/Layout/NRE_Layout.hpp
         src/GL/VBO/NRE_AbstractVBO.hpp
         src/GL/VBO/NRE_AbstractVBO.tpp
@@ -221,16 +221,14 @@ set(COMPILE_LIST
         src/Renderer/Deferred/NRE_DeferredRenderer.tpp
         src/Renderer/Material/NRE_MaterialManager.hpp
         src/Renderer/Material/NRE_MaterialManager.tpp
-        src/Renderer/Program/Core/GBuffer/Model/NRE_Model.hpp
-        src/Renderer/Program/Core/GBuffer/Terrain/NRE_Terrain.hpp
-        src/Renderer/Program/Core/GBuffer/Water/NRE_Water.hpp
+        src/Renderer/Program/Core/GBuffer/ModelShader/NRE_ModelShader.hpp
+        src/Renderer/Program/Core/GBuffer/VoxelShader/NRE_VoxelShader.hpp
         src/Renderer/Program/Core/IBL/BRDF/NRE_BRDF.hpp
         src/Renderer/Program/Core/IBL/Irradiance/NRE_Irradiance.hpp
         src/Renderer/Program/Core/IBL/Prefilter/NRE_Prefilter.hpp
         src/Renderer/Program/Core/PBR/NRE_PBR.hpp
         src/Renderer/Program/Core/SkyBox/Capture/NRE_Capture.hpp
         src/Renderer/Program/Core/SkyBox/SkyBox/NRE_SkyBox.hpp
-        src/Renderer/Program/Core/Shadow/Shadow/NRE_Shadow.hpp
         src/Renderer/Program/Core/SSAO/NRE_SSAOEffect.hpp
         src/Renderer/Program/Manager/NRE_ProgramManager.hpp
         src/Renderer/Program/Shader/Fragment/NRE_FragmentShader.hpp

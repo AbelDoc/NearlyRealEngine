@@ -17,7 +17,6 @@
     #include "../../Header/NRE_Physics.hpp"
     
     #include "NRE_GBufferSystem.hpp"
-    #include "NRE_ShadowSystem.hpp"
 
      /**
      * @namespace NRE
@@ -37,10 +36,9 @@
             class DeferredSystem : public System<DeferredSystem> {
                 private:    //Fields
                     Renderer::DeferredRenderer renderer;       /**< The deferred renderer object */
-                    Camera::Camera const& camera;              /**< The application's camera */
-                    Camera::OrthographicCamera light;          /**< The light's camera */
-                    NRE::Model::RectangleMesh screen;          /**< The screen mesh */
                     Renderer::SSAO ssao;                       /**< The ssao object */
+                    Camera::Camera const& camera;              /**< The application's camera */
+                    NRE::Model::RectangleMesh screen;          /**< The screen mesh */
                     GL::SkyBox skyBox;                         /**< The skybox */
 
                 public:    // Methods
@@ -51,11 +49,10 @@
                          * @param screenSize the window screen size
                          * @param mapPath    the application's skybox
                          */
-                        DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), light(0, Math::Vector3D<float>(-8, 16, 0), Math::Vector2D<float>(256), Math::Vector2D<float>(0.1, 300.0f), 0 * Math::degree, -20 * Math::degree), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
+                        DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
                             GL::setViewport(screenSize);
     
                             Utility::Singleton<SystemManager>::get().add<GBufferSystem>(camera);
-                            Utility::Singleton<SystemManager>::get().add<ShadowSystem>();
                         }
                         
                     //## Methods ##//
@@ -69,9 +66,8 @@
     
                             auto pbr = ProgramManager::get<PBR>();
                             auto ssaoEffect = ProgramManager::get<SSAOEffect>();
-                            auto terrain = ProgramManager::get<Renderer::Terrain>();
-                            auto model = ProgramManager::get<Renderer::Model>();
-                            auto water = ProgramManager::get<Renderer::Water>();
+                            auto voxel = ProgramManager::get<VoxelShader>();
+                            auto model = ProgramManager::get<ModelShader>();
                             
                             int nb;
     
@@ -84,24 +80,20 @@
                                 ssaoEffect->sendTexture();
                                 ssaoEffect->sendProjection(camera.getProjection());
                             ssaoEffect->unbind();
-                            
-                            terrain->bind();
+    
+                            voxel->bind();
                                 nb = 0;
                                 for (Material& m : Singleton<MaterialManager>::get()) {
                                     String base("materials[");
                                     base << nb;
-                                    terrain->use3FV(base + "].albedo", 1, m.getAlbedo().value());
-                                    terrain->use1F(base + "].roughness", m.getRoughness());
-                                    terrain->use1F(base + "].metallic", m.getMetallic());
+                                    voxel->use3FV(base + "].albedo", 1, m.getAlbedo().value());
+                                    voxel->use1F(base + "].roughness", m.getRoughness());
+                                    voxel->use1F(base + "].metallic", m.getMetallic());
                                     nb++;
                                 }
-                                terrain->use1I("numMats", static_cast <int> (nb));
-                                terrain->sendProjection(camera.getProjection());
-                            terrain->unbind();
-    
-                            water->bind();
-                                water->sendProjection(camera.getProjection());
-                            water->unbind();
+                                voxel->use1I("numMats", static_cast <int> (nb));
+                                voxel->sendProjection(camera.getProjection());
+                            voxel->unbind();
     
                             model->bind();
                                 nb = 0;
@@ -116,8 +108,6 @@
                                 model->use1I("numMats", static_cast <int> (nb));
                                 model->sendProjection(camera.getProjection());
                             model->unbind();
-                                
-                            SystemManager::get<ShadowSystem>()->setLight(light);
                         }
                         /**
                          * Perform the GBuffer pass
@@ -178,21 +168,6 @@
                             renderer.unbind();
                         }
                         /**
-                         * Perform the Shadow pass
-                         */
-                        void shadowPass() {
-                            light.update();
-                            renderer.getShadowBuffer().bind();
-                                GL::setViewport(Math::Vector2D<int>(512, 512));
-                                GL::clear(GL_DEPTH_BUFFER_BIT);
-                                glDisable(GL_CULL_FACE);
-    
-                                    SystemManager::get<ShadowSystem>()->update();
-                                glEnable(GL_CULL_FACE);
-                                GL::setViewport(renderer.getSize());
-                            renderer.getShadowBuffer().unbind();
-                        }
-                        /**
                          * Perform the PBR pass
                          */
                         void PBRPass() {
@@ -206,7 +181,6 @@
                             
                             pbr->bind();
                                 pbr->sendCamera(camera);
-                                pbr->sendLightSpace(light.getProjection() * light.getView());
                                 sendLight();
                                 
                                 bindTexture(skyBox.getIrradiance(), 0);
@@ -216,11 +190,9 @@
                                 bindTexture(renderer.getColorBuffer(1), 4);
                                 bindTexture(renderer.getColorBuffer(2), 5);
                                 bindTexture(renderer.getColorBuffer(3), 6);
-                                bindTexture(renderer.getShadowMap(), 7);
                                 
                                     screen.draw();
     
-                                unbindTexture(renderer.getShadowMap(), 7);
                                 unbindTexture(renderer.getColorBuffer(3), 6);
                                 unbindTexture(renderer.getColorBuffer(2), 5);
                                 unbindTexture(renderer.getColorBuffer(1), 4);
@@ -237,7 +209,6 @@
                         void update() override {
                             gBufferPass();
                             SSAOPass();
-                            //shadowPass();
                             PBRPass();
                         }
                         /**

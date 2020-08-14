@@ -15,8 +15,7 @@
     #include "../GL/VBO/Layout/NRE_Layout.hpp"
     #include "../GL/VBO/Layout/Matrix/NRE_MatrixInstance.hpp"
     #include "../GL/VBO/Layout/Point/NRE_PointVertex.hpp"
-    #include "../GL/VBO/Layout/Terrain/NRE_TerrainVertex.hpp"
-    #include "../GL/VBO/Layout/Water/NRE_WaterVertex.hpp"
+    #include "../GL/VBO/Layout/Voxel/NRE_VoxelVertex.hpp"
     #include "../GL/VBO/Layout/Model/NRE_ModelVertex.hpp"
 
     #include "../GL/VBO/NRE_VBO.hpp"

@@ -11,11 +11,9 @@
 
     in vec2 uv;
 
-    uniform mat4 lightSpace;
     uniform mat4 invView;
 
     uniform sampler2D texPos;
-    uniform sampler2D texShadow;
     uniform sampler2D texColor;
     uniform sampler2D texNormal;
     uniform sampler2D texMaterial;
@@ -79,24 +77,6 @@
             }
         }
         return result / (4.0 * 4.0);
-    }
-
-    float computeShadow(vec4 vertexLightSpace) {
-        vec3 projCoords = vertexLightSpace.xyz / vertexLightSpace.w;
-        projCoords = projCoords * 0.5 + 0.5;
-        float closestDepth = texture(texShadow, projCoords.xy).r;
-        float currentDepth = projCoords.z;
-        float bias = 0.05;
-        float shadow = 0.0;
-        vec2 texelSize = 1.0 / textureSize(texShadow, 0);
-        for(int x = -2; x <= 2; ++x) {
-            for(int y = -2; y <= 2; ++y) {
-                float pcfDepth = texture(texShadow, projCoords.xy + vec2(x, y) * texelSize).r;
-                shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
-            }
-        }
-        shadow /= 16.0;
-        return shadow;
     }
 
     void main() {

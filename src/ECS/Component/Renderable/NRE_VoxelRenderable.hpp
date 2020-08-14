@@ -1,7 +1,7 @@
 
     /**
-     * @file NRE_Terrain.hpp
-     * @brief Declaration of Engine's ECS's Object : Terrain
+     * @file NRE_VoxelRenderable.hpp
+     * @brief Declaration of Engine's ECS's Object : VoxelRenderable
      * @author Louis ABEL
      * @date 15/04/2020
      * @copyright CC-BY-NC-SA
@@ -25,10 +25,10 @@
         namespace ECS {
 
             /**
-             * @class Terrain
+             * @class VoxelRenderable
              * @brief Manage a single chunk to render
              */
-            class Terrain {
+            class VoxelRenderable {
                 public:    // Fields
                     Model::Mesh const& mesh;    /**< The rendered mesh */
 
@@ -38,7 +38,7 @@
                          * Construct a renderable from a mesh
                          * @param m the mesh
                          */
-                        Terrain(Model::Mesh const& m) : mesh(m) {
+                        VoxelRenderable(Model::Mesh const& m) : mesh(m) {
                         }
             };
         }

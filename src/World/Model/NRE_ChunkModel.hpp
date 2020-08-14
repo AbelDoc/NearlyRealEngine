@@ -44,37 +44,24 @@
                         using namespace Utility;
                         
                         Vector<std::unique_ptr<Mesh>> meshes;
-                        IBO<TerrainVertex>* terrainBuffer = new IBO<TerrainVertex>(GL_STATIC_DRAW);
-                        IBO<WaterVertex>*   waterBuffer   = new IBO<WaterVertex>(GL_STATIC_DRAW);
+                        IBO<VoxelVertex>* voxelBuffer = new IBO<VoxelVertex>(GL_STATIC_DRAW);
     
-                        UnorderedMap<Point3D<float>, ChunkPolygonizer::IndexedData> terrainIndexed;
-                        UnorderedMap<Point3D<float>, ChunkPolygonizer::IndexedData> waterIndexed;
-                        terrainIndexed.reserve(3000);   // Average index per chunk
-                        waterIndexed.reserve(3000);
+                        UnorderedMap<Point3D<float>, ChunkPolygonizer::IndexedData> voxelIndexed;
+                        voxelIndexed.reserve(3000);   // Average index per chunk
                         
-                        ChunkPolygonizer::polygonize(o.getTerrainVoxels(), o.getPosition(), *terrainBuffer, 0, ChunkPolygonizer::LEVELS[0], terrainIndexed);
-                        ChunkPolygonizer::polygonize(o.getWaterVoxels(),   o.getPosition(), *waterBuffer,   0, ChunkPolygonizer::LEVELS[0], waterIndexed);
+                        ChunkPolygonizer::polygonize(o.getVoxels(), o.getPosition(), *voxelBuffer, 0, ChunkPolygonizer::LEVELS[0], voxelIndexed);
     
-                        for (auto& it : terrainIndexed) {
-                            TerrainVertex& layout = terrainBuffer->getData(it.second.vIndex);
+                        for (auto& it : voxelIndexed) {
+                            VoxelVertex& layout = voxelBuffer->getData(it.second.vIndex);
                             layout.normal /= it.second.nbAdd;
                             layout.normal.normalize();
                         }
+                        
+                        auto* voxels = new ChunkMesh(voxelBuffer);
     
-                        for (auto& it : waterIndexed) {
-                            WaterVertex& layout = waterBuffer->getData(it.second.vIndex);
-                            layout.normal /= it.second.nbAdd;
-                            layout.normal.normalize();
-                            layout.position.setY(10);
-                        }
-                        auto* terrain = new ChunkMesh(terrainBuffer);
-                        auto* water   = new ChunkMesh(waterBuffer);
+                        voxels->setTarget(&o);
                         
-                        terrain->setTarget(&o);
-                        water->setTarget(&o);
-                        
-                        meshes.emplaceBack(terrain);
-                        meshes.emplaceBack(water);
+                        meshes.emplaceBack(voxels);
                         return meshes;
                     }
             };
