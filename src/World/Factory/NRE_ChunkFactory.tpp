@@ -33,8 +33,8 @@
                          for (std::size_t y = 0; y <= Chunk::SIZE_Y; ++y) {
                              float ny = static_cast <float> (y) + static_cast <float> (target.getPosition().getY());
                              std::size_t index = y * Chunk::VOXELS_LAYER_AREA + z * Chunk::VOXELS_LAYER_WIDTH + x;
-                             if (e < 0.1f) {
-                                 target[index].setIsoValue(ny - 0.1f * Chunk::SIZE_Y * World::SIZE_Y + 0.0001f);
+                             if (e < 0.18f) {
+                                 target[index].setIsoValue(ny - 0.18f * Chunk::SIZE_Y * World::SIZE_Y + 0.0001f);
                              } else {
                                  target[index].setIsoValue(ny - biasedE + 0.0001f);
                              }
@@ -45,10 +45,10 @@
              }
              
              inline Voxel::VoxelType ChunkFactory::createBiome(float e, float m) {
-                 if (e < 0.1f) {
+                 if (e < 0.18f) {
                      return 0;
                  }
-                 if (e < 0.12f) {
+                 if (e < 0.2f) {
                      return 1;
                  }
                  if (e > 0.8f) {
@@ -72,7 +72,7 @@
                      }
                      return 8;
                  }
-                 if (e > 0.3f) {
+                 if (e > 0.4f) {
                      if (m < 0.16f) {
                          return 6;
                      }

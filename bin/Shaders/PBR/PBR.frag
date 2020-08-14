@@ -1,7 +1,7 @@
 
     #version 450
 
-    #define MAX_LIGHTS 100
+    #define MAX_LIGHTS 32
 
     uniform int numLights;
     uniform struct Light {

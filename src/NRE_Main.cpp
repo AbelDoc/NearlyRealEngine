@@ -39,7 +39,7 @@
         
         public :    // Methods
             //## Constructor ##//
-                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(10.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 300.0f), Vector3D<float>(0, 0, 0)) {
+                DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(50.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 2000.0f), Vector3D<float>(0, 0, 0)) {
                     glEnable(GL_DEPTH_TEST);
                     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
                     glEnable(GL_CULL_FACE);
@@ -80,9 +80,15 @@
                         voxels.setBoundObject(&camera.getFrustum());
                         r.assign<VoxelRenderable>(voxels);
                     }
+
+                    int worldSizeX = World::World::SIZE_X * static_cast <int> (Chunk::SIZE_X);
+                    int worldSizeY = World::World::SIZE_Y * static_cast <int> (Chunk::SIZE_Y);
+                    int worldSizeZ = World::World::SIZE_Z * static_cast <int> (Chunk::SIZE_Z);
                     
-                    Entity l = Singleton<EntityManager>::get().create();
-                    l.assign<Light>(Vector3D<float>(-8, 16, 0), Vector3D<float>(200, 200, 200));
+                    for (int i = 0; i < 32; i++) {
+                        Entity l = Singleton<EntityManager>::get().create();
+                        l.assign<Light>(Vector3D<float>((std::rand() % worldSizeX) - worldSizeX / 2, worldSizeY, (std::rand() % worldSizeZ) - worldSizeZ / 2), Vector3D<float>(500, 500, 500));
+                    }
                     
                     Singleton<SystemManager>::get().add<DeferredSystem>(camera, Vector2D<unsigned int>(SCREEN_W, SCREEN_H), "Data/SkyBox/Space_2K.hdr");
                     Singleton<SystemManager>::get().configure();
