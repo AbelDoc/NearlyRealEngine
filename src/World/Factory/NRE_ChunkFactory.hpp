@@ -46,6 +46,7 @@
                      * @param target the target chunk
                      */
                     static void createTerrain(Chunk& target);
+                    static Voxel::VoxelType createBiome(float e, float m);
             };
 
         }

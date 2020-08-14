@@ -85,22 +85,22 @@
              
              inline void World::assignNeighbors(Chunk& chunk, int x, int y, int z) {
                  if (x > -H_SIZE_X) {
-                    chunk.setNeighbor(getChunk(x + H_SIZE_X - 1, y, z + H_SIZE_Z), Chunk::VoxelsContainer::NeighborSide::LEFT);
+                    chunk.setNeighbor(getChunk(x + H_SIZE_X - 1, y, z + H_SIZE_Z), Chunk::NeighborSide::LEFT);
                  }
                  if (x <  H_SIZE_X) {
-                     chunk.setNeighbor(getChunk(x + H_SIZE_X + 1, y, z + H_SIZE_Z), Chunk::VoxelsContainer::NeighborSide::RIGHT);
+                     chunk.setNeighbor(getChunk(x + H_SIZE_X + 1, y, z + H_SIZE_Z), Chunk::NeighborSide::RIGHT);
                  }
                  if (z > -H_SIZE_Z) {
-                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y, z + H_SIZE_Z - 1), Chunk::VoxelsContainer::NeighborSide::BACK);
+                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y, z + H_SIZE_Z - 1), Chunk::NeighborSide::BACK);
                  }
                  if (z <  H_SIZE_Z) {
-                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y, z + H_SIZE_Z + 1), Chunk::VoxelsContainer::NeighborSide::FRONT);
+                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y, z + H_SIZE_Z + 1), Chunk::NeighborSide::FRONT);
                  }
                  if (y > 0) {
-                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y - 1, z + H_SIZE_Z), Chunk::VoxelsContainer::NeighborSide::BOTTOM);
+                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y - 1, z + H_SIZE_Z), Chunk::NeighborSide::BOTTOM);
                  }
                  if (y < SIZE_Y - 1) {
-                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y + 1, z + H_SIZE_Z), Chunk::VoxelsContainer::NeighborSide::TOP);
+                     chunk.setNeighbor(getChunk(x + H_SIZE_X, y + 1, z + H_SIZE_Z), Chunk::NeighborSide::TOP);
                  }
              }
 

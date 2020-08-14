@@ -49,12 +49,11 @@
                         UnorderedMap<Point3D<float>, ChunkPolygonizer::IndexedData> voxelIndexed;
                         voxelIndexed.reserve(3000);   // Average index per chunk
                         
-                        ChunkPolygonizer::polygonize(o.getVoxels(), o.getPosition(), *voxelBuffer, 0, ChunkPolygonizer::LEVELS[0], voxelIndexed);
+                        ChunkPolygonizer::polygonize(o, *voxelBuffer, 0, ChunkPolygonizer::LEVELS[0], voxelIndexed);
     
                         for (auto& it : voxelIndexed) {
                             VoxelVertex& layout = voxelBuffer->getData(it.second.vIndex);
-                            layout.normal /= it.second.nbAdd;
-                            layout.normal.normalize();
+                            layout.mean(it.second.nbAdd);
                         }
                         
                         auto* voxels = new ChunkMesh(voxelBuffer);

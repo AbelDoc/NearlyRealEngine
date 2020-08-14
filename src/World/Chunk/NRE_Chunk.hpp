@@ -9,7 +9,7 @@
 
     #pragma once
 
-    #include "../Voxel/Container/NRE_VoxelsContainer.hpp"
+    #include "../Voxel/NRE_Voxel.hpp"
 
     /**
      * @namespace NRE
@@ -31,17 +31,35 @@
                     static constexpr std::size_t SIZE_X     = 16;
                     static constexpr std::size_t SIZE_Y     = 16;
                     static constexpr std::size_t SIZE_Z     = 16;
+                    static constexpr std::size_t VOLUME     = SIZE_X * SIZE_Y * SIZE_Z;
+        
+                    static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;
+                    static constexpr std::size_t VOXELS_LAYER_AREA  = VOXELS_LAYER_WIDTH * (SIZE_Z + 1);
+                    static constexpr std::size_t VOXELS_VOLUME      = VOXELS_LAYER_AREA  * (SIZE_Y + 1);
+        
+                    enum NeighborSide {
+                        RIGHT,
+                        LEFT,
+                        TOP,
+                        BOTTOM,
+                        FRONT,
+                        BACK,
+            
+                        NEIGHBOR_SIDE_NUM
+                    };
 
                 public :    // Iterator
-                    typedef VoxelsContainer<SIZE_X, SIZE_Y, SIZE_Z> VoxelsContainer;
+                    typedef Utility::Array<Voxel, VOXELS_VOLUME> VoxelsContainer;
+                    typedef Utility::Array<const Chunk*, NEIGHBOR_SIDE_NUM> NeighborsContainer;
                     /**< Shortcut to hide Iterator implementation */
                     typedef typename VoxelsContainer::Iterator         Iterator;
                     /**< Shortcut to hide ConstIterator implementation */
                     typedef typename VoxelsContainer::ConstIterator    ConstIterator;
 
                 private :   // Fields
-                    VoxelsContainer voxels;            /**< The chunk's voxels */
-                    Math::Point3D<int> position;       /**< The chunk's position */
+                    VoxelsContainer voxels;        /**< The voxels collection */
+                    NeighborsContainer neighbors;  /**< The collection's neighbors */
+                    Math::Point3D<int> position;   /**< The chunk's position */
 
                 public :    // Methods
                     //## Constructor ##//
@@ -71,13 +89,59 @@
                          */
                         Math::Point3D<int> const& getPosition() const;
                         /**
-                         * @return the terrain's voxels container
+                         * Query a specific voxel
+                         * @param index the voxel's index
+                         * @return the corresponding voxel
                          */
-                        VoxelsContainer& getVoxels();
+                        Voxel const& getVoxel(std::size_t index) const;
                         /**
-                         * @return the terrain's voxels container
+                         * Query a specific voxel
+                         * @param x the voxel's x coordinate
+                         * @param y the voxel's y coordinate
+                         * @param z the voxel's z coordinate
+                         * @return the corresponding voxel
                          */
-                        VoxelsContainer const& getVoxels() const;
+                        Voxel const& getVoxel(std::size_t x, std::size_t y, std::size_t z) const;
+                        /**
+                         * Query a specific voxel
+                         * @param p the voxel's coordinates
+                         * @return the corresponding voxel
+                         */
+                        Voxel const& getVoxel(Math::Point3D<std::size_t> const& p) const;
+                        /**
+                         * Query a specific voxel
+                         * @param index the voxel's index
+                         * @return the corresponding voxel
+                         */
+                        Voxel& getVoxel(std::size_t index);
+                        /**
+                         * Query a specific voxel
+                         * @param x the voxel's x coordinate
+                         * @param y the voxel's y coordinate
+                         * @param z the voxel's z coordinate
+                         * @return the corresponding voxel
+                         */
+                        Voxel& getVoxel(std::size_t x, std::size_t y, std::size_t z);
+                        /**
+                         * Query a specific voxel
+                         * @param p the voxel's coordinates
+                         * @return the corresponding voxel
+                         */
+                        Voxel& getVoxel(Math::Point3D<std::size_t> const& p);
+                        /**
+                         * Find a voxel's gradient, which can be used as a normal
+                         * @param x the voxel's x coordinate
+                         * @param y the voxel's y coordinate
+                         * @param z the voxel's z coordinate
+                         * @return the corresponding voxel
+                         */
+                        Math::Vector3D<float> getGradient(std::size_t x, std::size_t y, std::size_t z) const;
+                        /**
+                         * Find a voxel's gradient, which can be used as a normal
+                         * @param p the voxel's coordinates
+                         * @return the corresponding voxel
+                         */
+                        Math::Vector3D<float> getGradient(Math::Point3D<std::size_t> const& p) const;
 
                     //## Setter ##//
                         /**

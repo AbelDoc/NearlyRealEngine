@@ -26,12 +26,13 @@
 
             /**
              * @class VoxelVertex
-             * @brief A vertex layout : Position - Normal - Tangent - Materials
+             * @brief A vertex layout : Position - Normal - Color - Roughness - Metallic
              */
             class VoxelVertex : public Utility::Stringable<VoxelVertex> {
                 public:    //Fields
-                    Math::Vector4D<float> position;  /**< Packed vertex's position and terrain x */
-                    Math::Vector4D<float> normal;    /**< Packed vertex's normal and terrain y */
+                    Math::Vector4D<float> position;  /**< Packed vertex's position */
+                    Math::Vector4D<float> color;     /**< Packed vertex's color and roughness */
+                    Math::Vector4D<float> normal;    /**< Packed vertex's normal and metallic */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -43,25 +44,11 @@
                          * Construct a terrain vertex
                          * @param pos the vertex's position
                          * @param n   the vertex's normal
+                         * @param c   the vertex's color
+                         * @param r   the vertex's roughness
+                         * @param m   the vertex's metallic
                          */
-                        VoxelVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n) : position(pos), normal(n) {
-                        }
-    
-                    //## Getter ##//
-                        /**
-                         * @return the vertex's normal
-                         */
-                        Math::Vector4D<float> const& getNormal() const {
-                            return normal;
-                        }
-    
-                    //## Setter ##//
-                        /**
-                         * Set the vertex's normal
-                         * @param n the new normal
-                         */
-                        void setNormal(Math::Vector4D<float> const& n) {
-                            normal = n;
+                        VoxelVertex(Math::Point3D<float> const& pos, Math::Vector3D<float> const& n, Math::Vector3D<float> const& c, float r, float m) : position(pos), color(c, r), normal(n, m) {
                         }
 
                     //## Deconstructor ##//
@@ -76,7 +63,16 @@
                          */
                         static void access() {
                             Layout::enableAttribute(0, 4, GL_FLOAT, sizeof(VoxelVertex), 0);
-                            Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(VoxelVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute(1, 4, GL_FLOAT, sizeof(VoxelVertex), (void*)(1 * sizeof(Math::Vector4D<float>)));
+                            Layout::enableAttribute(2, 4, GL_FLOAT, sizeof(VoxelVertex), (void*)(2 * sizeof(Math::Vector4D<float>)));
+                        }
+                        void accumulate(Math::Vector3D<float> const& n, Math::Vector3D<float> const& c, float r, float m) {
+                            color += Math::Vector4D<float>(c, r);
+                            normal += Math::Vector4D<float>(n, m);
+                        }
+                        void mean(float nb) {
+                            color /= nb;
+                            normal /= nb;
                         }
 
                     //## Stream Operator ##//
@@ -85,7 +81,7 @@
                          * @return the converted terrain vertex layout
                          */
                         Utility::String toString() const {
-                            return position.toString() + " - " + normal.toString();
+                            return position.toString() + " - " + color.toString() + " - " + normal.toString();
                         }
 
             };

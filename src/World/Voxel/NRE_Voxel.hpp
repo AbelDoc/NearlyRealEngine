@@ -11,6 +11,8 @@
 
     #include <cstdint>
     #include <Header/NRE_Utility.hpp>
+
+    #include "NRE_VoxelTypes.hpp"
     
     /**
      * @namespace NRE

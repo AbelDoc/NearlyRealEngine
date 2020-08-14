@@ -69,8 +69,6 @@
                             auto voxel = ProgramManager::get<VoxelShader>();
                             auto model = ProgramManager::get<ModelShader>();
                             
-                            int nb;
-    
                             pbr->bind();
                                 pbr->sendTexture();
                             pbr->unbind();
@@ -82,21 +80,11 @@
                             ssaoEffect->unbind();
     
                             voxel->bind();
-                                nb = 0;
-                                for (Material& m : Singleton<MaterialManager>::get()) {
-                                    String base("materials[");
-                                    base << nb;
-                                    voxel->use3FV(base + "].albedo", 1, m.getAlbedo().value());
-                                    voxel->use1F(base + "].roughness", m.getRoughness());
-                                    voxel->use1F(base + "].metallic", m.getMetallic());
-                                    nb++;
-                                }
-                                voxel->use1I("numMats", static_cast <int> (nb));
                                 voxel->sendProjection(camera.getProjection());
                             voxel->unbind();
     
                             model->bind();
-                                nb = 0;
+                                int nb = 0;
                                 for (Material& m : Singleton<MaterialManager>::get()) {
                                     String base("materials[");
                                     base << nb;

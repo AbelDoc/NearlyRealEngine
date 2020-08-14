@@ -10,7 +10,7 @@
     #pragma once
 
     #include "../World/Voxel/NRE_Voxel.hpp"
-    #include "../World/Voxel/Container/NRE_VoxelsContainer.hpp"
+    #include "../World/Voxel/NRE_VoxelTypes.hpp"
     
     #include "../World/Chunk/NRE_Chunk.hpp"
     #include "../World/Polygonizer/NRE_ChunkPolygonizer.hpp"

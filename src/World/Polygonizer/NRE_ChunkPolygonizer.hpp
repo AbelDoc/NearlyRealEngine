@@ -351,7 +351,10 @@
                     };
 
                 public :    // Static
-                    typedef std::function<Math::Point3D<float>(float, Math::Point3D<float>, Math::Point3D<float>, float, float)> Interpolator;
+                    template <class T>
+                    using Interpolator = std::function<T(float, T, T, float, float)>;
+                    typedef Interpolator<Math::Vector3D<float>> VectorInterpolator;
+                    typedef Interpolator<float> FloatInterpolator;
                     typedef std::size_t LODLevel;
                     static constexpr LODLevel LEVELS[] = {1, 2, 4, 8};
 
@@ -359,7 +362,6 @@
                     /**
                      * Polygonize a chunk using the marching cubes algorithm
                      * @param target       the voxels to polygonize
-                     * @param position     the chunk's position
                      * @param ibo          the indexed buffer to fill
                      * @param threshold    the polygonize threshold
                      * @param level        the polygonization lod level
@@ -367,7 +369,7 @@
                      * @param interpolator use the linear interpolation
                      */
                     template <class Layout>
-                    static void polygonize(Chunk::VoxelsContainer const& target, Math::Point3D<int> const& position, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Utility::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, Interpolator interpolator = interpolateLinearVertex);
+                    static void polygonize(Chunk const& target, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Utility::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, VectorInterpolator vecInterpolator = linearInterpolator<Math::Point3D<float>>, FloatInterpolator fInterpolator = linearInterpolator<float>);
                     /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold
@@ -377,7 +379,8 @@
                      * @param iso2      the second isovalue
                      * @return          the interpolated point
                      */
-                    static Math::Point3D<float> interpolateLinearVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2);
+                    template <class T>
+                    static T linearInterpolator(float threshold, T const& p1, T const& p2, float iso1, float iso2);
                     /**
                      * Interpolate a flat vertex along the given points
                      * @param threshold unused
@@ -387,7 +390,8 @@
                      * @param iso2      unused
                      * @return          the interpolated point
                      */
-                    static Math::Point3D<float> interpolateFlatVertex(float threshold, Math::Point3D<float> const& p1, Math::Point3D<float> const& p2, float iso1, float iso2);
+                    template <class T>
+                    static T flatInterpolator(float threshold, T const& p1, T const& p2, float iso1, float iso2);
 
             };
 

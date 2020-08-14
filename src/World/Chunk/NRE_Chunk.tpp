@@ -17,12 +17,42 @@
                  return position;
              }
     
-             inline typename Chunk::VoxelsContainer& Chunk::getVoxels() {
-                 return voxels;
+             inline Voxel const& Chunk::getVoxel(std::size_t index) const {
+                 return voxels[index];
              }
-             
-             inline typename Chunk::VoxelsContainer const& Chunk::getVoxels() const {
-                 return voxels;
+    
+             inline Voxel const& Chunk::getVoxel(std::size_t x, std::size_t y, std::size_t z) const {
+                 return getVoxel(y * VOXELS_LAYER_AREA + z * VOXELS_LAYER_WIDTH + x);
+             }
+    
+             inline Voxel const& Chunk::getVoxel(Math::Point3D<std::size_t> const& p) const {
+                 return getVoxel(p.getX(), p.getY(), p.getZ());
+             }
+    
+             inline Voxel& Chunk::getVoxel(std::size_t index) {
+                 return voxels[index];
+             }
+    
+             inline Voxel& Chunk::getVoxel(std::size_t x, std::size_t y, std::size_t z) {
+                 return getVoxel(y * VOXELS_LAYER_AREA + z * VOXELS_LAYER_WIDTH + x);
+             }
+    
+             inline Voxel& Chunk::getVoxel(Math::Point3D<std::size_t> const& p) {
+                 return getVoxel(p.getX(), p.getY(), p.getZ());
+             }
+    
+             inline Math::Vector3D<float> Chunk::getGradient(std::size_t x, std::size_t y, std::size_t z) const {
+                 float vXN = (x == 0     ) ? (neighbors[LEFT  ] == nullptr) ? getVoxel(x, y, z).getIsoValue() : neighbors[LEFT  ]->getVoxel(SIZE_X - 1, y         , z         ).getIsoValue() : getVoxel(x - 1, y    , z).getIsoValue();
+                 float vXP = (x == SIZE_X) ? (neighbors[RIGHT ] == nullptr) ? getVoxel(x, y, z).getIsoValue() : neighbors[RIGHT ]->getVoxel(1         , y         , z         ).getIsoValue() : getVoxel(x + 1, y    , z).getIsoValue();
+                 float vYN = (y == 0     ) ? (neighbors[BOTTOM] == nullptr) ? getVoxel(x, y, z).getIsoValue() : neighbors[BOTTOM]->getVoxel(x         , SIZE_Y - 1, z         ).getIsoValue() : getVoxel(x    , y - 1, z).getIsoValue();
+                 float vYP = (y == SIZE_Y) ? (neighbors[TOP   ] == nullptr) ? getVoxel(x, y, z).getIsoValue() : neighbors[TOP   ]->getVoxel(x         , 1         , z         ).getIsoValue() : getVoxel(x    , y + 1, z).getIsoValue();
+                 float vZN = (z == 0     ) ? (neighbors[BACK  ] == nullptr) ? getVoxel(x, y, z).getIsoValue() : neighbors[BACK  ]->getVoxel(x         , y         , SIZE_Z - 1).getIsoValue() : getVoxel(x    , y    , z - 1).getIsoValue();
+                 float vZP = (z == SIZE_Z) ? (neighbors[FRONT ] == nullptr) ? getVoxel(x, y, z).getIsoValue() : neighbors[FRONT ]->getVoxel(x         , y         , 1         ).getIsoValue() : getVoxel(x    , y    , z + 1).getIsoValue();
+                 return Math::Vector3D<float>(vXP - vXN, vYP - vYN, vZP - vZN).normalize();
+             }
+    
+             inline Math::Vector3D<float> Chunk::getGradient(Math::Point3D<std::size_t> const& p) const {
+                 return getGradient(p.getX(), p.getY(), p.getZ());
              }
 
              inline void Chunk::setPosition(Math::Point3D<int> const& p) {
@@ -30,7 +60,7 @@
              }
              
              inline void Chunk::setNeighbor(Chunk const& n, std::size_t index) {
-                 voxels.setNeighbor(n.voxels, index);
+                 neighbors[index] = &n;
              }
     
              inline typename Chunk::Iterator Chunk::begin() {

@@ -50,14 +50,6 @@
                         void addUniforms() override {
                             addUniform("projection");
                             addUniform("view");
-                            addUniform("numMats");
-                            for (unsigned int i = 0; i < MAX_MATERIALS; i++) {
-                                Utility::String base("materials[");
-                                base << i;
-                                addUniform(base + "].albedo");
-                                addUniform(base + "].roughness");
-                                addUniform(base + "].metallic");
-                            }
                         }
                         /**
                          * Send the projection matrix to the shader
@@ -73,9 +65,6 @@
                         void sendView(Math::Matrix4x4<float> const& m) const {
                             useMat4("view", 1, &m);
                         }
-
-                public:     // Static
-                    constexpr static const GLuint MAX_MATERIALS = 16;  /**< The maximum number of materials in a scene */
             };
         }
     }
