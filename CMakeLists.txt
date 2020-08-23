@@ -258,7 +258,6 @@ set(COMPILE_LIST
         src/World/Model/NRE_ChunkModel.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.hpp
         src/World/Polygonizer/NRE_ChunkPolygonizer.tpp
-        src/World/NRE_World.cpp
         src/World/NRE_World.hpp
         src/World/NRE_World.tpp)
 

@@ -139,7 +139,7 @@
 
             vec3 color = ambient + Lo;
 
-            float exposure = 0.2;
+            float exposure = 1.0;
             float gamma = 2.2;
             vec3 mapped = vec3(1.0) - exp(-color * exposure);
             mapped = pow(mapped, vec3(1.0 / gamma));

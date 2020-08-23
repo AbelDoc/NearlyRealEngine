@@ -9,6 +9,7 @@
     #pragma once
 
     #include "Chunk/NRE_Chunk.hpp"
+    #include "Factory/NRE_ChunkFactory.hpp"
 
     /**
      * @namespace NRE
@@ -33,22 +34,24 @@
                     typedef const Chunk*    ConstIterator;
 
                 public :    // Static
-                    static constexpr int H_SIZE_X = 10;
-                    static constexpr int H_SIZE_Z = 10;
-                    static constexpr int   SIZE_Y = 5;
+                    static constexpr int H_SIZE_X = 0;
+                    static constexpr int H_SIZE_Z = 0;
+                    static constexpr int   SIZE_Y = 1;
                     static constexpr int   SIZE_X = static_cast <std::size_t> (H_SIZE_X) * 2 + 1;
                     static constexpr int   SIZE_Z = static_cast <std::size_t> (H_SIZE_Z) * 2 + 1;
                     static constexpr std::size_t NB_CHUNKS = SIZE_X * SIZE_Z * static_cast <std::size_t> (SIZE_Y);
 
                 private :   // Fields
-                    Chunk* chunks;      /**< The world's chunks */
+                    Chunk* chunks;          /**< The world's chunks */
+                    ChunkFactory factory;   /**< The chunk factory */
+                    Math::Vector3D<float> offset;   /**< The world's offset */
 
                 public :    // Methods
                     //## Constructor ##//
                         /**
                          * Construct the default world
                          */
-                        World();
+                        World(Math::Vector3D<float> const& worldOffset = Math::Vector3D<float>(0, 0, 0));
 
                     //## Copy constructor ##//
                         /**
@@ -111,6 +114,13 @@
                          * @return the corresponding chunk
                          */
                         Chunk& getChunk(Math::Point3D<std::size_t> const& p);
+    
+                    //## Setter ##//
+                        /**
+                         * Set the world's factory
+                         * @param f the new chunks factory
+                         */
+                        void setFactory(ChunkFactory f);
 
                     //## Iterator Access ##//
                         /**
@@ -137,6 +147,12 @@
                          * @return a const iterator on the end of the container
                          */
                         ConstIterator cend() const;
+    
+                    //## Methods ##//
+                        /**
+                         * Generate all chunk in the world
+                         */
+                        void generate();
     
                     //## Access Operator ##//
                         /**

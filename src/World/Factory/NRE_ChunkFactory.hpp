@@ -9,8 +9,6 @@
 
     #pragma once
 
-    #include "../NRE_World.hpp"
-
     #include "../Polygonizer/NRE_ChunkPolygonizer.hpp"
 
     #pragma GCC diagnostic push
@@ -34,24 +32,22 @@
          * @brief Engine's World module
          */
         namespace World {
+    
+            using ChunkFactory = std::function<void(Chunk&, int, Math::Vector3D<float> const&)>;
 
             /**
              * @class ChunkFactory
              * @brief Manage the creation of chunk
              */
-            class ChunkFactory {
-                public :    // Static
+            namespace Factory {
                     /**
                      * Create a cloud of voxels (which isovalue represent the terrain height) and then store the resulting cells into a given chunk
                      * @param target the target chunk
                      */
-                    static void createTerrain(Chunk& target);
+                    static void createTerrain(Chunk& target, int worldSizeY, Math::Vector3D<float> const& worldOffset);
                     static Voxel::VoxelType createBiome(float e, float m);
-            };
-
+            }
         }
-        
-        
     }
 
     #include "NRE_ChunkFactory.tpp"

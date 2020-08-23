@@ -9,6 +9,19 @@
 
      namespace NRE {
          namespace World {
+    
+             inline World::World(Math::Vector3D<float> const& worldOffset) : chunks(new Chunk[NB_CHUNKS]), factory(Factory::createTerrain), offset(worldOffset) {
+                 std::size_t index = 0;
+                 for (int y = 0; y < SIZE_Y; y++) {
+                     for (int z = -H_SIZE_Z; z <= H_SIZE_Z; z++) {
+                         for (int x = -H_SIZE_X; x <= H_SIZE_X; x++) {
+                             Chunk& chunk = chunks[index++];
+                             chunk.setPosition(offset + Math::Vector3D<float>(static_cast <int> (Chunk::SIZE_X) * x, static_cast <int> (Chunk::SIZE_Y) * y, static_cast <int> (Chunk::SIZE_Z) * z));
+                             assignNeighbors(chunk, x, y, z);
+                         }
+                     }
+                 }
+             }
 
              inline World::World(World && w) : chunks(w.chunks) {
                  w.chunks = nullptr;
@@ -42,6 +55,10 @@
              inline Chunk& World::getChunk(Math::Point3D<std::size_t> const& p) {
                 return getChunk(p.getX(), p.getY(), p.getZ());
              }
+             
+             inline void World::setFactory(ChunkFactory f) {
+                 factory = f;
+             }
     
              inline typename World::Iterator World::begin() {
                  return chunks;
@@ -66,7 +83,19 @@
              inline typename World::ConstIterator World::cend() const {
                  return end();
              }
-
+             
+             inline void World::generate() {
+                 std::size_t index = 0;
+                 for (int y = 0; y < SIZE_Y; y++) {
+                     for (int z = -H_SIZE_Z; z <= H_SIZE_Z; z++) {
+                         for (int x = -H_SIZE_X; x <= H_SIZE_X; x++) {
+                             Chunk& chunk = chunks[index++];
+                             factory(chunk, SIZE_Y, offset);
+                         }
+                     }
+                 }
+             }
+             
              inline Chunk& World::operator [](std::size_t index) {
                  return getChunk(index);
              }
