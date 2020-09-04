@@ -33,7 +33,7 @@
          */
         namespace World {
     
-            using ChunkFactory = std::function<void(Chunk&, int, Math::Vector3D<float> const&)>;
+            using ChunkFactory = std::function<void(Chunk&, Math::Vector3D<float> const&, Math::Vector3D<float> const&)>;
 
             /**
              * @class ChunkFactory
@@ -44,7 +44,8 @@
                      * Create a cloud of voxels (which isovalue represent the terrain height) and then store the resulting cells into a given chunk
                      * @param target the target chunk
                      */
-                    static void createTerrain(Chunk& target, int worldSizeY, Math::Vector3D<float> const& worldOffset);
+                    static void createTerrain(Chunk& target, Math::Vector3D<float> const& worldSize, Math::Vector3D<float> const& worldOffset);
+                    static void createAsteroid(Chunk& target, Math::Vector3D<float> const& worldSize, Math::Vector3D<float> const& worldOffset);
                     static Voxel::VoxelType createBiome(float e, float m);
             }
         }

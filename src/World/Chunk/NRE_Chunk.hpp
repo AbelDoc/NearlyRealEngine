@@ -28,9 +28,9 @@
              */
             class Chunk : public Utility::Stringable<Chunk> {
                 public :    // Static
-                    static constexpr std::size_t SIZE_X     = 80;
-                    static constexpr std::size_t SIZE_Y     = 80;
-                    static constexpr std::size_t SIZE_Z     = 80;
+                    static constexpr std::size_t SIZE_X     = 16;
+                    static constexpr std::size_t SIZE_Y     = 16;
+                    static constexpr std::size_t SIZE_Z     = 16;
                     static constexpr std::size_t VOLUME     = SIZE_X * SIZE_Y * SIZE_Z;
         
                     static constexpr std::size_t VOXELS_LAYER_WIDTH = SIZE_X + 1;

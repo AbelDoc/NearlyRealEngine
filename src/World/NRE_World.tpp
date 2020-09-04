@@ -90,7 +90,7 @@
                      for (int z = -H_SIZE_Z; z <= H_SIZE_Z; z++) {
                          for (int x = -H_SIZE_X; x <= H_SIZE_X; x++) {
                              Chunk& chunk = chunks[index++];
-                             factory(chunk, SIZE_Y, offset);
+                             factory(chunk, Math::Vector3D<float>(SIZE_X, SIZE_Y, SIZE_Z), offset);
                          }
                      }
                  }
