@@ -14,7 +14,7 @@
     #include <bitset>
     #include <cassert>
 
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
     #include "../NRE_Program.hpp"
 
      /**
@@ -32,13 +32,13 @@
              * @class ProgramManager
              * @brief Manage programs storing
              */
-            class ProgramManager : public Utility::Singleton<ProgramManager>  {
-                friend class Utility::Singleton<ProgramManager>;
+            class ProgramManager : public Core::Singleton<ProgramManager>  {
+                friend class Core::Singleton<ProgramManager>;
 
                 /** Shortcut to hide program's variants container type */
-                typedef Utility::Vector<std::unique_ptr<Program>> ProgramsVector;
+                typedef Core::Vector<std::unique_ptr<Program>> ProgramsVector;
                 /** Shortcut to hide programs container type */
-                typedef Utility::Vector<ProgramsVector> ProgramsMultiMap;
+                typedef Core::Vector<ProgramsVector> ProgramsMultiMap;
 
                 private:    //Fields
                     constexpr static int MAX_PROGRAM = 32;      /**< The max numbers of different programs category, doesn't include theirs variants */
@@ -128,14 +128,14 @@
                      */
                     template <class T, class Spec = T>
                     static T* get() {
-                        return Utility::Singleton<ProgramManager>::get().getShader<T, Spec>();
+                        return Core::Singleton<ProgramManager>::get().getShader<T, Spec>();
                     }
                     /**
                      * Swap the active T shader by one Spec variant
                      */
                     template <class T, class Spec = T>
                     static void swap() {
-                        Utility::Singleton<ProgramManager>::get().swapShader<T, Spec>();
+                        Core::Singleton<ProgramManager>::get().swapShader<T, Spec>();
                     }
             };
         }

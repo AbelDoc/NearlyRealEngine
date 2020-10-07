@@ -9,7 +9,7 @@
 
      #pragma once
 
-     #include <Header/NRE_Utility.hpp>
+     #include <Header/NRE_Core.hpp>
     
      #include "../../../Header/NRE_GL.hpp"
      #include "../../../Header/NRE_Utility.hpp"
@@ -29,10 +29,10 @@
              * @class ArrayBuffer
              * @brief Manage an array buffer for VBO communication with OpenGL
              */
-            class ArrayBuffer : public Utility::Identifiable<ArrayBuffer>,
-                                public Utility::Allocable<ArrayBuffer>,
-                                public Utility::Bindable<ArrayBuffer>,
-                                public Utility::Uncopyable<ArrayBuffer> {
+            class ArrayBuffer : public Core::Identifiable<ArrayBuffer>,
+                                public Core::Allocable<ArrayBuffer>,
+                                public Core::Bindable<ArrayBuffer>,
+                                public Core::Uncopyable<ArrayBuffer> {
                 public :    // Methods
                     //## Constructor ##//
                         /**

@@ -10,7 +10,7 @@
     #pragma once
     
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
     
     /**
      * @namespace NRE
@@ -27,7 +27,7 @@
              * @class Rectangle
              * @brief Represent a rectangle object
              */
-            class Rectangle : public Utility::Observable {
+            class Rectangle : public Core::Observable {
                 private :   // Fields
                     Math::Point2D<float> coord;
                     Math::Vector2D<float> size;

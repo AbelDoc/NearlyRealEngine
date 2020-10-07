@@ -29,8 +29,8 @@
                 type = t;
             }
             
-            inline Utility::String Voxel::toString() const {
-                Utility::String res;
+            inline Core::String Voxel::toString() const {
+                Core::String res;
                 res.reserve(8);
                 return res << isovalue << " -> " << type;
             }

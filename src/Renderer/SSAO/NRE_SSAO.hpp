@@ -14,7 +14,7 @@
     #include <memory>
 
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
     #include "../../GL/Texture/Texture2D/NRE_Texture2D.hpp"
 
@@ -33,9 +33,9 @@
              * @class SSAO
              * @brief Screen Space Ambient Occlusion kernel
              */
-            class SSAO : public Utility::Uncopyable<SSAO>, public Utility::Stringable<SSAO> {
+            class SSAO : public Core::Uncopyable<SSAO>, public Core::Stringable<SSAO> {
                 private:    //Fields
-                    Utility::Vector<Math::Vector3D<float>> kernel;  /**< The ssao's kernel */
+                    Core::Vector<Math::Vector3D<float>> kernel;  /**< The ssao's kernel */
                     GL::Texture2D noise;                            /**< The ssao's noise */
 
                 public:    // Methods
@@ -62,7 +62,7 @@
                         /**
                          * @return the ssao's kernel
                          */
-                        Utility::Vector<Math::Vector3D<float>> const& getKernel() const;
+                        Core::Vector<Math::Vector3D<float>> const& getKernel() const;
                         /**
                          * @return the ssao's noise
                          */
@@ -81,7 +81,7 @@
                          * Convert the ssao into a string
                          * @return the converted ssao
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
                 private:   // Methods
                     /**

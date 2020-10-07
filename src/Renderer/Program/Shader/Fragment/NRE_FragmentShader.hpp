@@ -43,7 +43,7 @@
                          * @param m     the main shader's file
                          * @param inc   the shader's specific includes
                          */
-                        FragmentShader(IO::File const& m, Utility::Vector<IO::File> && inc);
+                        FragmentShader(IO::File const& m, Core::Vector<IO::File> && inc);
 
                     //## Move-Constructor ##//
                         /**

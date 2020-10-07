@@ -31,7 +31,7 @@
                 unbind();
             }
 
-            inline void CubeMap::update(GLint level, Utility::Vector<Math::Vector2D<GLint>> const& offsets, Utility::Vector<Surface>& surfaces) {
+            inline void CubeMap::update(GLint level, Core::Vector<Math::Vector2D<GLint>> const& offsets, Core::Vector<Surface>& surfaces) {
                 bind();
                     for (unsigned int i = 0; i < Math::FACE_NUM; i++) {
                         update2DTextureData(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, level, offsets[i], surfaces[i].getSize(), surfaces[i].getFormat(), getType(), surfaces[i].getPixels());
@@ -47,7 +47,7 @@
                 unbind();
             }
 
-            inline void CubeMap::allocateAndFill(GLint level, Utility::Vector<Surface>& surfaces) {
+            inline void CubeMap::allocateAndFill(GLint level, Core::Vector<Surface>& surfaces) {
                 allocate();
                 bind();
                     for (unsigned int i = 0; i < Math::FACE_NUM; i++) {

@@ -10,7 +10,7 @@
     namespace NRE {
         namespace Model {
             
-            inline Model::Model(Utility::Vector<std::unique_ptr<Mesh>> && ms) : meshes(std::move(ms)) {
+            inline Model::Model(Core::Vector<std::unique_ptr<Mesh>> && ms) : meshes(std::move(ms)) {
             }
             
             inline Mesh& Model::get(std::size_t index) {
@@ -42,7 +42,7 @@
                     throw (Exception::AssimpException(importer.GetErrorString()));
                 }
                 
-                std::size_t indexOffset = Utility::Singleton<Renderer::MaterialManager>::get().getNbMaterials();
+                std::size_t indexOffset = Core::Singleton<Renderer::MaterialManager>::get().getNbMaterials();
                 
                 if (scene->HasMaterials()) {
                     for (unsigned int i = 1; i < scene->mNumMaterials; ++i) {
@@ -51,7 +51,7 @@
                         material->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
                         material->Get(AI_MATKEY_COLOR_AMBIENT, metallic);
                         material->Get(AI_MATKEY_COLOR_SPECULAR, roughness);
-                        Utility::Singleton<Renderer::MaterialManager>::get().add(GL::Material(Math::Vector3D<float>(albedo.r, albedo.g, albedo.b), roughness.r, metallic.r));
+                        Core::Singleton<Renderer::MaterialManager>::get().add(GL::Material(Math::Vector3D<float>(albedo.r, albedo.g, albedo.b), roughness.r, metallic.r));
                     }
                 }
     

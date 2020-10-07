@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 project(NearlyRealEngine)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../bin")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wno-virtual-move-assign -Wall -Wextra -Wfatal-errors -Wfloat-equal -Wstrict-overflow -Wshadow -Wconversion -Wunreachable-code -Wuninitialized -Winit-self -Werror -fstrict-overflow -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wno-virtual-move-assign -Wall -Wextra -Wfatal-errors -Wfloat-equal -Wstrict-overflow -Wshadow -Wconversion -Wunreachable-code -Wuninitialized -Winit-self -Werror -fstrict-overflow -std=c++20")
 
-include_directories(C:/Users/abell/Documents/GitHub/NRE-Utility/src)
-include_directories(C:/Users/abell/Documents/GitHub/NRE-Memory/src)
+include_directories(C:/Users/abell/Documents/GitHub/NRE-Core/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-Math/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-System/src)
 include_directories(C:/Users/abell/Documents/GitHub/NRE-IO/src)
@@ -94,11 +93,11 @@ include_directories(src/Renderer/Program/Shader/Fragment)
 include_directories(src/Renderer/Program/Shader/Geometry)
 include_directories(src/Renderer/Program/Shader/Vertex)
 include_directories(src/Renderer/Program/Uniforms)
-include_directories(src/Utility)
-include_directories(src/Utility/Interfaces)
-include_directories(src/Utility/Interfaces/Bindable)
-include_directories(src/Utility/Interfaces/Allocable)
-include_directories(src/Utility/Interfaces/Identifiable)
+include_directories(src/Core)
+include_directories(src/Core/Interfaces)
+include_directories(src/Core/Interfaces/Bindable)
+include_directories(src/Core/Interfaces/Allocable)
+include_directories(src/Core/Interfaces/Identifiable)
 include_directories(src/World)
 include_directories(src/World/Chunk)
 include_directories(src/World/Model)
@@ -248,9 +247,9 @@ set(COMPILE_LIST
         src/Renderer/Program/NRE_Program.tpp
         src/Renderer/SSAO/NRE_SSAO.hpp
         src/Renderer/SSAO/NRE_SSAO.tpp
-        src/Utility/Interfaces/Allocable/NRE_Allocable.hpp
-        src/Utility/Interfaces/Bindable/NRE_Bindable.hpp
-        src/Utility/Interfaces/Identifiable/NRE_Identifiable.hpp
+        src/Core/Interfaces/Allocable/NRE_Allocable.hpp
+        src/Core/Interfaces/Bindable/NRE_Bindable.hpp
+        src/Core/Interfaces/Identifiable/NRE_Identifiable.hpp
         src/World/Chunk/NRE_Chunk.hpp
         src/World/Chunk/NRE_Chunk.tpp
         src/World/Factory/NRE_ChunkFactory.hpp

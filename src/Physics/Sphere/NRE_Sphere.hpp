@@ -10,7 +10,7 @@
     #pragma once
     
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
     
     /**
      * @namespace NRE
@@ -27,7 +27,7 @@
              * @class Sphere
              * @brief Represent a sphere object
              */
-            class Sphere : public Utility::Observable {
+            class Sphere : public Core::Observable {
                 private :   // Fields
                     Math::Point3D<float> center;
                     float radius;

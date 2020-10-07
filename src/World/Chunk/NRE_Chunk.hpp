@@ -26,7 +26,7 @@
              * @class Chunk
              * @brief Manage a collection of voxels
              */
-            class Chunk : public Utility::Stringable<Chunk> {
+            class Chunk : public Core::Stringable<Chunk> {
                 public :    // Static
                     static constexpr std::size_t SIZE_X     = 16;
                     static constexpr std::size_t SIZE_Y     = 16;
@@ -49,8 +49,8 @@
                     };
 
                 public :    // Iterator
-                    typedef Utility::Array<Voxel, VOXELS_VOLUME> VoxelsContainer;
-                    typedef Utility::Array<const Chunk*, NEIGHBOR_SIDE_NUM> NeighborsContainer;
+                    typedef Core::Array<Voxel, VOXELS_VOLUME> VoxelsContainer;
+                    typedef Core::Array<const Chunk*, NEIGHBOR_SIDE_NUM> NeighborsContainer;
                     /**< Shortcut to hide Iterator implementation */
                     typedef typename VoxelsContainer::Iterator         Iterator;
                     /**< Shortcut to hide ConstIterator implementation */
@@ -217,7 +217,7 @@
                          * Convert the chunk into a string
                          * @return the converted chunk
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
             };
 
         }

@@ -52,7 +52,7 @@
                          */
                         void update() override {
                             using namespace Renderer;
-                            using namespace Utility;
+                            using namespace Core;
                             using namespace GL;
                             time += Time::Clock::TIMESTEP;
     

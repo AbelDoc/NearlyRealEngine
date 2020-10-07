@@ -74,7 +74,7 @@
 
             template <class Layout>
             inline void VBO<Layout>::clear() {
-                Utility::Vector<Layout>().swap(datas);
+                Core::Vector<Layout>().swap(datas);
             }
 
             template <class Layout>
@@ -88,8 +88,8 @@
             }
 
             template <class Layout>
-            inline Utility::String VBO<Layout>::toString() const {
-                Utility::String res;
+            inline Core::String VBO<Layout>::toString() const {
+                Core::String res;
                 res.reserve(5 * datas.getSize());
                 res << "[";
                 if (datas.getSize() > 0) {

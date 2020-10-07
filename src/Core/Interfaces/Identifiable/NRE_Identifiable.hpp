@@ -1,7 +1,7 @@
     
     /**
      * @file NRE_Identifiable.hpp
-     * @brief Declaration of Engine's Utility's Interface : Identifiable
+     * @brief Declaration of Engine's Core's Interface : Identifiable
      * @author Louis ABEL
      * @date 22/10/2019
      * @copyright CC-BY-NC-SA
@@ -10,8 +10,8 @@
     #pragma once
 
     #include <cassert>
-    #include <Utility/Interfaces/NRE_StaticInterface.hpp>
-    #include <Utility/Id/NRE_Id.hpp>
+    #include <Core/Interfaces/NRE_StaticInterface.hpp>
+    #include <Core/Id/NRE_Id.hpp>
     
     /**
     * @namespace NRE
@@ -19,10 +19,10 @@
     */
     namespace NRE {
         /**
-         * @namespace Utility
-         * @brief Utility's API
+         * @namespace Core
+         * @brief Core's API
          */
-        namespace Utility {
+        namespace Core {
             
             /**
              * @class Identifiable

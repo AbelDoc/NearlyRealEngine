@@ -65,7 +65,7 @@
                          * @param index     the binding point
                          * @param name      the block name in the program
                          */
-                        void connect(Id program, int index, Utility::String const& name);
+                        void connect(Id program, int index, Core::String const& name);
 
                     //## Assignment Operator ##//
                         /**

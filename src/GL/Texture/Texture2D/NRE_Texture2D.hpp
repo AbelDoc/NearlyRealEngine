@@ -109,7 +109,7 @@
                          * Convert the 2D texture into a string
                          * @return the converted 2D texture
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
             };
         }

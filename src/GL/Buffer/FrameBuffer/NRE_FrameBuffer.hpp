@@ -26,10 +26,10 @@
              * @class FrameBuffer
              * @brief Manage the link between GPU Frame buffer and Engine
              */
-            class FrameBuffer : public Utility::Stringable<FrameBuffer>,
-                                public Utility::Identifiable<FrameBuffer>,
-                                public Utility::Bindable<FrameBuffer>,
-                                public Utility::Uncopyable<FrameBuffer> {
+            class FrameBuffer : public Core::Stringable<FrameBuffer>,
+                                public Core::Identifiable<FrameBuffer>,
+                                public Core::Bindable<FrameBuffer>,
+                                public Core::Uncopyable<FrameBuffer> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
@@ -92,7 +92,7 @@
                          * Convert the frame buffer into a string
                          * @return the converted frame buffer
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
             };
         }

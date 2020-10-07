@@ -27,7 +27,7 @@
              * @class DeferredRenderer
              * @brief Manage the deferred rendering to a gBuffer
              */
-            class DeferredRenderer : public Utility::Bindable<DeferredRenderer>, public Utility::Uncopyable<DeferredRenderer>, public Utility::Stringable<DeferredRenderer> {
+            class DeferredRenderer : public Core::Bindable<DeferredRenderer>, public Core::Uncopyable<DeferredRenderer>, public Core::Stringable<DeferredRenderer> {
                 private:    //Fields
                     GL::FBO gBuffer;        /**< The gBuffer framebuffer */
 
@@ -95,7 +95,7 @@
                          * Convert the deferred renderer into a string
                          * @return the converted deferred renderer
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
             };
         }
     }

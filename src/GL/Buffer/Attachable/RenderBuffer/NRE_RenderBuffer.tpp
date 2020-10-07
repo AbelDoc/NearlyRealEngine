@@ -45,8 +45,8 @@
                 attachRenderBuffer(GL_FRAMEBUFFER, target, GL_RENDERBUFFER, getId());
             }
 
-            inline Utility::String RenderBuffer::toString() const {
-                Utility::String res;
+            inline Core::String RenderBuffer::toString() const {
+                Core::String res;
                 res << id;
                 return res;
             }

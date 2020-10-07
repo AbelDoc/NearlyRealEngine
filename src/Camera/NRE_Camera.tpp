@@ -119,8 +119,8 @@
                 updateView();
             }
 
-            inline Utility::String Camera::toString() const {
-                Utility::String res;
+            inline Core::String Camera::toString() const {
+                Core::String res;
                 res << eye.toString();
                 res << " - (";
                 res << yaw.toString();

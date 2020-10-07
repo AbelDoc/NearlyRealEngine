@@ -52,7 +52,7 @@
                         DeferredSystem(Camera::Camera const& c, Math::Vector2D<unsigned int> const& screenSize, IO::File const& mapPath) : renderer(screenSize), camera(c), screen(Physics::Rectangle(Math::Point2D<float>(-1, -1), Math::Vector2D<float>(2, 2))), skyBox(mapPath) {
                             GL::setViewport(screenSize);
     
-                            Utility::Singleton<SystemManager>::get().add<GBufferSystem>(camera);
+                            Core::Singleton<SystemManager>::get().add<GBufferSystem>(camera);
                         }
                         
                     //## Methods ##//
@@ -61,7 +61,7 @@
                          */
                         void configure() override {
                             using namespace GL;
-                            using namespace Utility;
+                            using namespace Core;
                             using namespace Renderer;
     
                             auto pbr = ProgramManager::get<PBR>();
@@ -160,7 +160,7 @@
                          */
                         void PBRPass() {
                             using namespace Renderer;
-                            using namespace Utility;
+                            using namespace Core;
                             using namespace GL;
                             
                             clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -204,7 +204,7 @@
                          */
                         void sendLight() {
                             using namespace Renderer;
-                            using namespace Utility;
+                            using namespace Core;
                             
                             unsigned char nb = 0;
                             auto pbr = ProgramManager::get<PBR>();

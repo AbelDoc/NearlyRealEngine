@@ -10,7 +10,7 @@
      #pragma once
 
      #include "../Header/NRE_GL.hpp"
-     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+     #include <Core/Interfaces/Stringable/NRE_Stringable.hpp>
 
      /**
      * @namespace NRE
@@ -27,7 +27,7 @@
              * @class Camera
              * @brief A base camera
              */
-            class Camera : public Utility::Stringable<Camera> {
+            class Camera : public Core::Stringable<Camera> {
                 private:    //Fields
                     float speed;                            /**< The camera's speed */
                     Math::Angle yaw;                        /**< The camera's yaw */
@@ -202,7 +202,7 @@
                          * Convert the camera into a string
                          * @return the converted camera
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
                 private:    // Static
                     static constexpr Math::Angle MAX_PITCH =  89.5 * Math::degree;    /**< The maximum phi */

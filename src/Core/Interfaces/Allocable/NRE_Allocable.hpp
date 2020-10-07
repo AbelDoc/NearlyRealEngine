@@ -1,7 +1,7 @@
     
     /**
      * @file NRE_Bindable.hpp
-     * @brief Declaration of Engine's Utility's Interface : Allocable
+     * @brief Declaration of Engine's Core's Interface : Allocable
      * @author Louis ABEL
      * @date 21/10/2019
      * @copyright CC-BY-NC-SA
@@ -10,7 +10,7 @@
     #pragma once
 
     #include <cassert>
-    #include <Utility/Interfaces/NRE_StaticInterface.hpp>
+    #include <Core/Interfaces/NRE_StaticInterface.hpp>
 
     #include <iostream>
     
@@ -20,10 +20,10 @@
     */
     namespace NRE {
         /**
-         * @namespace Utility
-         * @brief Utility's API
+         * @namespace Core
+         * @brief Core's API
          */
-        namespace Utility {
+        namespace Core {
             
             /**
              * @class Allocable

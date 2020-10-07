@@ -62,12 +62,12 @@
                 } else {
                     orphan();
                 }
-                static_cast <Utility::Allocable<ArrayBuffer>&> (buffer).deallocate();
+                static_cast <Core::Allocable<ArrayBuffer>&> (buffer).deallocate();
                 return result;
             }
             
             inline void AbstractVBO::deallocate() {
-                static_cast <Utility::Allocable<ArrayBuffer>&> (buffer).deallocate();
+                static_cast <Core::Allocable<ArrayBuffer>&> (buffer).deallocate();
             }
 
             inline void AbstractVBO::draw(DrawMode mode) const {

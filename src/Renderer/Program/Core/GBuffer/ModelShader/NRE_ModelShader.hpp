@@ -53,7 +53,7 @@
                             addUniform("projection");
                             addUniform("numMats");
                             for (unsigned int i = 0; i < MAX_MATERIALS; i++) {
-                                Utility::String base("materials[");
+                                Core::String base("materials[");
                                 base << i;
                                 addUniform(base + "].albedo");
                                 addUniform(base + "].roughness");

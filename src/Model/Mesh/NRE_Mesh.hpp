@@ -23,9 +23,9 @@
          */
         namespace Model {
             
-            class Mesh : public Utility::Bindable<Mesh>,
-                         public Utility::Stringable<Mesh>,
-                         public Utility::Uncopyable<Mesh> {
+            class Mesh : public Core::Bindable<Mesh>,
+                         public Core::Stringable<Mesh>,
+                         public Core::Uncopyable<Mesh> {
                 private :   // Field
                     std::unique_ptr<GL::AbstractVBO> vbo;   /**< The mesh buffer */
                     GL::VAO vao;                            /**< The buffer vao */
@@ -105,7 +105,7 @@
                          * Convert the mesh into a string
                          * @return the converted mesh
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
             };
         }
     }

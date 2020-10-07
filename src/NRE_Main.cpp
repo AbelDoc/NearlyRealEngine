@@ -17,7 +17,7 @@
     using namespace NRE::Renderer;
     using namespace NRE::Graphics;
     using namespace NRE::Camera;
-    using namespace NRE::Utility;
+    using namespace NRE::Core;
     using namespace NRE::Model;
     using namespace NRE::GL;
     using namespace NRE::ECS;
@@ -42,7 +42,7 @@
     
             Vector<World::World> worlds;
             Vector<ChunkModel> chunks;
-        
+            
         public :    // Methods
             //## Constructor ##//
                 DevApplication() : Application("NRE-System Devlopment", {SCREEN_W, SCREEN_H}, WindowStyle::RESIZEABLE, {8, 8, 8, 0, 0, 1, 24, 8, 0, 0, 0, 1, 2, 1}), camera(80.0f, 45_deg, 1280.0f / 720.0f, Vector2D<float>(0.1f, 2000.0f), Vector3D<float>(0, 0, 0)) {
@@ -56,6 +56,7 @@
                 void create() override {
                     NRE::System::System::get().setRelativeMode(true);
                     NRE::System::System::get().showCursor(false);
+    
                     addHandler<KeyEvent>([&](KeyEvent& event) {
                         if (event.isCode(KeyCode::Z)) {
                             camera.moveFront();

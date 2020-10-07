@@ -16,7 +16,7 @@
                 generateNoise();
             }
     
-            inline Utility::Vector<Math::Vector3D<float>> const& SSAO::getKernel() const {
+            inline Core::Vector<Math::Vector3D<float>> const& SSAO::getKernel() const {
                 return kernel;
             }
     
@@ -65,8 +65,8 @@
                 delete[] ssaoNoise;
             }
     
-            inline Utility::String SSAO::toString() const {
-                Utility::String res;
+            inline Core::String SSAO::toString() const {
+                Core::String res;
                 res << "Noise : " << noise.toString() << "\n";
                 res << "Kernel : [\n";
                 for (std::size_t i = 0; i < KERNEL_SIZE; i++) {

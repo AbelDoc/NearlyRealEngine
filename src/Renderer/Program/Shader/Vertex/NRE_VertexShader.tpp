@@ -14,7 +14,7 @@
                 createId();
             }
 
-            inline VertexShader::VertexShader(IO::File const& m, Utility::Vector<IO::File> && inc) : Shader(m, std::move(inc)) {
+            inline VertexShader::VertexShader(IO::File const& m, Core::Vector<IO::File> && inc) : Shader(m, std::move(inc)) {
                 createId();
             }
 

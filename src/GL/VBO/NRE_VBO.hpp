@@ -30,12 +30,12 @@
             class VBO : public AbstractVBO {
                 public :    // Iterator
                     /**< Shortcut to hide Iterator implementation */
-                    typedef typename Utility::Vector<Layout>::Iterator         Iterator;
+                    typedef typename Core::Vector<Layout>::Iterator         Iterator;
                     /**< Shortcut to hide ConstIterator implementation */
-                    typedef typename Utility::Vector<Layout>::ConstIterator    ConstIterator;
+                    typedef typename Core::Vector<Layout>::ConstIterator    ConstIterator;
                     
                 private:    //Fields
-                    Utility::Vector<Layout> datas;  /**< The vertex's data */
+                    Core::Vector<Layout> datas;  /**< The vertex's data */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -152,7 +152,7 @@
                          * Convert the vbo into a string
                          * @return the converted vbo
                          */
-                        Utility::String toString() const override;
+                        Core::String toString() const override;
 
                 private:   // Methods
                     /**

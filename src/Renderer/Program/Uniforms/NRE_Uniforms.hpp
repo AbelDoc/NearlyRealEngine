@@ -9,7 +9,7 @@
 
      #pragma once
 
-     #include <Header/NRE_Utility.hpp>
+     #include <Header/NRE_Core.hpp>
      #include "../../../Header/NRE_GL.hpp"
 
      /**
@@ -27,9 +27,9 @@
              * @class Uniforms
              * @brief Manage a collection of uniforms
              */
-            class Uniforms : public Utility::Stringable<Uniforms> {
+            class Uniforms : public Core::Stringable<Uniforms> {
                 private:    //Fields
-                    Utility::UnorderedMap<Utility::String, GLint> uniforms;  /**< Uniform's location associate with his name */
+                    Core::UnorderedMap<Core::String, GLint> uniforms;  /**< Uniform's location associate with his name */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -64,7 +64,7 @@
                          * @param  name the uniform's name
                          * @return      the uniform's location
                          */
-                        GLint getLocation(Utility::String const& name) const;
+                        GLint getLocation(Core::String const& name) const;
 
                     //## Methods ##//
                         /**
@@ -72,7 +72,7 @@
                          * @param id   the program's id
                          * @param name the uniform's name
                          */
-                        void addLocation(Id id, Utility::String const& name);
+                        void addLocation(Id id, Core::String const& name);
 
                     //## Assignment Operator ##//
                         /**
@@ -93,7 +93,7 @@
                          * Convert the uniform collection into a string
                          * @return the converted uniform collection
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
             };
         }

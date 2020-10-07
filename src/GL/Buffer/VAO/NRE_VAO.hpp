@@ -9,7 +9,7 @@
 
      #pragma once
 
-     #include <Header/NRE_Utility.hpp>
+     #include <Header/NRE_Core.hpp>
 
      #include "../../VBO/NRE_VBO.hpp"
 
@@ -28,10 +28,10 @@
              * @class VAO
              * @brief Manage the binding of vbo with the GPU
              */
-            class VAO : public Utility::Identifiable<VAO>,
-                        public Utility::Stringable<VAO>,
-                        public Utility::Uncopyable<VAO>,
-                        public Utility::Bindable<VAO> {
+            class VAO : public Core::Identifiable<VAO>,
+                        public Core::Stringable<VAO>,
+                        public Core::Uncopyable<VAO>,
+                        public Core::Bindable<VAO> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
@@ -93,7 +93,7 @@
                          * Convert the vao into a string
                          * @return the converted vao
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
             };
         }

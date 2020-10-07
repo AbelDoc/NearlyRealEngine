@@ -9,7 +9,7 @@
 
      #pragma once
 
-     #include <Header/NRE_Utility.hpp>
+     #include <Header/NRE_Core.hpp>
 
      #include "../../../Header/NRE_GL.hpp"
      #include "../../../Header/NRE_Utility.hpp"
@@ -29,10 +29,10 @@
              * @pure Attachable
              * @brief Describe an attachable object
              */
-            class Attachable : public Utility::Allocable<Attachable>,
-                               public Utility::Bindable<Attachable>,
-                               public Utility::Uncopyable<Attachable>,
-                               public Utility::Stringable<Attachable> {
+            class Attachable : public Core::Allocable<Attachable>,
+                               public Core::Bindable<Attachable>,
+                               public Core::Uncopyable<Attachable>,
+                               public Core::Stringable<Attachable> {
                 public :    // Methods
                     //## Constructor ##//
                         /**
@@ -89,7 +89,7 @@
                          * Convert the attachable into a string
                          * @return the converted attachable
                          */
-                        virtual Utility::String toString() const = 0;
+                        virtual Core::String toString() const = 0;
     
                     using Allocable<Attachable>::allocate;
             };

@@ -47,8 +47,8 @@
                 unbind();
             }
             
-            inline Utility::String Mesh::toString() const {
-                Utility::String res;
+            inline Core::String Mesh::toString() const {
+                Core::String res;
                 res << "Buffer : " << vbo.get() << '\n';
                 res << "VAO : " << vao;
                 return res;

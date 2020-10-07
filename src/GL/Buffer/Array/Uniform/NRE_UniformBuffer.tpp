@@ -18,7 +18,7 @@
                 bindBufferBase(getTarget(), index, getId());
             }
 
-            inline void UniformBuffer::connect(Id program, int index, Utility::String const& name) {
+            inline void UniformBuffer::connect(Id program, int index, Core::String const& name) {
                 GLuint blockIndex = getUniformBlockIndex(program, name);
                 bind();
                     bindUniformBlock(program, blockIndex, index);

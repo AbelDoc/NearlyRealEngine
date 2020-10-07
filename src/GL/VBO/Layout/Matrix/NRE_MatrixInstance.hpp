@@ -11,7 +11,7 @@
 
     #include "../NRE_Layout.hpp"
 
-    #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+    #include <Core/Interfaces/Stringable/NRE_Stringable.hpp>
 
      /**
      * @namespace NRE
@@ -28,7 +28,7 @@
              * @class MatrixInstance
              * @brief A vertex layout : Matrix
              */
-            class MatrixInstance : public Utility::Stringable<MatrixInstance> {
+            class MatrixInstance : public Core::Stringable<MatrixInstance> {
                 public:    //Fields
                     Math::Matrix4x4<float> matrix; /**< The matrix instance */
 
@@ -65,7 +65,7 @@
                          * Convert the matrix vertex layout into a string
                          * @return the converted matrix vertex layout
                          */
-                        Utility::String toString() const {
+                        Core::String toString() const {
                             return matrix.toString();
                         }
 

@@ -20,7 +20,7 @@
             inline Surface::Surface(Math::Vector2D<GLsizei> const& s, TextureFormat f, TextureInternalFormat iF) : size(s), pixels(nullptr), format(f), internalFormat(iF) {
             }
 
-            inline Surface::Surface(Surface && s) : Utility::Allocable<Surface>(std::move(s)), size(std::move(s.size)), pixels(std::move(s.pixels)), format(s.format), internalFormat(s.internalFormat) {
+            inline Surface::Surface(Surface && s) : Core::Allocable<Surface>(std::move(s)), size(std::move(s.size)), pixels(std::move(s.pixels)), format(s.format), internalFormat(s.internalFormat) {
                 s.pixels = nullptr;
             }
 
@@ -88,7 +88,7 @@
                     internalFormat = GL_RGBA;
                     format = GL_RGBA;
                 } else {
-                    Utility::String err = file.toString() + " : Unknown Pixel Format : " + stbi_failure_reason();
+                    Core::String err = file.toString() + " : Unknown Pixel Format : " + stbi_failure_reason();
                     throw (Exception::STBException(err));
                 }
             }
@@ -100,7 +100,7 @@
 
             inline Surface& Surface::operator =(Surface && s) {
                 if (this != &s) {
-                    Utility::Allocable<Surface>::operator=(std::move(s));
+                    Core::Allocable<Surface>::operator=(std::move(s));
                     size = std::move(s.size);
                     pixels = std::move(s.pixels);
                     format = s.format;

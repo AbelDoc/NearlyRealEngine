@@ -27,7 +27,7 @@
              * @brief Manage a render buffer
              */
             class RenderBuffer : public Attachable,
-                                 public Utility::Identifiable<RenderBuffer> {
+                                 public Core::Identifiable<RenderBuffer> {
                 public:    // Methods
                     //## Constructor ##//
                         /**
@@ -103,7 +103,7 @@
                          * Convert the render buffer into a string
                          * @return the converted render buffer
                          */
-                        Utility::String toString() const override;
+                        Core::String toString() const override;
     
                     using Attachable::allocate;
             };

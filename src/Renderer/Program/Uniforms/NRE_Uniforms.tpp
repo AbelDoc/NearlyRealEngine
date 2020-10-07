@@ -10,16 +10,16 @@
     namespace NRE {
         namespace Renderer {
 
-            inline GLint Uniforms::getLocation(Utility::String const& name) const {
+            inline GLint Uniforms::getLocation(Core::String const& name) const {
                 return uniforms.get(name);
             }
 
-            inline void Uniforms::addLocation(Id id, Utility::String const& name) {
+            inline void Uniforms::addLocation(Id id, Core::String const& name) {
                 uniforms.emplace(name, GL::getUniformLocation(id, name));
             }
 
-            inline Utility::String Uniforms::toString() const {
-                Utility::String r;
+            inline Core::String Uniforms::toString() const {
+                Core::String r;
                 r.reserve(15 * uniforms.getSize());
                 for (auto& it : uniforms) {
                     r << "(";

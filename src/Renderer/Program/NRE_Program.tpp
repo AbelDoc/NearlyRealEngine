@@ -54,115 +54,115 @@
                 for (auto& shader : stages) {
                     GL::detachShader(getId(), shader->getId());
                 }
-                Utility::Vector<std::unique_ptr<Shader>>().swap(stages);
+                Core::Vector<std::unique_ptr<Shader>>().swap(stages);
             }
 
-            inline void Program::addUniform(Utility::String const& uniform) {
+            inline void Program::addUniform(Core::String const& uniform) {
                 uniforms.addLocation(getId(), uniform);
             }
 
-            inline void Program::use1I(Utility::String const& location, GLint v0) const {
+            inline void Program::use1I(Core::String const& location, GLint v0) const {
                 glUniform1i(uniforms.getLocation(location), v0);
             }
 
-            inline void Program::use2I(Utility::String const& location, GLint v0, GLint v1) const {
+            inline void Program::use2I(Core::String const& location, GLint v0, GLint v1) const {
                 glUniform2i(uniforms.getLocation(location), v0, v1);
             }
 
-            inline void Program::use3I(Utility::String const& location, GLint v0, GLint v1, GLint v2) const {
+            inline void Program::use3I(Core::String const& location, GLint v0, GLint v1, GLint v2) const {
                 glUniform3i(uniforms.getLocation(location), v0, v1, v2);
             }
 
-            inline void Program::use4I(Utility::String const& location, GLint v0, GLint v1, GLint v2, GLint v3) const {
+            inline void Program::use4I(Core::String const& location, GLint v0, GLint v1, GLint v2, GLint v3) const {
                 glUniform4i(uniforms.getLocation(location), v0, v1, v2, v3);
             }
 
-            inline void Program::use1F(Utility::String const& location, GLfloat v0) const {
+            inline void Program::use1F(Core::String const& location, GLfloat v0) const {
                 glUniform1f(uniforms.getLocation(location), v0);
             }
 
-            inline void Program::use2F(Utility::String const& location, GLfloat v0, GLfloat v1) const {
+            inline void Program::use2F(Core::String const& location, GLfloat v0, GLfloat v1) const {
                 glUniform2f(uniforms.getLocation(location), v0, v1);
             }
 
-            inline void Program::use3F(Utility::String const& location, GLfloat v0, GLfloat v1, GLfloat v2) const {
+            inline void Program::use3F(Core::String const& location, GLfloat v0, GLfloat v1, GLfloat v2) const {
                 glUniform3f(uniforms.getLocation(location), v0, v1, v2);
             }
 
-            inline void Program::use4F(Utility::String const& location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const {
+            inline void Program::use4F(Core::String const& location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const {
                 glUniform4f(uniforms.getLocation(location), v0, v1, v2, v3);
             }
 
-            inline void Program::use1UI(Utility::String const& location, GLuint v0) const {
+            inline void Program::use1UI(Core::String const& location, GLuint v0) const {
                 glUniform1ui(uniforms.getLocation(location), v0);
             }
 
-            inline void Program::use2UI(Utility::String const& location, GLuint v0, GLuint v1) const {
+            inline void Program::use2UI(Core::String const& location, GLuint v0, GLuint v1) const {
                 glUniform2ui(uniforms.getLocation(location), v0, v1);
             }
 
-            inline void Program::use3UI(Utility::String const& location, GLuint v0, GLuint v1, GLuint v2) const {
+            inline void Program::use3UI(Core::String const& location, GLuint v0, GLuint v1, GLuint v2) const {
                 glUniform3ui(uniforms.getLocation(location), v0, v1, v2);
             }
 
-            inline void Program::use4UI(Utility::String const& location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) const {
+            inline void Program::use4UI(Core::String const& location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) const {
                 glUniform4ui(uniforms.getLocation(location), v0, v1, v2, v3);
             }
 
-            inline void Program::useMat3(Utility::String const& location, GLsizei count, const Math::Matrix3x3<float>* const value) const {
+            inline void Program::useMat3(Core::String const& location, GLsizei count, const Math::Matrix3x3<float>* const value) const {
                 glUniformMatrix3fv(uniforms.getLocation(location), count, GL_TRUE, value->value());
             }
 
 
-            inline void Program::useMat4(Utility::String const& location, GLsizei count, const Math::Matrix4x4<float>* const value) const {
+            inline void Program::useMat4(Core::String const& location, GLsizei count, const Math::Matrix4x4<float>* const value) const {
                 glUniformMatrix4fv(uniforms.getLocation(location), count, GL_TRUE, value->value());
             }
             
-            inline void Program::use1IV(Utility::String const& location, GLsizei count, const GLint* const value) const {
+            inline void Program::use1IV(Core::String const& location, GLsizei count, const GLint* const value) const {
                 glUniform1iv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use2IV(Utility::String const& location, GLsizei count, const GLint* const value) const {
+            inline void Program::use2IV(Core::String const& location, GLsizei count, const GLint* const value) const {
                 glUniform2iv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use3IV(Utility::String const& location, GLsizei count, const GLint* const value) const {
+            inline void Program::use3IV(Core::String const& location, GLsizei count, const GLint* const value) const {
                 glUniform3iv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use4IV(Utility::String const& location, GLsizei count, const GLint* const value) const {
+            inline void Program::use4IV(Core::String const& location, GLsizei count, const GLint* const value) const {
                 glUniform4iv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use1FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const {
+            inline void Program::use1FV(Core::String const& location, GLsizei count, const GLfloat* const value) const {
                 glUniform1fv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use2FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const {
+            inline void Program::use2FV(Core::String const& location, GLsizei count, const GLfloat* const value) const {
                 glUniform2fv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use3FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const {
+            inline void Program::use3FV(Core::String const& location, GLsizei count, const GLfloat* const value) const {
                 glUniform3fv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use4FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const {
+            inline void Program::use4FV(Core::String const& location, GLsizei count, const GLfloat* const value) const {
                 glUniform4fv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use1UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const {
+            inline void Program::use1UIV(Core::String const& location, GLsizei count, const GLuint* const value) const {
                 glUniform1uiv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use2UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const {
+            inline void Program::use2UIV(Core::String const& location, GLsizei count, const GLuint* const value) const {
                 glUniform2uiv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use3UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const {
+            inline void Program::use3UIV(Core::String const& location, GLsizei count, const GLuint* const value) const {
                 glUniform3uiv(uniforms.getLocation(location), count, value);
             }
 
-            inline void Program::use4UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const {
+            inline void Program::use4UIV(Core::String const& location, GLsizei count, const GLuint* const value) const {
                 glUniform4uiv(uniforms.getLocation(location), count, value);
             }
 

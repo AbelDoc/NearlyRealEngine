@@ -20,7 +20,7 @@
 
     #include <Header/NRE_System.hpp>
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
      /**
      * @namespace NRE
@@ -86,7 +86,7 @@
              * @param  name the uniform name
              * @return      the requested location
              */
-            GLint getUniformLocation(Id id, Utility::String const& name);
+            GLint getUniformLocation(Id id, Core::String const& name);
             /**
              * Create a shader id
              * @param  type the shader stage type
@@ -133,7 +133,7 @@
              * @param id  the shader handler
              * @param str the source code
              */
-            void replaceSource(Id id, Utility::String const& str);
+            void replaceSource(Id id, Core::String const& str);
             /**
              * Compile the given shader
              * @param id the shader id
@@ -167,7 +167,7 @@
              * @param index the attribute location
              * @param name  the attribute name
              */
-            void bindAttributeLocation(Id id, GLuint index, Utility::String const& name);
+            void bindAttributeLocation(Id id, GLuint index, Core::String const& name);
             /**
              * Query the shader info
              * @param  id   the shader id
@@ -180,7 +180,7 @@
              * @param  id the shader id
              * @return    the requested logs
              */
-            Utility::String getShaderLog(Id id);
+            Core::String getShaderLog(Id id);
             /**
              * Query the program info
              * @param  id   the program id
@@ -193,7 +193,7 @@
              * @param  id the program id
              * @return    the requested logs
              */
-            Utility::String getProgramLog(Id id);
+            Core::String getProgramLog(Id id);
             /**
              * Bind a buffer to a given target
              * @param target the bind target
@@ -245,7 +245,7 @@
              * @param  name the block name
              * @return      the block index
              */
-            GLuint getUniformBlockIndex(Id id, Utility::String const& name);
+            GLuint getUniformBlockIndex(Id id, Core::String const& name);
             /**
              * Bind a uniform block
              * @param id         the program id

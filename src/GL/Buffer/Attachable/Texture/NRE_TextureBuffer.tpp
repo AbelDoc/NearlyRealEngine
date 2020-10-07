@@ -40,8 +40,8 @@
                 return GL::isTexture(id);
             }
 
-            inline Utility::String TextureBuffer::toString() const {
-                Utility::String res;
+            inline Core::String TextureBuffer::toString() const {
+                Core::String res;
                 res << id;
                 res << " - ";
                 res << type;

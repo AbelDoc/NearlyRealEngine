@@ -36,8 +36,8 @@
                 unbind();
             }
 
-            inline Utility::String FrameBuffer::toString() const {
-                Utility::String res;
+            inline Core::String FrameBuffer::toString() const {
+                Core::String res;
                 res << id;
                 return res;
             }

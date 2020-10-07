@@ -369,7 +369,7 @@
                      * @param interpolator use the linear interpolation
                      */
                     template <class Layout>
-                    static void polygonize(Chunk const& target, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Utility::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, VectorInterpolator vecInterpolator = linearInterpolator<Math::Point3D<float>>, FloatInterpolator fInterpolator = linearInterpolator<float>);
+                    static void polygonize(Chunk const& target, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Core::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, VectorInterpolator vecInterpolator = linearInterpolator<Math::Point3D<float>>, FloatInterpolator fInterpolator = linearInterpolator<float>);
                     /**
                      * Interpolate a linear vertex along the given points
                      * @param threshold the polygonize threshold

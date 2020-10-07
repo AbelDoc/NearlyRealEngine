@@ -11,7 +11,7 @@
 
      #include "../NRE_Layout.hpp"
 
-     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+     #include <Core/Interfaces/Stringable/NRE_Stringable.hpp>
 
      /**
      * @namespace NRE
@@ -28,7 +28,7 @@
              * @class VoxelVertex
              * @brief A vertex layout : Position - Normal - Color - Roughness - Metallic
              */
-            class VoxelVertex : public Utility::Stringable<VoxelVertex> {
+            class VoxelVertex : public Core::Stringable<VoxelVertex> {
                 public:    //Fields
                     Math::Vector4D<float> position;  /**< Packed vertex's position */
                     Math::Vector4D<float> color;     /**< Packed vertex's color and roughness */
@@ -80,7 +80,7 @@
                          * Convert the terrain vertex layout into a string
                          * @return the converted terrain vertex layout
                          */
-                        Utility::String toString() const {
+                        Core::String toString() const {
                             return position.toString() + " - " + color.toString() + " - " + normal.toString();
                         }
 

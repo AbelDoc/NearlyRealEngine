@@ -63,7 +63,7 @@
                             addUniform("prefilterMap");
                             addUniform("brdfLUT");
                             for (unsigned int i = 0; i < MAX_LIGHTS; i++) {
-                                Utility::String base("lights[");
+                                Core::String base("lights[");
                                 base << i;
                                 addUniform(base + "].position");
                                 addUniform(base + "].intensities");

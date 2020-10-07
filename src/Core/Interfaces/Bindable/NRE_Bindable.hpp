@@ -1,7 +1,7 @@
     
     /**
      * @file NRE_Bindable.hpp
-     * @brief Declaration of Engine's Utility's Interface : Bindable
+     * @brief Declaration of Engine's Core's Interface : Bindable
      * @author Louis ABEL
      * @date 21/10/2019
      * @copyright CC-BY-NC-SA
@@ -9,7 +9,7 @@
     
     #pragma once
 
-    #include <Utility/Interfaces/NRE_StaticInterface.hpp>
+    #include <Core/Interfaces/NRE_StaticInterface.hpp>
     
     /**
     * @namespace NRE
@@ -17,10 +17,10 @@
     */
     namespace NRE {
         /**
-         * @namespace Utility
-         * @brief Utility's API
+         * @namespace Core
+         * @brief Core's API
          */
-        namespace Utility {
+        namespace Core {
             
             /**
              * @class Bindable

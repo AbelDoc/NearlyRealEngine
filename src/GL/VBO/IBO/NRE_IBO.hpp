@@ -35,7 +35,7 @@
 
                 private:    //Fields
                     ElementBuffer element;          /**< The element buffer */
-                    Utility::Vector<Index> index;   /**< The index's data */
+                    Core::Vector<Index> index;   /**< The index's data */
                     std::size_t indexCount;         /**< The number of index */
                     std::size_t indexSize;          /**< The index's data size in bytes */
                     std::size_t indexCounter;       /**< The index counter */
@@ -169,7 +169,7 @@
                          * Convert the ibo into a string
                          * @return the converted ibo
                          */
-                        Utility::String toString() const override;
+                        Core::String toString() const override;
 
                 private:   // Methods
                     /**

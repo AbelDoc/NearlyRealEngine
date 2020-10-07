@@ -23,7 +23,7 @@
     #include "../../../Header/NRE_Camera.hpp"
     #include "../../../Header/NRE_Physics.hpp"
     
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
      /**
      * @namespace NRE
@@ -40,7 +40,7 @@
              * @class SkyBox
              * @brief Manage a skybox for environment mapping
              */
-            class SkyBox : public Utility::Uncopyable<SkyBox> {
+            class SkyBox : public Core::Uncopyable<SkyBox> {
                 private:    //Fields
                     CubeMap map;                        /**< The skybox's base texture */
                     CubeMap irradiance;                 /**< The skybox's irradiance texture */

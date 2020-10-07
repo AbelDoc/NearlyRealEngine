@@ -10,7 +10,7 @@
      #pragma once
 
     #include <Header/NRE_IO.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
     #include "../../../Header/NRE_GL.hpp"
     #include "../../../Header/NRE_Exception.hpp"
@@ -30,8 +30,8 @@
              * @class Surface
              * @brief Manage a surface
              */
-            class Surface : public Utility::Allocable<Surface>,
-                            public Utility::Uncopyable<Surface> {
+            class Surface : public Core::Allocable<Surface>,
+                            public Core::Uncopyable<Surface> {
                 private:    //Fields
                     Math::Vector2D<GLsizei> size;           /**< The surface's size */
                     unsigned char* pixels;                  /**< The surface's pixels */

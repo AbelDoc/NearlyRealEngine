@@ -11,7 +11,7 @@
     
     #include "../NRE_Layout.hpp"
     
-    #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+    #include <Core/Interfaces/Stringable/NRE_Stringable.hpp>
     
     /**
     * @namespace NRE
@@ -28,7 +28,7 @@
              * @class PointVertex
              * @brief A vertex layout : Position - Color
              */
-            class PointVertex : public Utility::Stringable<PointVertex> {
+            class PointVertex : public Core::Stringable<PointVertex> {
             public:    //Fields
                 Math::Vector4D<float> position;    /**< Vertex's position */
             
@@ -65,7 +65,7 @@
                  * Convert the primitive vertex layout into a string
                  * @return the converted primitive vertex layout
                  */
-                Utility::String toString() const {
+                Core::String toString() const {
                     return position.toString();
                 }
                 

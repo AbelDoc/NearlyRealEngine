@@ -10,7 +10,7 @@
     #pragma once
 
     #include <cstdint>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
     #include "NRE_VoxelTypes.hpp"
     
@@ -29,7 +29,7 @@
              * @class Voxel
              * @brief Manage a voxel's information
              */
-            class Voxel : public Utility::Stringable<Voxel> {
+            class Voxel : public Core::Stringable<Voxel> {
                 public :    // Static
                     typedef std::uint32_t VoxelType;
                 
@@ -111,7 +111,7 @@
                          * Convert the voxel into a string
                          * @return the converted voxel
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
             };
         }
     }

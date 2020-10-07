@@ -51,7 +51,7 @@
                 attach2DTexture(GL_FRAMEBUFFER, target, getTarget(), getId(), 0);
             }
 
-            inline Utility::String Texture2D::toString() const {
+            inline Core::String Texture2D::toString() const {
                 return Texture2DBuffer::toString();
             }
 

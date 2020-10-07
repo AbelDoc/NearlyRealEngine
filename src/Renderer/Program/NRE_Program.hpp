@@ -12,7 +12,7 @@
     #include <memory>
 
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
     #include "../../Header/NRE_GL.hpp"
     #include "../../Header/NRE_Exception.hpp"
@@ -41,7 +41,7 @@
                 private:    //Fields
                     Id id;                                              /**< The program's id */
                     Uniforms uniforms;                                  /**< The program's uniforms */
-                    Utility::Vector<std::unique_ptr<Shader>> stages;    /**< The program's shader stages */
+                    Core::Vector<std::unique_ptr<Shader>> stages;    /**< The program's shader stages */
 
                 public:     //Fields
                     /**< Shortcut to hide the Category type */
@@ -137,20 +137,20 @@
                          * Add a uniform
                          * @param uniform the uniform to add
                          */
-                        void addUniform(Utility::String const& uniform);
+                        void addUniform(Core::String const& uniform);
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
                          * @param v0       the value to pass
                          */
-                        void use1I(Utility::String const& location, GLint v0) const;
+                        void use1I(Core::String const& location, GLint v0) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
                          * @param v0       the first value to pass
                          * @param v1       the second value to pass
                          */
-                        void use2I(Utility::String const& location, GLint v0, GLint v1) const;
+                        void use2I(Core::String const& location, GLint v0, GLint v1) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
@@ -158,7 +158,7 @@
                          * @param v1       the second value to pass
                          * @param v2       the third value to pass
                          */
-                        void use3I(Utility::String const& location, GLint v0, GLint v1, GLint v2) const;
+                        void use3I(Core::String const& location, GLint v0, GLint v1, GLint v2) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
@@ -167,20 +167,20 @@
                          * @param v2       the third value to pass
                          * @param v3       the fourth value to pass
                          */
-                        void use4I(Utility::String const& location, GLint v0, GLint v1, GLint v2, GLint v3) const;
+                        void use4I(Core::String const& location, GLint v0, GLint v1, GLint v2, GLint v3) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
                          * @param v0       the value to pass
                          */
-                        void use1F(Utility::String const& location, GLfloat v0) const;
+                        void use1F(Core::String const& location, GLfloat v0) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
                          * @param v0       the first value to pass
                          * @param v1       the second value to pass
                          */
-                        void use2F(Utility::String const& location, GLfloat v0, GLfloat v1) const;
+                        void use2F(Core::String const& location, GLfloat v0, GLfloat v1) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
@@ -188,7 +188,7 @@
                          * @param v1       the second value to pass
                          * @param v2       the third value to pass
                          */
-                        void use3F(Utility::String const& location, GLfloat v0, GLfloat v1, GLfloat v2) const;
+                        void use3F(Core::String const& location, GLfloat v0, GLfloat v1, GLfloat v2) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
@@ -197,20 +197,20 @@
                          * @param v2       the third value to pass
                          * @param v3       the fourth value to pass
                          */
-                        void use4F(Utility::String const& location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const;
+                        void use4F(Core::String const& location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
                          * @param v0       the value to pass
                          */
-                        void use1UI(Utility::String const& location, GLuint v0) const;
+                        void use1UI(Core::String const& location, GLuint v0) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
                          * @param v0       the first value to pass
                          * @param v1       the second value to pass
                          */
-                        void use2UI(Utility::String const& location, GLuint v0, GLuint v1) const;
+                        void use2UI(Core::String const& location, GLuint v0, GLuint v1) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
@@ -218,7 +218,7 @@
                          * @param v1       the second value to pass
                          * @param v2       the third value to pass
                          */
-                        void use3UI(Utility::String const& location, GLuint v0, GLuint v1, GLuint v2) const;
+                        void use3UI(Core::String const& location, GLuint v0, GLuint v1, GLuint v2) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value
                          * @param location the uniform to query the location
@@ -227,105 +227,105 @@
                          * @param v2       the third value to pass
                          * @param v3       the fourth value to pass
                          */
-                        void use4UI(Utility::String const& location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) const;
+                        void use4UI(Core::String const& location, GLuint v0, GLuint v1, GLuint v2, GLuint v3) const;
                         /**
                          * Call the OpengGL command to bind 3x3 matrix
                          * @param location the uniform to query the location
                          * @param count    the number of matrix passed
                          * @param value    the pointer to the first matrix to passed
                          */
-                        void useMat3(Utility::String const& location, GLsizei count, const Math::Matrix3x3<float>* const value) const;
+                        void useMat3(Core::String const& location, GLsizei count, const Math::Matrix3x3<float>* const value) const;
                         /**
                          * Call the OpengGL command to bind 4x4 matrix
                          * @param location the uniform to query the location
                          * @param count    the number of matrix passed
                          * @param value    the pointer to the first matrix to passed
                          */
-                        void useMat4(Utility::String const& location, GLsizei count, const Math::Matrix4x4<float>* const value) const;
+                        void useMat4(Core::String const& location, GLsizei count, const Math::Matrix4x4<float>* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 1 value by 1 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use1IV(Utility::String const& location, GLsizei count, const GLint* const value) const;
+                        void use1IV(Core::String const& location, GLsizei count, const GLint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 2 value by 2 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use2IV(Utility::String const& location, GLsizei count, const GLint* const value) const;
+                        void use2IV(Core::String const& location, GLsizei count, const GLint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 3 value by 3 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use3IV(Utility::String const& location, GLsizei count, const GLint* const value) const;
+                        void use3IV(Core::String const& location, GLsizei count, const GLint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 4 value by 4 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use4IV(Utility::String const& location, GLsizei count, const GLint* const value) const;
+                        void use4IV(Core::String const& location, GLsizei count, const GLint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 1 value by 1 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use1FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const;
+                        void use1FV(Core::String const& location, GLsizei count, const GLfloat* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 2 value by 2 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use2FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const;
+                        void use2FV(Core::String const& location, GLsizei count, const GLfloat* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 3 value by 3 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use3FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const;
+                        void use3FV(Core::String const& location, GLsizei count, const GLfloat* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 4 value by 4 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use4FV(Utility::String const& location, GLsizei count, const GLfloat* const value) const;
+                        void use4FV(Core::String const& location, GLsizei count, const GLfloat* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 1 value by 1 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use1UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const;
+                        void use1UIV(Core::String const& location, GLsizei count, const GLuint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 2 value by 2 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use2UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const;
+                        void use2UIV(Core::String const& location, GLsizei count, const GLuint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 3 value by 3 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use3UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const;
+                        void use3UIV(Core::String const& location, GLsizei count, const GLuint* const value) const;
                         /**
                          * Call the OpenGL command to bind specific uniform value from a pointer, 4 value by 4 value
                          * @param location the uniform to query the location
                          * @param count    the number of values passed
                          * @param value    the pointer to the first value to passed
                          */
-                        void use4UIV(Utility::String const& location, GLsizei count, const GLuint* const value) const;
+                        void use4UIV(Core::String const& location, GLsizei count, const GLuint* const value) const;
 
                     //## Assignment Operator ##//
                         /**

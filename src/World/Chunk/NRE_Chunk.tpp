@@ -95,7 +95,7 @@
                  return voxels[index];
              }
 
-             inline Utility::String Chunk::toString() const {
+             inline Core::String Chunk::toString() const {
                  return "Position : " + position.toString() + "\nVoxels : " + voxels.toString();
              }
          }

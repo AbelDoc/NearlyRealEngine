@@ -10,7 +10,7 @@
     #pragma once
     
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
     
     /**
      * @namespace NRE
@@ -27,7 +27,7 @@
              * @class Cube
              * @brief Represent a cube object
              */
-            class Cube : public Utility::Observable {
+            class Cube : public Core::Observable {
                 private :   // Fields
                     Math::Point3D<float> center;
                     

@@ -14,7 +14,7 @@
             inline Shader::Shader(IO::File const& m) : main(m) {
             }
 
-            inline Shader::Shader(IO::File const& m, Utility::Vector<IO::File> && inc) : main(m), includes(std::move(inc)) {
+            inline Shader::Shader(IO::File const& m, Core::Vector<IO::File> && inc) : main(m), includes(std::move(inc)) {
             }
 
             inline Shader::Shader(Shader && s) : id(s.id), main(std::move(s.main)), includes(std::move(s.includes)) {
@@ -56,7 +56,7 @@
                 return *this;
             }
 
-            inline bool Shader::readFile(Utility::String& line, Utility::String& sourceCode, IO::File const& file) const {
+            inline bool Shader::readFile(Core::String& line, Core::String& sourceCode, IO::File const& file) const {
                 IO::InputFile shaderFile(BASE_PATH + file);
                 shaderFile.open();
                 if (shaderFile.isOpen()) {

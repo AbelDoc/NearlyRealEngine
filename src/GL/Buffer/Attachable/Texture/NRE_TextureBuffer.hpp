@@ -27,7 +27,7 @@
              * @brief Describe a base texture buffer for 2D & 3D texture specialization
              */
             class TextureBuffer : public Attachable,
-                                  public Utility::Identifiable<TextureBuffer> {
+                                  public Core::Identifiable<TextureBuffer> {
                 private:    //Fields
                     TextureType type;    /**< The texture's pixel data type */
 
@@ -102,7 +102,7 @@
                          * Convert the texture buffer into a string
                          * @return the converted texture buffer
                          */
-                        Utility::String toString() const override;
+                        Core::String toString() const override;
     
                     using Attachable::allocate;
             };

@@ -9,7 +9,7 @@
 
     #include "NRE_Shader.hpp"
 
-    using namespace NRE::Utility;
+    using namespace NRE::Core;
     using namespace NRE::IO;
     using namespace NRE::Exception;
     using namespace NRE::GL;

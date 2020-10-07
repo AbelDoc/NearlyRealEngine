@@ -10,7 +10,7 @@
      #pragma once
 
      #include <Header/NRE_IO.hpp>
-     #include <Header/NRE_Utility.hpp>
+     #include <Header/NRE_Core.hpp>
 
      #include "../../../Header/NRE_GL.hpp"
      #include "../../../Header/NRE_Exception.hpp"
@@ -34,7 +34,7 @@
                 private:    //Fields
                     Id id;                              /**< The shader's id */
                     IO::File main;                      /**< The shader's main file */
-                    Utility::Vector<IO::File> includes; /**< The shader's specific includes */
+                    Core::Vector<IO::File> includes; /**< The shader's specific includes */
 
                 public:    // Methods
                     //## Constructor ##//
@@ -52,7 +52,7 @@
                          * @param m     the main shader's file
                          * @param inc   the shader's specific includes
                          */
-                        Shader(IO::File const& m, Utility::Vector<IO::File> && inc);
+                        Shader(IO::File const& m, Core::Vector<IO::File> && inc);
 
                     //## Copy-Constructor ##//
                         /**
@@ -127,7 +127,7 @@
                      * @param  file       a shader's file
                      * @return            if the shader's file exists
                      */
-                    bool readFile(Utility::String& line, Utility::String& sourceCode, IO::File const& file) const;
+                    bool readFile(Core::String& line, Core::String& sourceCode, IO::File const& file) const;
 
                 public:     // Static
                     static const IO::File BASE_PATH;    /**< Programs base directory */

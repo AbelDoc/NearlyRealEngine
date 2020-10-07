@@ -20,7 +20,7 @@
             using namespace Renderer;
             using namespace Model;
             using namespace Physics;
-            using namespace Utility;
+            using namespace Core;
 
             void SkyBox::capture(File const& file) {
                 if (!file.exist()) {

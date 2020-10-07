@@ -21,6 +21,7 @@
     #pragma GCC diagnostic ignored "-Wfloat-equal"
     #pragma GCC diagnostic ignored "-Wconversion"
     #pragma GCC diagnostic ignored "-Wfloat-conversion"
+    #pragma GCC diagnostic ignored "-Wdeprecated-copy"
     
         #include <assimp/Importer.hpp>
         #include <assimp/scene.h>
@@ -44,9 +45,9 @@
              * @class Model
              * @brief Manage a collection of mesh
              */
-            class Model : public Utility::Uncopyable<Model> {
+            class Model : public Core::Uncopyable<Model> {
                 protected : // Fields
-                    Utility::Vector<std::unique_ptr<Mesh>> meshes;  /**< The model's meshes */
+                    Core::Vector<std::unique_ptr<Mesh>> meshes;  /**< The model's meshes */
                     
                 public :    // Methods
                     //## Constructor ##//
@@ -58,7 +59,7 @@
                          * Construct a model from a collections of meshes
                          * @param ms the collections of meshes
                          */
-                        Model(Utility::Vector<std::unique_ptr<Mesh>> && ms);
+                        Model(Core::Vector<std::unique_ptr<Mesh>> && ms);
                         /**
                          * Load an object model
                          * @param path the object's path

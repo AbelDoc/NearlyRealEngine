@@ -43,7 +43,7 @@
                          * @param m     the main shader's file
                          * @param inc   the shader's specific includes
                          */
-                        VertexShader(IO::File const& m, Utility::Vector<IO::File> && inc);
+                        VertexShader(IO::File const& m, Core::Vector<IO::File> && inc);
 
                     //## Move-Constructor ##//
                         /**

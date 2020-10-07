@@ -11,7 +11,7 @@
 
      #include "../NRE_Layout.hpp"
 
-     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+     #include <Core/Interfaces/Stringable/NRE_Stringable.hpp>
 
      /**
      * @namespace NRE
@@ -28,7 +28,7 @@
              * @class ModelVertex
              * @brief A vertex layout : Position - Normal - Tangent - UV - Material
              */
-            class ModelVertex : public Utility::Stringable<ModelVertex> {
+            class ModelVertex : public Core::Stringable<ModelVertex> {
                 public:    //Fields
                     Math::Vector4D<float> position;         /**< Packed vertex's position */
                     Math::Vector4D<float> normalAndMat;     /**< Packed vertex's normal */
@@ -68,7 +68,7 @@
                          * Convert the model vertex layout into a string
                          * @return the converted model vertex layout
                          */
-                        Utility::String toString() const {
+                        Core::String toString() const {
                             return position.toString() + " - " + normalAndMat.toString();
                         }
 

@@ -11,7 +11,7 @@
         namespace World {
     
             template <class Layout>
-            inline void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Utility::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, VectorInterpolator vecInterpolator, FloatInterpolator fInterpolator) {
+            inline void ChunkPolygonizer::polygonize(Chunk const& target, GL::IBO<Layout>& ibo, float threshold, LODLevel level, Core::UnorderedMap<Math::Point3D<float>, IndexedData>& indexed, VectorInterpolator vecInterpolator, FloatInterpolator fInterpolator) {
                 using namespace GL;
                 using namespace Math;
                 

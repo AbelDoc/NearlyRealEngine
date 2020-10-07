@@ -35,7 +35,7 @@
                 gBuffer.unbind();
             }
     
-            inline Utility::String DeferredRenderer::toString() const {
+            inline Core::String DeferredRenderer::toString() const {
                 return gBuffer.toString();
             }
 

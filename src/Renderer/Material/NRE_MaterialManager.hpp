@@ -9,7 +9,7 @@
     
     #pragma once
     
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
     #include <Header/NRE_Math.hpp>
 
     #include "../../GL/Texture/Material/NRE_Material.hpp"
@@ -30,16 +30,16 @@
              * @class MaterialManager
              * @brief Manage the collections of materials
              */
-            class MaterialManager : Utility::Singleton<MaterialManager> {
-                friend class Utility::Singleton<MaterialManager>;
+            class MaterialManager : Core::Singleton<MaterialManager> {
+                friend class Core::Singleton<MaterialManager>;
                 public :    // Iterator
                     /**< Shortcut to hide Iterator implementation */
-                    typedef typename Utility::Vector<GL::Material>::Iterator         Iterator;
+                    typedef typename Core::Vector<GL::Material>::Iterator         Iterator;
                     /**< Shortcut to hide ConstIterator implementation */
-                    typedef typename Utility::Vector<GL::Material>::ConstIterator    ConstIterator;
+                    typedef typename Core::Vector<GL::Material>::ConstIterator    ConstIterator;
                 
                 private:    //Fields
-                    Utility::Vector<GL::Material> textures; /**< The materials textures */
+                    Core::Vector<GL::Material> textures; /**< The materials textures */
                     GL::MaterialArray materials;            /**< The materials array */
                     int currentLayer;                       /**< The materials array current layer */
                 

@@ -36,8 +36,8 @@
                 unbind();
             }
 
-            inline Utility::String VAO::toString() const {
-                Utility::String res;
+            inline Core::String VAO::toString() const {
+                Core::String res;
                 res << id;
                 return res;
             }

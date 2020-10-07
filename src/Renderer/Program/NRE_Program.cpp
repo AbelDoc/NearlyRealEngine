@@ -10,7 +10,7 @@
     #include "NRE_Program.hpp"
 
     using namespace NRE::Exception;
-    using namespace NRE::Utility;
+    using namespace NRE::Core;
     using namespace NRE::GL;
 
     namespace NRE {

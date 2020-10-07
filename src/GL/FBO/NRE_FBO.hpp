@@ -12,7 +12,7 @@
     #include <memory>
 
     #include <Header/NRE_Math.hpp>
-    #include <Header/NRE_Utility.hpp>
+    #include <Header/NRE_Core.hpp>
 
     #include "../Buffer/FrameBuffer/NRE_FrameBuffer.hpp"
     #include "../Texture/Texture2D/NRE_Texture2D.hpp"
@@ -37,7 +37,7 @@
             class FBO : public FrameBuffer {
                 private:    //Fields
                     Math::Vector2D<GLuint> size;                                /**< The frame buffer's size */
-                    Utility::Vector<std::unique_ptr<Attachable>> colorBuffers;  /**< The frame buffer's color buffers */
+                    Core::Vector<std::unique_ptr<Attachable>> colorBuffers;  /**< The frame buffer's color buffers */
                     std::unique_ptr<Attachable> depthBuffer;                    /**< The frame buffer's render buffer */
 
                 public:    // Methods
@@ -138,7 +138,7 @@
                          * Convert the fbo into a string
                          * @return the converted fbo
                          */
-                        Utility::String toString() const;
+                        Core::String toString() const;
 
             };
         }

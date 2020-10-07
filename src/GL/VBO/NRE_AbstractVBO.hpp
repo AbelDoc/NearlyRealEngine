@@ -10,7 +10,7 @@
      #pragma once
 
      #include <cassert>
-     #include <Utility/Interfaces/Stringable/NRE_Stringable.hpp>
+     #include <Core/Interfaces/Stringable/NRE_Stringable.hpp>
 
      #include "../Buffer/Array/Attribute/NRE_AttributeBuffer.hpp"
 
@@ -29,7 +29,7 @@
              * @class AbstractVBO
              * @brief Manage a layout of data, abstract base for specialized layout
              */
-        class AbstractVBO : public Utility::Stringable<AbstractVBO>, public Utility::Uncopyable<AbstractVBO> {
+        class AbstractVBO : public Core::Stringable<AbstractVBO>, public Core::Uncopyable<AbstractVBO> {
                 private:    //Fields
                     AttributeBuffer buffer; /**< The attribute buffer */
                     GLsizei count;          /**< The number of vertex */
@@ -158,7 +158,7 @@
                          * Convert the vbo into a string
                          * @return the converted vbo
                          */
-                        virtual Utility::String toString() const = 0;
+                        virtual Core::String toString() const = 0;
 
                 protected: // Methods
                     /**

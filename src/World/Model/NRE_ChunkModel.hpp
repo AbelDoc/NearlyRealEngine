@@ -37,11 +37,11 @@
                      * @param o the object to create the buffer
                      * @return  the created buffer
                      */
-                    static Utility::Vector<std::unique_ptr<Mesh>> create(World::Chunk const& o) {
+                    static Core::Vector<std::unique_ptr<Mesh>> create(World::Chunk const& o) {
                         using namespace GL;
                         using namespace Math;
                         using namespace World;
-                        using namespace Utility;
+                        using namespace Core;
                         
                         Vector<std::unique_ptr<Mesh>> meshes;
                         IBO<VoxelVertex>* voxelBuffer = new IBO<VoxelVertex>(GL_STATIC_DRAW);

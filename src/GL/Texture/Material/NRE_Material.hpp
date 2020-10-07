@@ -26,7 +26,7 @@
              * @class Material
              * @brief Describe a PBR material
              */
-            class Material : public Utility::Uncopyable<Material> {
+            class Material : public Core::Uncopyable<Material> {
                 private:    //Fields
                     Math::Vector3D<float> albedo;   /**< The material's albedo */
                     float roughness;                /**< The material's roughness */

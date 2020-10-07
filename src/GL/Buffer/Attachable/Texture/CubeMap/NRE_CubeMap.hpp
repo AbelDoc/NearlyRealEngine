@@ -72,7 +72,7 @@
                          * @param offsets  the data's offset
                          * @param surfaces the surface array to move data
                          */
-                        void update(GLint level, Utility::Vector<Math::Vector2D<GLint>> const& offsets, Utility::Vector<Surface>& surfaces);
+                        void update(GLint level, Core::Vector<Math::Vector2D<GLint>> const& offsets, Core::Vector<Surface>& surfaces);
                         /**
                          * Update a cube map face
                          * @param level    the mipmap's level
@@ -86,7 +86,7 @@
                          * @param level    the mipmap's level
                          * @param surfaces the surface array to move data
                          */
-                        void allocateAndFill(GLint level, Utility::Vector<Surface>& surfaces);
+                        void allocateAndFill(GLint level, Core::Vector<Surface>& surfaces);
                         /**
                          * Attach the object to a defined point
                          * @param target the attachment point

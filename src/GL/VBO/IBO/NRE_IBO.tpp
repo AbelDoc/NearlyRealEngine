@@ -71,7 +71,7 @@
 
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::clearIndex() {
-                Utility::Vector<Index>().swap(index);
+                Core::Vector<Index>().swap(index);
                 indexCounter = 0;
             }
 
@@ -94,14 +94,14 @@
                 } else {
                     orphanIndex();
                 }
-                static_cast <Utility::Allocable<ArrayBuffer>&> (element).deallocate();
+                static_cast <Core::Allocable<ArrayBuffer>&> (element).deallocate();
                 return result;
             }
             
             template <class Layout, class Index>
             inline void IBO<Layout, Index>::deallocate() {
                 AbstractVBO::deallocate();
-                static_cast <Utility::Allocable<ArrayBuffer>&> (element).deallocate();
+                static_cast <Core::Allocable<ArrayBuffer>&> (element).deallocate();
             }
 
             template <class Layout, class Index>
@@ -143,8 +143,8 @@
             }
 
             template <class Layout, class Index>
-            inline Utility::String IBO<Layout, Index>::toString() const {
-                Utility::String internal, res;
+            inline Core::String IBO<Layout, Index>::toString() const {
+                Core::String internal, res;
                 internal = std::move(VBO<Layout>::toString());
                 res.reserve(20 + internal.getSize());
                 res << "Index count : " << static_cast <GLsizei> (indexCount) << "\n";

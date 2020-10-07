@@ -36,7 +36,7 @@
                 bind();
                     FrameBufferStatus status = getFrameBufferStatus(GL_FRAMEBUFFER);
                     if (status != GL_FRAMEBUFFER_COMPLETE) {
-                        Utility::String error;
+                        Core::String error;
                         error << status;
                         throw (Exception::GLException("FBO Integrity Error : " + error));
                     }
@@ -50,8 +50,8 @@
                 unbind();
             }
 
-            inline Utility::String FBO::toString() const {
-                Utility::String res;
+            inline Core::String FBO::toString() const {
+                Core::String res;
                 res.reserve(40 + colorBuffers.getSize() * 5);
                 res << FrameBuffer::toString() << " :\n";
                 res << "Color Buffer : " << static_cast <unsigned int> (colorBuffers.getSize()) << "\n";
